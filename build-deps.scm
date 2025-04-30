@@ -4,6 +4,7 @@
   #:use-module (guix packages)
   #:use-module (guix build-system pyproject)
   #:use-module (guix git-download)
+  #:use-module (guix gexp)
   #:use-module (gnu packages)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-check)
@@ -47,30 +48,6 @@
     (description "catkin package library.")
     (license license:bsd-3))))
 
-(define-public python-rosdep
-  (package
-    (name "python-rosdep")
-    (version "0.25.1")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append "https://github.com/ros-infrastructure/rosdep/archive/refs/tags/" version "tar.gz"))
-       (sha256
-        (base32 "0wnycd2cw6b1rkjd597yf7am0w00k6pvfsxs90r2j4xvppg019x0"))))
-    (build-system pyproject-build-system)
-    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro-noetic
-                             python-rospkg))
-    (native-inputs (list python-flake8
-                         python-flake8-builtins
-                         python-flake8-comprehensions
-                         python-flake8-quotes
-                         python-pytest
-                         python-setuptools
-                         python-wheel))
-    (home-page "http://wiki.ros.org/rosdep")
-    (synopsis "rosdep package manager abstraction tool for ROS")
-    (description "rosdep package manager abstraction tool for ROS.")
-    (license license:bsd-3)))
 
 (define-public python-rosdistro-noetic
   (let ((commit "347b84a37595a213eedf80c168862d75e72b1a8c")
@@ -84,9 +61,17 @@
        (uri (git-reference (url "https://github.com/ros/rosdistro")
                            (commit commit)))
        (sha256
-        (base32 "0v62c16h860ypnm7pr76g895v8pkp5s7dcqxx42yjyddy15qpy17"))
+        (base32 "1qbxfx43asx212kn9r28l9wrbxmlj17hdh59bgs1y473qrwi3fh0"))
         (file-name (git-file-name name version))))
     (build-system pyproject-build-system)
+    (arguments
+     (list
+      #:tests? #f
+      #:phases
+      #~(modify-phases %standard-phases
+                      (add-after 'unpack 'enter-subdir
+                        (lambda _ (chdir "noetic") #t))
+                      )))
     (propagated-inputs (list python-catkin-pkg python-pyyaml python-rospkg
                              python-setuptools))
     (native-inputs (list python-pytest python-setuptools python-wheel))
@@ -107,11 +92,43 @@
        (uri (git-reference (url "https://github.com/ros-infrastructure/rospkg")
                            (commit commit)))
        (sha256
-        (base32 "1v0f8g3sycb8rkb6xqkl3pbpxikfya72xfrzpa37hgvpx9ixsxza"))))
+        (base32 "1v0f8g3sycb8rkb6xqkl3pbpxikfya72xfrzpa37hgvpx9ixsxza"))
+        (file-name (git-file-name name version))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-catkin-pkg python-pyyaml))
     (native-inputs (list python-distro python-pytest python-setuptools python-wheel))
     (home-page "http://wiki.ros.org/rospkg")
     (synopsis "ROS package library")
     (description "ROS package library.")
+    (license license:bsd-3))))
+
+(define-public python-rosdep
+  (let ((commit "78f3744f9054ed188bc23b830854080dc9face70")
+        (revision "1"))
+  (package
+    (name "python-rosdep")
+    (version (git-version "0.25.1" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros-infrastructure/rosdep")
+                           (commit commit)))
+       (sha256
+        (base32 "1n7fw73ikp02c8hxgg0vx3nl6zxdyxqy9lcl70162f3ss0lxkrl2"))
+        (file-name (git-file-name name version))))
+    (build-system pyproject-build-system)
+    (arguments (list #:test-flags #~(list "--import-mode=importlib")))
+    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro-noetic
+                             python-rospkg))
+    (native-inputs (list python-distro
+                         python-flake8
+                         python-flake8-builtins
+                         python-flake8-comprehensions
+                         python-flake8-quotes
+                         python-pytest
+                         python-setuptools
+                         python-wheel))
+    (home-page "http://wiki.ros.org/rosdep")
+    (synopsis "rosdep package manager abstraction tool for ROS")
+    (description "rosdep package manager abstraction tool for ROS.")
     (license license:bsd-3))))
