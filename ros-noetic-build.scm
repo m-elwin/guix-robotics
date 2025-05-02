@@ -1,4 +1,4 @@
-(define-module (build-deps)
+(define-module (ros-noetic-build)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
@@ -9,6 +9,7 @@
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages version-control)
   #:use-module (gnu packages check)
   #:use-module (gnu packages time)
   )
@@ -49,36 +50,6 @@
     (license license:bsd-3))))
 
 
-(define-public python-rosdistro-noetic
-  (let ((commit "347b84a37595a213eedf80c168862d75e72b1a8c")
-        (revision "1"))
-  (package
-    (name "python-rosdistro-noetic")
-    (version (git-version "1.0.1" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/rosdistro")
-                           (commit commit)))
-       (sha256
-        (base32 "1qbxfx43asx212kn9r28l9wrbxmlj17hdh59bgs1y473qrwi3fh0"))
-        (file-name (git-file-name name version))))
-    (build-system pyproject-build-system)
-    (arguments
-     (list
-      #:tests? #f
-      #:phases
-      #~(modify-phases %standard-phases
-                      (add-after 'unpack 'enter-subdir
-                        (lambda _ (chdir "noetic") #t))
-                      )))
-    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rospkg
-                             python-setuptools))
-    (native-inputs (list python-pytest python-setuptools python-wheel))
-    (home-page "http://wiki.ros.org/rosdistro")
-    (synopsis "A tool to work with rosdistro files")
-    (description "This package provides a tool to work with rosdistro files.")
-    (license license:bsd-3))))
 
 (define-public python-rospkg
   (let ((commit "db7614e5209137faa6ec01e2edaf34f775780b1a")
@@ -102,6 +73,31 @@
     (description "ROS package library.")
     (license license:bsd-3))))
 
+(define-public python-rosdistro
+  (let ((commit "9c909bfb7f34e13e8229f1742b6493b228a3cfa9")
+        (revision "1"))
+  (package
+    (name "python-rosdistro")
+    (version (git-version "1.0.1" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros-infrastructure/rosdistro")
+                           (commit commit)))
+       (sha256
+        (base32 "1g4h2grqqa4952zrr3kyp2d22f8karx2ygyjqkhv86i8dg6i0fqi"))
+        (file-name (git-file-name name version))))
+    (build-system pyproject-build-system)
+    (arguments (list
+     #:test-flags #~(list "--ignore=test/test_manifest_providers.py"))) ; test downloads a lot and is hard to mock
+    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rospkg
+                             python-setuptools))
+    (native-inputs (list python-distro python-pytest python-setuptools python-wheel git))
+    (home-page "http://wiki.ros.org/rosdistro")
+    (synopsis "A tool to work with rosdistro files")
+    (description "This package provides a tool to work with rosdistro files.")
+    (license license:bsd-3))))
+
 (define-public python-rosdep
   (let ((commit "78f3744f9054ed188bc23b830854080dc9face70")
         (revision "1"))
@@ -117,7 +113,6 @@
         (base32 "1n7fw73ikp02c8hxgg0vx3nl6zxdyxqy9lcl70162f3ss0lxkrl2"))
         (file-name (git-file-name name version))))
     (build-system pyproject-build-system)
-    (arguments (list #:test-flags #~(list "--import-mode=importlib")))
     (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro-noetic
                              python-rospkg))
     (native-inputs (list python-distro
