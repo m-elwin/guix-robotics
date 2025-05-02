@@ -113,7 +113,16 @@
         (base32 "1n7fw73ikp02c8hxgg0vx3nl6zxdyxqy9lcl70162f3ss0lxkrl2"))
         (file-name (git-file-name name version))))
     (build-system pyproject-build-system)
-    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro-noetic
+      (arguments
+       (list
+        #:tests? #f ; too many tests that depend on environment
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-before 'check 'pre-check
+              (lambda _
+                (setenv "HOME" "/tmp")))
+            )))
+    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
                              python-rospkg))
     (native-inputs (list python-distro
                          python-flake8
