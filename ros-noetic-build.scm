@@ -2,19 +2,50 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix build-system cmake)
   #:use-module (guix build-system pyproject)
   #:use-module (guix build-system python)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (gnu packages)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages python-check)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages version-control)
+  #:use-module (gnu packages certs)
   #:use-module (gnu packages check)
   #:use-module (gnu packages time)
   )
 
+(define-public catkin
+  (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
+        (revision "0"))
+    (package
+      (name "catkin")
+    (version (git-version "0.8.12" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros/catkin")
+                           (commit commit)))
+       (sha256
+        (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
+         (file-name (git-file-name name version))))
+    (build-system cmake-build-system)
+    (arguments
+     (list
+      #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'fix-usr-bin-env
+              (lambda* (#:key inputs #:allow-other-keys)
+                      (substitute* "cmake/templates/python_distutils_install.sh.in"
+                  (("/usr/bin/env") (search-input-file inputs "/bin/env"))))))))
+    (native-inputs (list python python-catkin-pkg python-empy))
+    (home-page "http://wiki.ros.org/catkin")
+    (synopsis "catkin build tool")
+    (description "ROS 1 Catkin build tool")
+    (license license:bsd-3))))
 
 (define-public python-catkin-pkg
   (let ((commit "fb2468e6c2565802bc3ef6134a76db76ae9f3632")
@@ -61,7 +92,7 @@
        (sha256
         (base32 "0w8sj3628m0q8d59d7ckjn8cam39pa2k22fv6gid3nh4izxydb95"))))
     (build-system pyproject-build-system)
-    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
+    (propagated-inputs (list nss-certs python-catkin-pkg python-pyyaml python-rosdistro
                              python-rospkg))
     (native-inputs (list python-distro python-mock python-pytest python-setuptools
                          python-wheel))
