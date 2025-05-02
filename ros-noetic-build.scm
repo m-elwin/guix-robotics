@@ -3,6 +3,7 @@
   #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix build-system pyproject)
+  #:use-module (guix build-system python)
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (gnu packages)
@@ -49,7 +50,26 @@
     (description "catkin package library.")
     (license license:bsd-3))))
 
-
+(define-public python-rosinstall-generator
+  (package
+    (name "python-rosinstall-generator")
+    (version "0.1.23")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "rosinstall_generator" version))
+       (sha256
+        (base32 "0w8sj3628m0q8d59d7ckjn8cam39pa2k22fv6gid3nh4izxydb95"))))
+    (build-system pyproject-build-system)
+    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
+                             python-rospkg))
+    (native-inputs (list python-distro python-mock python-pytest python-setuptools
+                         python-wheel))
+    (home-page "http://wiki.ros.org/rosinstall_generator")
+    (synopsis "A tool for generating rosinstall files")
+    (description
+     "This package provides a tool for generating rosinstall files.")
+    (license license:bsd-3)))
 
 (define-public python-rospkg
   (let ((commit "db7614e5209137faa6ec01e2edaf34f775780b1a")
