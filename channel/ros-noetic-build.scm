@@ -6,6 +6,7 @@
   #:use-module (guix build-system pyproject)
   #:use-module (guix build-system python)
   #:use-module (guix git-download)
+  #:use-module (guix search-paths)
   #:use-module (guix gexp)
   #:use-module (gnu packages)
   #:use-module (gnu packages python)
@@ -96,6 +97,7 @@
                              python-rospkg))
     (native-inputs (list python-distro python-mock python-pytest python-setuptools
                          python-wheel))
+    (native-search-paths (list $SSL_CERT_DIR $SSL_CERT_FILE))
     (home-page "http://wiki.ros.org/rosinstall_generator")
     (synopsis "A tool for generating rosinstall files")
     (description
