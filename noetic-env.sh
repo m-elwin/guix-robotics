@@ -24,15 +24,20 @@ exec guix shell -L channel -C \
 (specifications->manifest
  '("nss-certs"
    "boost"
-   "coreutils"
-   "python-rosinstall-generator"
    "catkin"
+   "cmake@3.25.1"
+   "console-bridge"
+   "coreutils"
+   "gcc-toolchain"
+   "googletest"
+   "lz4"
+   "make"
+   "python-rosinstall-generator"
+   "poco"
    "python"
    "python-empy"
    "python-rosdep"
-   "cmake@3.25.1"
-   "gcc-toolchain"
-   "make"
+   "tinyxml2"
    )
  )
 
