@@ -8,6 +8,13 @@
   #:use-module (guix git-download)
   #:use-module (guix search-paths)
   #:use-module (guix gexp)
+  #:use-module (gnu packages apr)
+  #:use-module (gnu packages bash)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages python-build)
+  #:use-module (gnu packages version-control)
   )
 ;; Items that are contributed to gnu guix and pending review
 (define-public python-vcstool ; gnu bug 78219
@@ -64,3 +71,15 @@
 log4j which uses Apache Portable Runtime for most platform-specific code
 and should be usable on any platform supported by APR")
     (license license:asl2.0)))
+
+(define-public log4cxx-0.11
+  (package
+    (inherit log4cxx)
+    (version "0.11.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "mirror://apache/logging/log4cxx/" version
+                           "/apache-log4cxx-" version ".tar.gz"))
+       (sha256
+        (base32 "14xkb34svkgn08gz7qbama3idlk2a4q5y7ansccvkrf4wdg705n3"))))))

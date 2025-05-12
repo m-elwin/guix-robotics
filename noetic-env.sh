@@ -16,27 +16,37 @@ exec guix shell -L channel -C \
      --container \
      --emulate-fhs \
      --network \
-     -m $0
+     -m $0 -- bash
 
 !#
 
 
 (specifications->manifest
- '("nss-certs"
+ '("bzip2"
+   "bash"
    "boost"
    "catkin"
    "cmake@3.25.1"
    "console-bridge"
    "coreutils"
+   "gawk"
    "gcc-toolchain"
+   "gpgme"
    "googletest"
+   "grep"
+   "log4cxx@0.11"
    "lz4"
    "make"
+   "nss-certs"
+   "openssl"
    "python-rosinstall-generator"
    "poco"
+   "procps"
    "python"
    "python-empy"
+   "python-nose"
    "python-rosdep"
+   "python-vcstool"
    "tinyxml2"
    )
  )
