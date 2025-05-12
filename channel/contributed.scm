@@ -1,3 +1,14 @@
+(define-module (contributed)
+  #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix download)
+  #:use-module (guix packages)
+  #:use-module (guix build-system cmake)
+  #:use-module (guix build-system pyproject)
+  #:use-module (guix build-system python)
+  #:use-module (guix git-download)
+  #:use-module (guix search-paths)
+  #:use-module (guix gexp)
+  )
 ;; Items that are contributed to gnu guix and pending review
 (define-public python-vcstool ; gnu bug 78219
   (package
