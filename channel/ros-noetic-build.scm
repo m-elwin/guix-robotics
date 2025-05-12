@@ -41,12 +41,36 @@
             (add-after 'unpack 'fix-usr-bin-env
               (lambda* (#:key inputs #:allow-other-keys)
                       (substitute* "cmake/templates/python_distutils_install.sh.in"
-                  (("/usr/bin/env") (search-input-file inputs "/bin/env"))))))))
+                        (("/usr/bin/env") (search-input-file inputs "/bin/env"))))))))
     (native-inputs (list python python-catkin-pkg python-empy))
     (home-page "http://wiki.ros.org/catkin")
     (synopsis "catkin build tool")
     (description "ROS 1 Catkin build tool")
     (license license:bsd-3))))
+
+(define-public console-bridge
+  (let ((commit "0828d846f2d4940b4e2b5075c6c724991d0cd308")
+        (revision "0"))
+    (package
+      (name "console-bridge")
+      (version (git-version "1.0.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/console_bridge")
+                             (commit commit)))
+         (sha256
+          (base32 "18rjjzkg1ml2p4aa41kvfgamkxc88g0iv3fd94vxr8917mqshw9k"))
+         (file-name (git-file-name name version))))
+      (build-system cmake-build-system)
+      (arguments (list
+                  #:configure-flags #~(list "-DBUILD_TESTING=ON")))
+      (native-inputs (list python))
+      (home-page "https://github.com/ros/console_bridge")
+      (synopsis "A ROS-independent pure CMake package for logging")
+      (description "Provides logging calls that mirror those found in rosconsole,
+but for applications that are not necessarily using ROS")
+      (license license:bsd-3))))
 
 (define-public python-catkin-pkg
   (let ((commit "fb2468e6c2565802bc3ef6134a76db76ae9f3632")
