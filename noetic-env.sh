@@ -12,9 +12,9 @@
 set -ex
 
 # Set environment variables here and preserve them
-
 exec guix shell -L channel -C \
      --container \
+     --emulate-fhs \
      --network \
      -m $0
 
@@ -23,6 +23,7 @@ exec guix shell -L channel -C \
 
 (specifications->manifest
  '("nss-certs"
+   "boost"
    "coreutils"
    "python-rosinstall-generator"
    "catkin"
