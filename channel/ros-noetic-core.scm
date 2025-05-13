@@ -130,8 +130,27 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
      (description "Common-Lisp ROS emssage and service generators.")
      (license license:bsd-3))))
 
+(define-public ros-noetic-gennodejs
+  (let ((commit "53cf97ce44a6f592c69cd6f6d07bb7825b6ea243")
+        (revision "0"))
+    (package
+      (name "ros-noetic-gennodejs")
+      (version (git-version "2.0.2" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/sloretz/gennodejs")
+                           (commit commit)))
+       (sha256
+        (base32 "0ybiih22mmcbkdcpyv6b4yfnssmc5n8ksl74ghvkjpyr55h7k6v7"))
+       (file-name (git-file-name name version))))
+    (build-system cmake-build-system)
+    (native-inputs (list catkin python ros-noetic-genmsg))
+     (home-page "https://github.com/ros/genlisp")
+     (synopsis "Javascript ROS message and service generators")
+     (description "Javascript ROS emssage and service generators.")
+     (license license:bsd-3))))
 
-;~~  - gennodejs
 ;~~  - genpy
 ;~~  - cmake_modules
 ;~~  - class_loader
