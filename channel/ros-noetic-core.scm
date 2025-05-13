@@ -151,7 +151,26 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
      (description "Javascript ROS emssage and service generators.")
      (license license:bsd-3))))
 
-;~~  - genpy
+(define-public ros-noetic-genpy
+  (let ((commit "323d861c512ba912a8c7e842647fe2d9657fd15b")
+        (revision "0"))
+    (package
+      (name "ros-noetic-genpy")
+      (version (git-version "0.6.18" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros/genpy")
+                           (commit commit)))
+       (sha256
+        (base32 "06a10p3kmy6m7mvkybj8pbl4pfrl9mm0wdgxbz67jr1disa1zj88"))
+       (file-name (git-file-name name version))))
+    (build-system cmake-build-system)
+    (native-inputs (list catkin python ros-noetic-genmsg))
+     (home-page "https://github.com/ros/genpy")
+     (synopsis "Python ROS message and service generators")
+     (description "Python ROS message and service generators.")
+     (license license:bsd-3))))
 ;~~  - cmake_modules
 ;~~  - class_loader
 ;~~  - common_msgs
