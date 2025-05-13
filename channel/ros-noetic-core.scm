@@ -83,16 +83,32 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
        (file-name (git-file-name name version))))
     (build-system cmake-build-system)
     (native-inputs (list catkin python ros-noetic-genmsg))
-     (home-page "https://docs.ros.org/en/api/genmsg/html/")
-     (synopsis "Decouple code generation from .msg .srv files from build system")
-     (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
-files from the parsing of these files and from impementation details of the build system
-(project directory layout, existence or nonexistence of utilities like rospack, values of environment
-variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set in any particular way.")
+     (home-page "https://wiki.ros.org/gencpp")
+     (synopsis "ROS C++ message definition and serialization generators")
+     (description "Generate ROS msgs and srvs for C++")
      (license license:bsd-3))))
 
+(define-public ros-noetic-geneus
+  (let ((commit "ec388e279ce4fd52ec78a4144ba52014ab4dd824")
+        (revision "0"))
+    (package
+      (name "ros-noetic-geneus")
+      (version (git-version "0.7.2" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/jsk-ros-pkg/geneus")
+                           (commit commit)))
+       (sha256
+        (base32 "0hz6jy7f9wxn9m1ni4zawmiqk87zqc0hcf652prxnlm79xri0aj6"))
+       (file-name (git-file-name name version))))
+    (build-system cmake-build-system)
+    (native-inputs (list catkin python ros-noetic-genmsg))
+     (home-page "https://github.com/jsk-ros-pkg/geneus")
+     (synopsis "EusLisp ROS emssage and service generators")
+     (description "EusLisp ROS emssage and service generators.")
+     (license license:bsd-3))))
 
-;~~  - gencpp
 ;~~  - geneus
 ;~~  - genlisp
 ;~~  - gennodejs
