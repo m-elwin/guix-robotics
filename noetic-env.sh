@@ -50,6 +50,7 @@ exec guix shell -L "$curr_dir/channel" -C \
    "python-empy"
    "python-gnupg"
    "python-pycryptodomex"
+   "python-netifaces"
    "python-nose"
    "python-rosdep"
    "python-rosinstall-generator"
