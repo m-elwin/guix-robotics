@@ -28,7 +28,6 @@ exec guix shell -L "$curr_dir/channel" -C \
  '("bzip2"
    "bash"
    "boost"
-   "catkin"
    "cmake@3.25.1"
    "console-bridge"
    "coreutils"
