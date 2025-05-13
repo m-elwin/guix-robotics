@@ -11,13 +11,16 @@
 # https://www.futurile.net/2023/04/29/guix-shell-virtual-environments-containers/ <Accessed 5/5/2025>
 set -ex
 
+curr_dir=$(dirname $(readlink -f "$0"))
+
 # Set environment variables here and preserve them
-exec guix shell -L channel -C \
+exec guix shell -L "$curr_dir/channel" -C \
      --container \
      --emulate-fhs \
+     --nesting \
      --network \
+     --writable-root \
      -m $0 -- bash
-
 !#
 
 
@@ -29,6 +32,7 @@ exec guix shell -L channel -C \
    "cmake@3.25.1"
    "console-bridge"
    "coreutils"
+   "findutils"
    "gawk"
    "gcc-toolchain"
    "gpgme"
@@ -39,15 +43,19 @@ exec guix shell -L channel -C \
    "make"
    "nss-certs"
    "openssl"
-   "python-rosinstall-generator"
    "poco"
    "procps"
    "python"
+   "python-defusedxml"
    "python-empy"
+   "python-gnupg"
+   "python-pycryptodomex"
    "python-nose"
    "python-rosdep"
-   "python-vcstool"
+   "python-rosinstall-generator"
+   "sed"
    "tinyxml2"
+   "vcstool"
    )
  )
 

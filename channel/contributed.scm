@@ -17,39 +17,6 @@
   #:use-module (gnu packages version-control)
   )
 ;; Items that are contributed to gnu guix and pending review
-(define-public python-vcstool ; gnu bug 78219
-  (package
-    (name "python-vcstool")
-    (version "0.3.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "vcstool" version))
-       (sha256
-        (base32 "0b7f68q25x9nxqa3xcg32js3qgp4jg99anwy2c7nd1jkw5iskcq4"))))
-    (build-system pyproject-build-system)
-    (arguments
-     (list
-      #:phases
-      #~(modify-phases %standard-phases
-          (add-after 'wrap 'wrap-script
-            (lambda _
-              (wrap-program (string-append #$output "/bin/vcs")
-                `("PATH" prefix
-                  ,(list (string-append #$git "/bin")
-                         (string-append #$mercurial "/bin")
-                         (string-append #$mercurial "/bin")
-                         (string-append #$breezy "/bin")
-                         (string-append #$subversion "/bin")))))))))
-    (inputs (list bash-minimal))
-    (propagated-inputs (list python-pyyaml python-setuptools))
-    (native-inputs (list python-setuptools python-wheel))
-    (home-page "https://github.com/dirk-thomas/vcstool")
-    (synopsis
-     "Command line tool to invoke version control commands on multiple repositories")
-    (description
-     "Enables manipulating multiple version control repositories with one command.")
-    (license license:asl2.0)))
 
 (define-public log4cxx ; gnu bug 78395
   (package
