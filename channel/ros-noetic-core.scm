@@ -93,7 +93,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
         (revision "0"))
     (package
       (name "ros-noetic-geneus")
-      (version (git-version "0.7.2" revision commit))
+      (version (git-version "3.0.0" revision commit))
     (source
      (origin
        (method git-fetch)
@@ -105,12 +105,32 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
     (build-system cmake-build-system)
     (native-inputs (list catkin python ros-noetic-genmsg))
      (home-page "https://github.com/jsk-ros-pkg/geneus")
-     (synopsis "EusLisp ROS emssage and service generators")
-     (description "EusLisp ROS emssage and service generators.")
+     (synopsis "EusLisp ROS message and service generators")
+     (description "EusLisp ROS message and service generators.")
      (license license:bsd-3))))
 
-;~~  - geneus
-;~~  - genlisp
+(define-public ros-noetic-genlisp
+  (let ((commit "3ac633abacdf5ab321d23ed013c7d5b7da97736d")
+        (revision "0"))
+    (package
+      (name "ros-noetic-genlisp")
+      (version (git-version "0.4.18" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros/genlisp")
+                           (commit commit)))
+       (sha256
+        (base32 "07qx0blkfx6n8i5c5mj1yzpi9y099npw4f0rzbs5p3gjpq2gh0m2"))
+       (file-name (git-file-name name version))))
+    (build-system cmake-build-system)
+    (native-inputs (list catkin python ros-noetic-genmsg))
+     (home-page "https://github.com/ros/genlisp")
+     (synopsis "Common-Lisp ROS message and service generators")
+     (description "Common-Lisp ROS emssage and service generators.")
+     (license license:bsd-3))))
+
+
 ;~~  - gennodejs
 ;~~  - genpy
 ;~~  - cmake_modules
