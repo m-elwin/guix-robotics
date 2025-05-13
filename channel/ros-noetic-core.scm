@@ -1,47 +1,20 @@
 ;;; ROS noetic core dependencies
 (define-module (ros-noetic-core)
+  #:use-module (catkin-build-system)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
+  #:use-module (guix build-system)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system pyproject)
   #:use-module (guix build-system python)
   #:use-module (guix git-download)
   #:use-module (guix search-paths)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic-deps))
-
-(define-public catkin
-  (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
-        (revision "0"))
-    (package
-      (name "catkin")
-    (version (git-version "0.8.12" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/catkin")
-                           (commit commit)))
-       (sha256
-        (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
-         (file-name (git-file-name name version))))
-    (build-system cmake-build-system)
-    (arguments
-     (list
-      #:phases
-        #~(modify-phases %standard-phases
-            (add-after 'unpack 'fix-usr-bin-env
-              (lambda* (#:key inputs #:allow-other-keys)
-                      (substitute* "cmake/templates/python_distutils_install.sh.in"
-                        (("/usr/bin/env") (search-input-file inputs "/bin/env"))))))))
-    (native-inputs (list python))
-    (propagated-inputs (list python-catkin-pkg python-empy))
-    (home-page "http://wiki.ros.org/catkin")
-    (synopsis "catkin build tool")
-    (description "ROS 1 Catkin build tool")
-    (license license:bsd-3))))
 
 (define-public ros-noetic-genmsg
   (let ((commit "393871225e1458d2a8db41761759e57ca01a1801")
@@ -57,8 +30,7 @@
        (sha256
         (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
        (file-name (git-file-name name version))))
-    (build-system cmake-build-system)
-    (native-inputs (list catkin python))
+    (build-system catkin-build-system)
      (home-page "https://docs.ros.org/en/api/genmsg/html/")
      (synopsis "Decouple code generation from .msg .srv files from build system")
      (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
@@ -192,7 +164,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
      (synopsis "CMake modules used by ROS but not included with CMake")
      (description "CMake modules used by ROS but not included with CMake")
      (license license:bsd-3))))
-;~~  - cmake_modules
+
 ;~~  - class_loader
 ;~~  - common_msgs
 ;~~  - cpp_common
