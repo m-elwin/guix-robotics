@@ -23,10 +23,23 @@ exec guix shell -L "$curr_dir/channel" -C \
      -m $0 -- bash
 !#
 
+;;; Packages that are unnecessary but make navigating and using the shell environment easier
+(define shell-quality-of-life
+ '("bash"
+   "procps"))
 
-(specifications->manifest
+;;; These dependencies are required to build and use the ros_core packages
+;;; Commands that are enabled in the environment are based on http://wiki.ros.org/noetic/Installation/Source <Accessed May 10, 2025>
+;;; mkdir ws_noetic
+;;; cd ws_noetic
+;;; rosinstall_generator ros_core --rosdistro noetic --deps --tar > noetic-ros-core.rosinstall
+;;; mkdir ./src
+;;; vcs import --input noetic-ros-core.rosinstall
+;;; ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release
+;;;
+;;; The build will then succeed, the workspace can be sourced as usual, and the core ros packages work
+(define ros-core-system-deps
  '("bzip2"
-   "bash"
    "boost"
    "cmake@3.25.1"
    "console-bridge"
@@ -43,7 +56,6 @@ exec guix shell -L "$curr_dir/channel" -C \
    "nss-certs"
    "openssl"
    "poco"
-   "procps"
    "python"
    "python-defusedxml"
    "python-empy"
@@ -56,6 +68,8 @@ exec guix shell -L "$curr_dir/channel" -C \
    "sed"
    "tinyxml2"
    "vcstool"
-   )
- )
+   ))
+
+(specifications->manifest
+ (append shell-quality-of-life ros-core-system-deps))
 
