@@ -1,0 +1,7 @@
+1. Check that catkin's inputs are specified directly by
+   - Creating a guix shell environment with catkin and making sure that I can catkin_make_isolated catkin itself.
+   - Check vcstool for a similar tool:
+     - It uses python but is an executable (so not prefixed with python)
+     - It calls other executables (which were inputs).
+
+2. Transition ROS packages to the catkin-build-system
