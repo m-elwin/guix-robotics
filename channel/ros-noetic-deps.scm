@@ -17,8 +17,7 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages certs)
   #:use-module (gnu packages check)
-  #:use-module (gnu packages time)
-  )
+  #:use-module (gnu packages time))
 
 (define-public console-bridge
   (let ((commit "0828d846f2d4940b4e2b5075c6c724991d0cd308")
