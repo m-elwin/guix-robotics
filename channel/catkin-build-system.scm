@@ -20,8 +20,7 @@
   (apply lower name
          (substitute-keyword-arguments arguments
                ((#:native-inputs original-inputs ''())
-                (append `(("catkin" ,catkin)
-                          ("python" ,python)
+                (append `(("python" ,python)
                           ("python-catkin-pkg" ,python-catkin-pkg)
                           ("python-empy" ,python-empy))
                         original-inputs)))))
