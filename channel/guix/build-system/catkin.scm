@@ -3,6 +3,7 @@
   #:use-module (guix build-system)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system python)
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (gnu packages python)
@@ -31,7 +32,8 @@
 (define %catkin-build-system-modules
   ;; Build-side modules imported by default.
   `((guix build catkin-build-system)
-    ,@%cmake-build-system-modules))
+    ,@%cmake-build-system-modules
+    ,@%python-build-system-modules))
 
   ;;; adds some python phases to gnu
 ;;; Defined to augment the native inputs of anything that uses this build system

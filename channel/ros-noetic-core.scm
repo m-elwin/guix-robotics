@@ -35,7 +35,7 @@
      (list
       #:catkin python-catkin-pkg
       #:phases
-        #~(modify-phases $cstandard-phases
+        #~(modify-phases %standard-phases
             (add-after 'unpack 'fix-usr-bin-env
               (lambda* (#:key inputs #:allow-other-keys)
                       (substitute* "cmake/templates/python_distutils_install.sh.in"
