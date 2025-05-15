@@ -34,13 +34,26 @@
   (define private-keywords '(#:catkin))
   (apply lower name
          (substitute-keyword-arguments (strip-keyword-arguments private-keywords arguments)
+           ;; Replicate some build phases from guix build python-build-system
+           ;; because catkin often installs python files
            ((#:phases original-phases '())
             (with-imported-modules '((guix build python-build-system))
               #~(begin
                   (use-modules ((guix build python-build-system) #:prefix pybuild:))
                   (modify-phases #$original-phases
                     (add-after 'unpack 'ensure-no-mtimes-pre-1980
-                      pybuild:ensure-no-mtimes-pre-1980)))))
+                      (assoc-ref pybuild:%standard-phases 'ensure-no-mtimes-pre-1980))
+                    (add-after 'ensure-no-mtimes-pre-1980 'enable-bytecode-determinism
+                        (assoc-ref pybuild:%standard-phases 'enable-bytecode-determinism))
+                    (add-after 'enable-bytecode-determinism 'ensure-no-cythonized-files
+                        (assoc-ref pybuild:%standard-phases 'ensure-no-cythonized-files))
+                    (add-after 'install 'add-install-to-pythonpath
+                        (assoc-ref pybuild:%standard-phases 'add-install-to-pythonpath))
+                    (add-after 'add-install-to-pythonpath 'add-install-to-path
+                        (assoc-ref pybuild:%standard-phases 'add-install-to-path))
+                    (add-after 'add-install-to-path 'wrap
+                        (assoc-ref pybuild:%standard-phases 'wrap))
+                    ))))
            ((#:native-inputs original-inputs ''())
             (append `(("catkin" ,catkin)
                       ("python" ,python)
