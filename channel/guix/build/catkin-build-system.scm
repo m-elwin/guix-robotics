@@ -2,7 +2,7 @@
   #:use-module ((guix build cmake-build-system) #:prefix cmake-build:)
   #:use-module ((guix build python-build-system) #:prefix py-build:)
   #:use-module (guix build utils)
-  #:export (%standard-phases))
+  #:export (%cstandard-phases))
 
 ;; Commentary:
 ;;
@@ -11,7 +11,7 @@
 ;;
 ;; Code:
 
-(define %standard-phases
+(define %cstandard-phases
   (modify-phases cmake-build:%standard-phases
     (add-after 'unpack 'ensure-no-mtimes-pre-1980
       (assoc-ref py-build:%standard-phases 'ensure-no-mtimes-pre-1980))
