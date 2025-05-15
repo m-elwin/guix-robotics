@@ -6,10 +6,12 @@
 ;;; build tools
 ;;; Note: this file was modeled after the guix/build-systems/mozilla.scm 
 (define-module (catkin-build-system)
+  #:use-module (guix build utils)
   #:use-module (guix build-system)
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system cmake)
   #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic-deps))
@@ -26,21 +28,29 @@
 
 ;;; Defined to augment the native inputs of anything that uses this build system
 (define* (lower-catkin name #:key (catkin (default-catkin)) native-inputs #:allow-other-keys
-                        #:rest arguments)
+                       #:rest arguments)
   (define lower (build-system-lower cmake-build-system))
   "Return a bag for NAME."
   (define private-keywords '(#:catkin))
   (apply lower name
          (substitute-keyword-arguments (strip-keyword-arguments private-keywords arguments)
-               ((#:native-inputs original-inputs ''())
-                (append `(("catkin" ,catkin)
-                          ("python" ,python)
-                          ("python-catkin-pkg" ,python-catkin-pkg)
-                          ("python-empy" ,python-empy))
-                        original-inputs)))))
+           ((#:phases original-phases '())
+            (with-imported-modules '((guix build python-build-system))
+              #~(begin
+                  (use-modules ((guix build python-build-system) #:prefix pybuild:))
+                  (modify-phases #$original-phases
+                    (add-after 'unpack 'ensure-no-mtimes-pre-1980
+                      pybuild:ensure-no-mtimes-pre-1980)))))
+           ((#:native-inputs original-inputs ''())
+            (append `(("catkin" ,catkin)
+                      ("python" ,python)
+                      ("python-catkin-pkg" ,python-catkin-pkg)
+                      ("python-empy" ,python-empy))
+                    original-inputs)))))
 
 (define-public catkin-build-system
   (build-system
     (inherit cmake-build-system)
     (description "The build system for ros-noetic using catkin")
     (lower lower-catkin)))
+
