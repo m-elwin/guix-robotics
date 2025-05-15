@@ -7,9 +7,7 @@
   #:use-module (guix gexp)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
-  #:use-module (ros-noetic-deps)
-  #:export (cstandard-phases)
-  )
+  #:use-module (ros-noetic-deps))
 
 ;; Commentary:
 ;;
@@ -33,7 +31,7 @@
 (define %catkin-build-system-modules
   ;; Build-side modules imported by default.
   `((guix build catkin-build-system)
-    ,(@%default-gnu-imported-modules)))
+    ,@%cmake-build-system-modules))
 
   ;;; adds some python phases to gnu
 ;;; Defined to augment the native inputs of anything that uses this build system
