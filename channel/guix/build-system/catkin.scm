@@ -51,13 +51,16 @@
                       ("python-empy" ,python-empy))
                     original-native-inputs))
            ((#:phases original-phases '())
-            #~(append %standard-phases #$original-phases))
+            #~(begin
+                (use-modules (guix build catkin-build-system)) ; make sure to use the correct standard phases
+                append %standard-phases #$original-phases))
            ((#:imported-modules orig-imported-modules '())
-            (append orig-imported-modules %catkin-build-system-modules)))))
+             (append %catkin-build-system-modules orig-imported-modules)))))
 
 (define-public catkin-build-system
   (build-system
     (inherit cmake-build-system)
+    (name "catkin-build-system")
     (description "The build system for ros-noetic using catkin")
     (lower lower-catkin)))
 
