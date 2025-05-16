@@ -10,6 +10,7 @@
   #:use-module (guix utils)
   #:use-module (gnu packages base)
   #:use-module (gnu packages cmake)
+  #:use-module (gnu packages commencement)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic-deps))
@@ -30,7 +31,7 @@
         (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
     (build-system catkin-build-system)
-    (inputs (list cmake gnu-make))
+    (inputs (list cmake gnu-make gcc-toolchain))
     (arguments
      (list
       #:catkin python-catkin-pkg
@@ -48,7 +49,8 @@
                      (wrap-program file
                        `("PATH" ":" prefix
                          ,(list (string-append #$cmake "/bin")
-                                (string-append #$gnu-make "/bin")))))
+                                (string-append #$gnu-make "/bin")
+                                (string-append #$gcc-toolchain "/bin")))))
                   (find-files (string-append #$output "/bin") "^catkin_*")))))))
     (home-page "http://wiki.ros.org/catkin")
     (synopsis "catkin build tool")
