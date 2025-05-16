@@ -38,7 +38,12 @@
      (list
       #:catkin python-catkin-pkg
       #:phases
-        #~(modify-phases %standard-phases
+      #~(begin
+           (display "STANDARD PHASES")
+           (newline)
+           (display %standard-phases)
+           (newline)
+           (modify-phases %standard-phases
             (add-after 'unpack 'fix-usr-bin-env
               (lambda* (#:key inputs #:allow-other-keys)
                       (substitute* "cmake/templates/python_distutils_install.sh.in"
@@ -51,7 +56,7 @@
                      (wrap-program file
                        `("PATH" prefix
                          ,(list (string-append #$cmake "/bin")))))
-                  (find-files (string-append #$output "/bin") "^catkin_*")))))))
+                  (find-files (string-append #$output "/bin") "^catkin_*"))))))))
     (home-page "http://wiki.ros.org/catkin")
     (synopsis "catkin build tool")
     (description "ROS 1 Catkin build tool")

@@ -1,7 +1,24 @@
-1. Check that catkin's inputs are specified directly by
-   - Creating a guix shell environment with catkin and making sure that I can catkin_make_isolated catkin itself.
-   - Check vcstool for a similar tool:
-     - It uses python but is an executable (so not prefixed with python)
-     - It calls other executables (which were inputs).
+Remove debugging code when this is finished.
 
-2. Transition ROS packages to the catkin-build-system
+Previous approach was trying to modify #:phases directly, but this was not working when #:phases was empty in the (package) definition due
+to build-system gexp craziness.
+
+It also does not seem to be the proper way to do it.
+
+In the package, it's canonical to do #~(modify-phases %standard-phases)
+The %standard-phases should be referring to the build-system's standard-phases.
+
+In this case it wasn't.
+
+The solution is to
+
+1. Override #:modules. This copies the "source code" of the module into the build container making it accessible to the build process
+2. Override #:imported-modules so that the package is actually imported.
+
+- This seems to work, but it seems like the %standard-phases are now coming from python.
+  I think this is a problem with how I define the modules, since I combine catkin, cmake, and python modules, all of which have %standard-phases defined.
+
+- Overall the goal is to make this as much like the other build systems as possible, and that includes following the model closely
+
+- So overall I need to inspect the value of %standard-phases in the gexp (which is changing when I play with #:modules and #:imported-modules.
+  It should be the version of phases that I have defined in catkin-build-system
