@@ -15,7 +15,6 @@
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic-deps))
 
-;; TODO: add cmake as an input and wrap executables so that they can find cmake
 (define-public catkin
   (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
         (revision "0"))
@@ -31,7 +30,10 @@
         (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
     (build-system catkin-build-system)
-    (inputs (list cmake gnu-make gcc-toolchain))
+    (inputs (list cmake))
+    ;; The only input is cmake because calling cmake is hard-coded into catkin
+    ;; However, cmake itself can find different compilers and be used with Make or ninja, etc
+    ;; Thus, the choice of make and compiler etc is left to the environment.
     (arguments
      (list
       #:catkin python-catkin-pkg
@@ -47,10 +49,8 @@
                    (lambda (file)
                      (display (string-append "Wrapping " file "\n"))
                      (wrap-program file
-                       `("PATH" ":" prefix
-                         ,(list (string-append #$cmake "/bin")
-                                (string-append #$gnu-make "/bin")
-                                (string-append #$gcc-toolchain "/bin")))))
+                       `("PATH" prefix
+                         ,(list (string-append #$cmake "/bin")))))
                   (find-files (string-append #$output "/bin") "^catkin_*")))))))
     (home-page "http://wiki.ros.org/catkin")
     (synopsis "catkin build tool")
