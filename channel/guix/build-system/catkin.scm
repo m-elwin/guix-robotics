@@ -43,12 +43,6 @@
   (define lower (build-system-lower cmake-build-system))
   "Return a bag for NAME."
   (define private-keywords '(#:catkin))
-  (display "Arguments")
-  (newline)
-  (display arguments)
-  (newline)
-  (display "-------")
-  (newline)
   ;; %standard-phases from the g-exp is looked up in some module, not sure which module
   (apply lower name
          (substitute-keyword-arguments (strip-keyword-arguments private-keywords arguments)
@@ -59,13 +53,14 @@
                       ("python-empy" ,python-empy))
                     original-native-inputs))
            ((#:modules orig-modules '())
-             (append %catkin-build-system-modules orig-modules))
+            (append `(((guix build cmake-build-system) #:select (cmake-build))
+                      (guix build catkin-build-system)
+                      (guix build utils)) orig-modules))
            ((#:imported-modules orig-imported-modules '())
              (append %catkin-build-system-modules orig-imported-modules)))))
 
 (define-public catkin-build-system
   (build-system
-    (inherit cmake-build-system)
     (name "catkin-build-system")
     (description "The build system for ros-noetic using catkin")
     (lower lower-catkin)))

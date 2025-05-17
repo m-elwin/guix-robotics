@@ -39,10 +39,6 @@
       #:catkin python-catkin-pkg
       #:phases
       #~(begin
-           (display "STANDARD PHASES")
-           (newline)
-           (display %standard-phases)
-           (newline)
            (modify-phases %standard-phases
             (add-after 'unpack 'fix-usr-bin-env
               (lambda* (#:key inputs #:allow-other-keys)
@@ -52,7 +48,8 @@
               (lambda _
                   (for-each
                    (lambda (file)
-                     (display (string-append "Wrapping " file "\n"))
+                     (display (string-append "Wrapping " file))
+                     (newline)
                      (wrap-program file
                        `("PATH" prefix
                          ,(list (string-append #$cmake "/bin")))))
