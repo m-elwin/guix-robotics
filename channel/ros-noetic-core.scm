@@ -9,6 +9,7 @@
   #:use-module (guix gexp)
   #:use-module (guix utils)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages commencement)
   #:use-module (gnu packages python)
@@ -31,7 +32,7 @@
         (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
     (build-system catkin-build-system)
-    (native-inputs (list fish zsh))
+    (native-inputs (list fish zsh googletest python-nose coreutils))
     (inputs (list cmake))
     ;; The only input is cmake because calling cmake is hard-coded into catkin
     ;; However, cmake itself can find different compilers and be used with Make or ninja, etc
@@ -44,8 +45,13 @@
            (modify-phases %standard-phases
             (add-after 'unpack 'fix-usr-bin-env
               (lambda* (#:key inputs #:allow-other-keys)
+                ;;replace hard-coded paths with the proper location for guix
                       (substitute* "cmake/templates/python_distutils_install.sh.in"
-                        (("/usr/bin/env") (search-input-file inputs "/bin/env")))))
+                        (("/usr/bin/env") (search-input-file inputs "/bin/env")))
+                      (substitute* "test/unit_tests/test_environment_cache.py"
+                        (("#! /usr/bin/env sh") (string-append "#! " (search-input-file inputs "/bin/env") " sh")))
+                      (substitute* "test/utils.py"
+                        (("/bin/ln") (search-input-file inputs "/bin/ln")))))
             (add-after 'wrap 'wrap-script
               (lambda _
                   (for-each
