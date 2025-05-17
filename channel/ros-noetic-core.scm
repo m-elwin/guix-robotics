@@ -82,6 +82,7 @@
         (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
        (file-name (git-file-name name version))))
     (build-system catkin-build-system)
+    (native-inputs (list python-nose))
      (home-page "https://docs.ros.org/en/api/genmsg/html/")
      (synopsis "Decouple code generation from .msg .srv files from build system")
      (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
