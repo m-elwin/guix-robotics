@@ -13,6 +13,7 @@
   #:use-module (gnu packages commencement)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages shells)
   #:use-module (ros-noetic-deps))
 
 (define-public catkin
@@ -30,6 +31,7 @@
         (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
     (build-system catkin-build-system)
+    (native-inputs (list fish zsh))
     (inputs (list cmake))
     ;; The only input is cmake because calling cmake is hard-coded into catkin
     ;; However, cmake itself can find different compilers and be used with Make or ninja, etc
