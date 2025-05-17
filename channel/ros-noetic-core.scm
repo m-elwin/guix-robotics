@@ -39,7 +39,7 @@
     ;; Thus, the choice of make and compiler etc is left to the environment.
     (arguments
      (list
-      #:catkin python-catkin-pkg
+      #:catkin? #f
       #:phases
       #~(begin
            (modify-phases %standard-phases
@@ -67,29 +67,29 @@
     (description "ROS 1 Catkin build tool")
     (license license:bsd-3))))
 
-;(define-public ros-noetic-genmsg
-;  (let ((commit "393871225e1458d2a8db41761759e57ca01a1801")
-;        (revision "0"))
-;    (package
-;      (name "ros-noetic-genmsg")
-;      (version (git-version "0.6.1" revision commit))
-;    (source
-;     (origin
-;       (method git-fetch)
-;       (uri (git-reference (url "https://github.com/ros/genmsg")
-;                           (commit commit)))
-;       (sha256
-;        (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
-;       (file-name (git-file-name name version))))
-;    (build-system catkin-build-system)
-;    (native-inputs (list catkin))
-;     (home-page "https://docs.ros.org/en/api/genmsg/html/")
-;     (synopsis "Decouple code generation from .msg .srv files from build system")
-;     (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
-;files from the parsing of these files and from impementation details of the build system
-;(project directory layout, existence or nonexistence of utilities like rospack, values of environment
-;variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set in any particular way.")
-;     (license license:bsd-3))))
+(define-public ros-noetic-genmsg
+  (let ((commit "393871225e1458d2a8db41761759e57ca01a1801")
+        (revision "0"))
+    (package
+      (name "ros-noetic-genmsg")
+      (version (git-version "0.6.1" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros/genmsg")
+                           (commit commit)))
+       (sha256
+        (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
+       (file-name (git-file-name name version))))
+    (build-system catkin-build-system)
+    (native-inputs (list catkin))
+     (home-page "https://docs.ros.org/en/api/genmsg/html/")
+     (synopsis "Decouple code generation from .msg .srv files from build system")
+     (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
+files from the parsing of these files and from impementation details of the build system
+(project directory layout, existence or nonexistence of utilities like rospack, values of environment
+variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set in any particular way.")
+     (license license:bsd-3))))
 ;
 ;(define-public ros-noetic-gencpp
 ;  (let ((commit "cc7e11cf67ec5c5f49b1d539e80475073f3864b4")

@@ -37,18 +37,17 @@
 
   ;;; adds some python phases to gnu
 ;;; Defined to augment the native inputs of anything that uses this build system
-(define* (lower-catkin name #:key (catkin (default-catkin))
+(define* (lower-catkin name #:key (catkin? #t)
                        #:allow-other-keys
                        #:rest arguments)
   (define lower (build-system-lower cmake-build-system))
-  "Return a bag for NAME."
-  (define private-keywords '(#:catkin))
-  ;; %standard-phases from the g-exp is looked up in some module, not sure which module
+  "Return a bag for NAME. catkin? is #f to not include catkin as an input, such as when building the catkin package itself"
+  (define private-keywords '(#:catkin?))
   (apply lower name
          (substitute-keyword-arguments (strip-keyword-arguments private-keywords arguments)
            ((#:native-inputs original-native-inputs '())
-            (append `(("catkin" ,catkin)
-                      ("python" ,python)
+            (append (if catkin? `(("catkin" ,(default-catkin))) '())
+                    `(("python" ,python)
                       ("python-catkin-pkg" ,python-catkin-pkg)
                       ("python-empy" ,python-empy))
                     original-native-inputs))
