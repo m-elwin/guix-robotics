@@ -90,27 +90,27 @@ files from the parsing of these files and from impementation details of the buil
 (project directory layout, existence or nonexistence of utilities like rospack, values of environment
 variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set in any particular way.")
      (license license:bsd-3))))
-;
-;(define-public ros-noetic-gencpp
-;  (let ((commit "cc7e11cf67ec5c5f49b1d539e80475073f3864b4")
-;        (revision "0"))
-;    (package
-;      (name "ros-noetic-gencpp")
-;      (version (git-version "0.7.2" revision commit))
-;    (source
-;     (origin
-;       (method git-fetch)
-;       (uri (git-reference (url "https://github.com/ros/gencpp")
-;                           (commit commit)))
-;       (sha256
-;        (base32 "1nwia7j7390x8574cw1iz4w1phv8q67w3khykfphsssbbxly3v44"))
-;       (file-name (git-file-name name version))))
-;    (build-system cmake-build-system)
-;    (native-inputs (list catkin python ros-noetic-genmsg))
-;     (home-page "https://wiki.ros.org/gencpp")
-;     (synopsis "ROS C++ message definition and serialization generators")
-;     (description "Generate ROS msgs and srvs for C++")
-;     (license license:bsd-3))))
+
+(define-public ros-noetic-gencpp
+  (let ((commit "cc7e11cf67ec5c5f49b1d539e80475073f3864b4")
+        (revision "0"))
+    (package
+      (name "ros-noetic-gencpp")
+      (version (git-version "0.7.2" revision commit))
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference (url "https://github.com/ros/gencpp")
+                           (commit commit)))
+       (sha256
+        (base32 "1nwia7j7390x8574cw1iz4w1phv8q67w3khykfphsssbbxly3v44"))
+       (file-name (git-file-name name version))))
+    (build-system catkin-build-system)
+    (native-inputs (list ros-noetic-genmsg))
+     (home-page "https://wiki.ros.org/gencpp")
+     (synopsis "ROS C++ message definition and serialization generators")
+     (description "Generate ROS msgs and srvs for C++")
+     (license license:bsd-3))))
 ;
 ;(define-public ros-noetic-geneus
 ;  (let ((commit "ec388e279ce4fd52ec78a4144ba52014ab4dd824")
