@@ -1157,6 +1157,33 @@ any of the ROS tools are written in rospy to take advantage of the type introspe
 Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
   (license license:bsd-3))))
 
+(define-public ros-noetic-rosmaster
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosmaster")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list python-defusedxml
+                    ros-noetic-rosgraph))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosmaster"))))))
+      (home-page "https://wiki.ros.org/rosmaster")
+      (synopsis "ROS Master implementation")
+      (description "All ROS 1 systems must run a rosmaster to coordinate communication.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-pluginlib
   (let ((commit "8d4bf7e4fab132d6b7d894d446631a9161f2afec")
         (revision "0"))
@@ -1188,25 +1215,96 @@ Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
       (description "These tools require plugin providers to register their plugins in the package.xml of their package.")
   (license license:bsd-3))))
 
+;;(define-public ros-noetic-rostest
+;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+;        (revision "0"))
+;    (package
+;      (name "ros-noetic-rostest")
+;      (version (git-version "1.17.3" revision commit))
+;      (source
+;       (origin
+;         (method git-fetch)
+;         (uri (git-reference (url "https://github.com/ros/ros_comm")
+;                             (commit commit)))
+;         (sha256
+;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+;         (file-name (git-file-name name version))))
+;      (build-system catkin-build-system)
+;      (native-inputs (list ros-noetic-rostest))
+;      (inputs (list bzip2
+;                    boost
+;                    openssl
+;                    ros-noetic-cpp-common
+;                    ros-noetic-pluginlib
+;                    ros-noetic-roscpp-serialization
+;                    ros-noetic-roscpp-traits
+;                    ros-noetic-rostime
+;                    ros-noetic-roslz4
+;                    ros-noetic-std-msgs))
+;
+;      (arguments (list
+;                  #:phases #~(modify-phases %standard-phases
+;                               ;; go to the directory for the ros package
+;                               (add-after 'unpack 'switch-to-pkg-src
+;                                 (lambda _ (chdir "tools/rostest"))))))
+;      (home-page "https://wiki.ros.org/rostest")
+;      (synopsis "Integration test suite based on roslaunch that is compatibile with xUnit frameworks")
+;      (description"Integration test suite based on roslaunch that is compatibile with xUnit frameworks.")
+;      (license license:bsd-3))))
+;
+;(define-public ros-noetic-rosbag-storage
+;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+;        (revision "0"))
+;    (package
+;      (name "ros-noetic-rosbag-storage")
+;      (version (git-version "1.17.3" revision commit))
+;      (source
+;       (origin
+;         (method git-fetch)
+;         (uri (git-reference (url "https://github.com/ros/ros_comm")
+;                             (commit commit)))
+;         (sha256
+;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+;         (file-name (git-file-name name version))))
+;      (build-system catkin-build-system)
+;      (native-inputs (list ros-noetic-rostest))
+;      (inputs (list bzip2
+;                    boost
+;                    openssl
+;                    ros-noetic-cpp-common
+;                    ros-noetic-pluginlib
+;                    ros-noetic-roscpp-serialization
+;                    ros-noetic-roscpp-traits
+;                    ros-noetic-rostime
+;                    ros-noetic-roslz4
+;                    ros-noetic-std-msgs))
+;
+;      (arguments (list
+;                  #:phases #~(modify-phases %standard-phases
+;                               ;; go to the directory for the ros package
+;                               (add-after 'unpack 'switch-to-pkg-src
+;                                 (lambda _ (chdir "tools/rosbag_storage"))))))
+;      (home-page "https://wiki.ros.org/rosbag_storage")
+;      (synopsis "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
+;      (description "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
+;      (license license:bsd-3))))
+
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
 ;;~~  - rosbag_migration_rule
 ;;~~  - roslisp
-;;~~  - rosmaster
 ;;~~  - rosparam
 ;;~~  - rosservice
 ;;~~  - roslaunch
-;;~~  - pluginlib
 ;;~~  - rosconsole_bridge
+;;~~  - rosbag-storage
 ;;~~  - roslz4
-;;~~  - rostest
 ;;~~  - std_srvs
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
 ;;~~  - rosout
 ;;~~  - message_filters
-;;~~  - rosbag_storage
 ;;~~  - rosmsg
 ;;~~  - rosnode
 ;;~~  - rostopic
