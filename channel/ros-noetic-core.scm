@@ -1015,7 +1015,8 @@ on SourceForge in order to support roscpp's threading model.
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
+      (inputs (list ros-noetic-std-msgs))
+      (propagated-inputs (list ros-noetic-message-runtime))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1070,16 +1071,16 @@ that end users do not interact with.")
       (inputs (list boost
                     pkg-config
                     ros-noetic-message-generation
-                    ros-noetic-rosconsole
-                    ros-noetic-cpp-common
                     ros-noetic-message-runtime
                     ros-noetic-roscpp-serialization
                     ros-noetic-roscpp-traits
                     ros-noetic-rosgraph-msgs
                     ros-noetic-roslang
-                    ros-noetic-rostime
-                    ros-noetic-std-msgs
-                    ros-noetic-xmlrpcpp))
+                    ros-noetic-rostime))
+      (propagated-inputs (list ros-noetic-cpp-common
+                               ros-noetic-rosconsole
+                               ros-noetic-std-msgs
+                               ros-noetic-xmlrpcpp))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1214,6 +1215,71 @@ on the Parameter Server using YAML-encoded files. It also contains an experiment
 library for using YAML with the Paramter Server. This library is intended for internal use only. rosparam can be invoked within a roslaunch file.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rosout
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosout")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-roscpp ros-noetic-rosgraph-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosout"))))))
+      (home-page "https://wiki.ros.org/rosout")
+      (synopsis "System-wide logging mechanism for messages sent to the /rosout topic")
+      (description "System-wide logging mechanism for messages sent to the /rosout topic.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-roslaunch
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslaunch")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rosbuild))
+      (inputs (list python-paramiko python-rospkg python-pyyaml
+                    ros-noetic-rosclean
+                    ros-noetic-rosgraph-msgs
+                    ros-noetic-roslib
+                    ros-noetic-rosmaster
+                    ros-noetic-rosout
+                    ros-noetic-rosparam
+                    ros-noetic-rosunit))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/roslaunch"))))))
+      (home-page "https://wiki.ros.org/roslaunch")
+      (synopsis "A tool for easily launching multiple ROS nodes locally and remotely as well as setting parameters on the Paramter Server")
+      (description "A tool for easily launching multiple ROS nodes locally and remotely as well as setting parameters on the Paramter Server. Includes options to
+automatically respawn processes that have already died. roslaunch takes in one or
+more XML configuration files (with the .launch extension) that specify the
+parameters to set and nodes to launch, as well as the machines that they should
+be run on.")
+      (license license:bsd-3))))
+
+
 (define-public ros-noetic-pluginlib
   (let ((commit "8d4bf7e4fab132d6b7d894d446631a9161f2afec")
         (revision "0"))
@@ -1324,16 +1390,13 @@ library for using YAML with the Paramter Server. This library is intended for in
 ;;~~  - ros_core
 ;;~~  - rosbag_migration_rule
 ;;~~  - roslisp
-;;~~  - rosparam
 ;;~~  - rosservice
-;;~~  - roslaunch
 ;;~~  - rosconsole_bridge
 ;;~~  - rosbag-storage
 ;;~~  - roslz4
 ;;~~  - std_srvs
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
-;;~~  - rosout
 ;;~~  - message_filters
 ;;~~  - rosmsg
 ;;~~  - rosnode
