@@ -503,6 +503,36 @@ the messages, as well as automated ways to process the diagnostic data.
 These messages are used for long term logging and will not be
 changed unless there is a very important reason.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-geometry-msgs
+  (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-geometry-msgs")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/common_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
+      (inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                       (lambda _ (chdir "diagnostic_msgs"))))))
+      (home-page "https://wiki.ros.org/diagnostic_msgs")
+      (synopsis "Messages for common geometric primitives")
+      (description "Provides messages for common geometric primitives
+such as points, vectors, and poses. These primitives are designed
+to provide a common data type and facilitate interoperability
+throughout the system.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - mk
 ;;~~  - ros
