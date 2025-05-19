@@ -50,3 +50,5 @@ and should be usable on any platform supported by APR")
                            "/apache-log4cxx-" version ".tar.gz"))
        (sha256
         (base32 "14xkb34svkgn08gz7qbama3idlk2a4q5y7ansccvkrf4wdg705n3"))))))
+
+(define-public log4cxx-noetic log4cxx-0.11)
