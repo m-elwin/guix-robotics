@@ -906,6 +906,33 @@ are shared across ROS client library implementations")
       (synopsis "Tool taht assists in creating ROS filesystem resources")
       (description "It provides roscreate-pkg, which creates a new package directory, including the appropriate build and manifest files.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rosunit
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosunit")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-roslib))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "tools/rosunit"))))))
+      (home-page "https://wiki.ros.org/rosunit")
+      (synopsis "Unit-testing package for ROS")
+      (description "Lower-level library for rostest that handles
+unit tests, whereas rostest handles integration tests.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros
 ;;~~  - ros_comm
@@ -919,7 +946,6 @@ are shared across ROS client library implementations")
 ;;~~  - rospy
 ;;~~  - rosservice
 ;;~~  - roslaunch
-;;~~  - rosunit
 ;;~~  - rosconsole
 ;;~~  - pluginlib
 ;;~~  - rosconsole_bridge
