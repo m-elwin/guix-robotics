@@ -40,7 +40,6 @@
 (define* (lower-catkin name #:key
                        (catkin? #t)
                        (test-target "run_tests")
-                       (configure-flags #~(list "-DCATKIN_ENABLE_TESTING=ON"))
                        #:allow-other-keys
                        #:rest arguments)
   (define lower (build-system-lower cmake-build-system))
@@ -49,10 +48,8 @@
   (apply lower name
          (substitute-keyword-arguments
              (strip-keyword-arguments private-keywords
-                                      (append arguments
-                                              (list
-                                               #:test-target test-target
-                                               #:configure-flags configure-flags)))
+                                      (append
+                                       arguments (list #:test-target test-target)))
            ((#:native-inputs original-native-inputs '())
             (append (if catkin? `(("catkin" ,(default-catkin))) '())
                     `(("python" ,python)
