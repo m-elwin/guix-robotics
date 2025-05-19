@@ -463,11 +463,45 @@ For common, generic robot-specific message types, please see http://www.ros.org/
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-cpp-core
+                     (add-after 'unpack 'switch-to-actionlib-msgs
                        (lambda _ (chdir "actionlib_msgs"))))))
-      (home-page "https://wiki.ros.org/std_msgs")
+      (home-page "https://wiki.ros.org/actionlib_msgs")
       (synopsis "Common messages to interact with an action server and action client")
       (description "Common messages to interact with an action server and action client.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-diagnostic-msgs
+  (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-diagnostic-msgs")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/common_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
+      (inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                       (lambda _ (chdir "diagnostic_msgs"))))))
+      (home-page "https://wiki.ros.org/diagnostic_msgs")
+      (synopsis "Standardized interface for diagnostic and runtime monitoring in ROS")
+      (description "Holds the diagnostic messages which provide the
+standardized interface for the diagnostic and runtime monitoring
+systems in ROS. These messages are currently used by
+the http://wiki.ros.org/diagnostics Stack, which provides libraries for simple ways to set and access
+the messages, as well as automated ways to process the diagnostic data.
+
+These messages are used for long term logging and will not be
+changed unless there is a very important reason.")
       (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - mk
