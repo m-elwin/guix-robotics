@@ -240,9 +240,29 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (description "The class_loader package is a ROS-independent package for loading plugins during runtime and the foundation of the higher level ROS pluginlib library. class_loader utilizes the host operating system's runtime loader to open runtime libraries (e.g. .so/.dll/dylib files), introspect the library for exported plugin classes, and allows users to instantiate objects of said exported classes without the explicit declaration (i.e. header file) for those classes.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-message-generation
+  (let ((commit "6dd393ba9c6a398784da4039c162fc9186f19796")
+        (revision "0"))
+    (package
+      (name "ros-noetic-message-generation")
+      (version (git-version "0.4.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/message_generation")
+                             (commit commit)))
+         (sha256
+          (base32 "1m36aknbv42m4jjaacnclm4frk5hg6aw9nql26jiphcfk3559iir"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-gencpp ros-noetic-geneus ros-noetic-gennodejs ros-noetic-genlisp ros-noetic-genmsg ros-noetic-genpy))
+      (home-page "https://github.com/ros/message_generation")
+      (synopsis "Meta Package for Message generation")
+      (description "Message packages depend on this metapackage to automatically bring in all message generators.")
+      (license license:bsd-3))))
+
 ;;~~  - common_msgs
 ;;~~  - cpp_common
-;;~~  - message_generation
 ;;~~  - message_runtime
 ;;~~  - mk
 ;;~~  - ros
