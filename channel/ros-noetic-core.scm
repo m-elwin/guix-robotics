@@ -239,8 +239,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (synopsis "ROS-independent plugin loading package")
       (description "The class_loader package is a ROS-independent package for loading plugins during runtime and the foundation of the higher level ROS pluginlib library. class_loader utilizes the host operating system's runtime loader to open runtime libraries (e.g. .so/.dll/dylib files), introspect the library for exported plugin classes, and allows users to instantiate objects of said exported classes without the explicit declaration (i.e. header file) for those classes.")
       (license license:bsd-3))))
-;
-;;~~  - class_loader
+
 ;;~~  - common_msgs
 ;;~~  - cpp_common
 ;;~~  - message_generation
