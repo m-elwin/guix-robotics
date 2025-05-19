@@ -827,14 +827,39 @@ are shared across ROS client library implementations")
       (synopsis "Assorted shell commands for using ros with bash")
       (description "Assorted shell commands for using ros with bash.")
       (license license:bsd-3))))
+
+
+(define-public ros-noetic-rosboost-cfg
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosboost-cfg")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-rospack))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "tools/rosboost_cfg"))))))
+      (home-page "https://wiki.ros.org/rosboost_cfg")
+      (synopsis "Used by the rosboost-cfg tool for termining cflgags/iflags etc. of boost on your system")
+      (description "Used by the rosboost-cfg tool for termining cflgags/iflags etc. of boost on your system")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros
 ;;~~  - ros_comm
 ;;~~  - ros_core
 ;;~~  - ros_environment
 ;;~~  - rosbag_migration_rule
-;;~~  - rosbash
-;;~~  - rosboost_cfg
 ;;~~  - rosclean
 ;;~~  - roscreate
 ;;~~  - rosgraph
