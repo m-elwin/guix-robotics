@@ -193,6 +193,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
        (file-name (git-file-name name version))))
     (build-system catkin-build-system)
     (native-inputs (list ros-noetic-genmsg python-nose python-pyyaml python-numpy))
+    (propagated-inputs (list python-pyyaml python-numpy))
      (home-page "https://github.com/ros/genpy")
      (synopsis "Python ROS message and service generators")
      (description "Python ROS message and service generators.")
@@ -255,7 +256,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
           (base32 "1m36aknbv42m4jjaacnclm4frk5hg6aw9nql26jiphcfk3559iir"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-gencpp ros-noetic-geneus ros-noetic-gennodejs ros-noetic-genlisp ros-noetic-genmsg ros-noetic-genpy))
+      (propagated-inputs (list ros-noetic-gencpp ros-noetic-geneus ros-noetic-gennodejs ros-noetic-genlisp ros-noetic-genmsg ros-noetic-genpy))
       (home-page "https://github.com/ros/message_generation")
       (synopsis "Meta Package for Message generation")
       (description "Message packages depend on this metapackage to automatically bring in all message generators.")
@@ -419,6 +420,29 @@ This package is a part of roscpp.")
       (description "Message packages depend on this metapackage at runtime to automatically bring in all message generators.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-std-msgs
+  (let ((commit "2d12e5b826da883d4c8a09f681ad27f960c86ca1")
+        (revision "0"))
+    (package
+      (name "ros-noetic-std-msgs")
+      (version (git-version "0.5.14" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/std_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "0d150h4j2r8km7mx4xhichvliixg69czjbwb14jwa0jkzg5ks093"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (inputs (list ros-noetic-message-runtime))
+      (home-page "https://wiki.ros.org/std_msgs")
+      (synopsis "Standard ROS messages including common message types representing primitive data types")
+      (description "Standard ROS Messages including common message types representing primitive data types and other basic message constructs, such as multiarrays.
+For common, generic robot-specific message types, please see http://www.ros.org/wiki/common_msgs.")
+      (license license:bsd-3))))
+
 ;;~~  - common_msgs
 ;;~~  - mk
 ;;~~  - ros
@@ -448,7 +472,6 @@ This package is a part of roscpp.")
 ;;~~  - rosconsole_bridge
 ;;~~  - roslz4
 ;;~~  - rostest
-;;~~  - std_msgs
 ;;~~  - actionlib_msgs
 ;;~~  - diagnostic_msgs
 ;;~~  - geometry_msgs
