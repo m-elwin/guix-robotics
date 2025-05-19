@@ -317,6 +317,32 @@ backtraces.")
       (description "Time and Duration implementation for C++ libraries, including roscpp.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-roscpp-traits
+  (let ((commit "2951f0579a94955f5529d7f24bb1c8c7f0256451")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roscpp-traits")
+      (version (git-version "0.7.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/roscpp_core")
+                             (commit commit)))
+         (sha256
+          (base32 "0zs0wlkldjkvyi2d74ri93hykbq2a5wmkb1x0jibnashlyiijiwj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cpp-common ros-noetic-rostime))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-roscpp-traits
+                       (lambda _ (chdir "roscpp_traits"))))))
+      (home-page "http://wiki.ros.org/roscpp_traits")
+      (synopsis "Message traits as defined in http://www.ros.org/wiki/roscpp/Overview/MessagesTraits")
+      (description "Message traits as defined in http://www.ros.org/wiki/roscpp/Overview/MessagesTraits.")
+      (license license:bsd-3))))
+
 ;(define-public ros-noetic-roscpp-serialization
 ;  (let ((commit "2951f0579a94955f5529d7f24bb1c8c7f0256451")
 ;        (revision "0"))
