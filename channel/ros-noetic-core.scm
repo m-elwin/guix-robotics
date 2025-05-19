@@ -896,7 +896,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-roslib))
+      (inputs (list ros-noetic-roslib python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -933,8 +933,44 @@ are shared across ROS client library implementations")
       (description "Lower-level library for rostest that handles
 unit tests, whereas rostest handles integration tests.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-ros
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-ros")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list
+                          catkin
+                          ros-noetic-mk
+                          ros-noetic-rosbuild
+                          ros-noetic-roslang
+                          ros-noetic-roslib
+                          ros-noetic-rosbash
+                          ros-noetic-rosboost-cfg
+                          ros-noetic-rosclean
+                          ros-noetic-roscreate
+                          ros-noetic-rosmake
+                          ros-noetic-rosunit))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "ros"))))))
+      (home-page "https://wiki.ros.org/ros")
+      (synopsis "ROS Packaging System")
+      (description "ROS Packaging System")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
-;;~~  - ros
 ;;~~  - ros_comm
 ;;~~  - ros_core
 ;;~~  - rosbag_migration_rule
