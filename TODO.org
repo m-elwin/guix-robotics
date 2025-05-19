@@ -1,1 +1,5 @@
-Add more packages.
+1. Add more packages.
+2. Make rosdep work
+   - Plan is to create a separate rosdep repo for this
+3. There are several ROS paths and env variables that need to be setup
+   it is unclear right now how best to integrate this flow with guix.

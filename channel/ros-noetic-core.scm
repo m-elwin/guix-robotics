@@ -804,6 +804,31 @@ primitives (cube, sphere, etc.), planes, and meshes.")
 are shared across ROS client library implementations")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rosbash
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosbash")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-rospack))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "tools/rosbash"))))))
+      (home-page "https://wiki.ros.org/rosbash")
+      (synopsis "Assorted shell commands for using ros with bash")
+      (description "Assorted shell commands for using ros with bash.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros
 ;;~~  - ros_comm
