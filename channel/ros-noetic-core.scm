@@ -414,7 +414,7 @@ This package is a part of roscpp.")
           (base32 "148jhpxir4fwp8xgk72gcn4m58kricg4ckmhnsilbrsq5ci4h1iy"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-cpp-common ros-noetic-roscpp-serialization ros-noetic-roscpp-traits ros-noetic-rostime ros-noetic-genpy))
+      (propagated-inputs (list ros-noetic-cpp-common ros-noetic-roscpp-serialization ros-noetic-roscpp-traits ros-noetic-rostime ros-noetic-genpy))
       (home-page "https://github.com/ros/message_runtime")
       (synopsis "Meta Package for the runtime components of ROS messages")
       (description "Message packages depend on this metapackage at runtime to automatically bring in all message generators.")
@@ -443,6 +443,32 @@ This package is a part of roscpp.")
 For common, generic robot-specific message types, please see http://www.ros.org/wiki/common_msgs.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-actionlib-msgs
+  (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-actionlib-msgs")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/common_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
+      (inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-cpp-core
+                       (lambda _ (chdir "actionlib_msgs"))))))
+      (home-page "https://wiki.ros.org/std_msgs")
+      (synopsis "Common messages to interact with an action server and action client")
+      (description "Common messages to interact with an action server and action client.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - mk
 ;;~~  - ros
@@ -472,7 +498,6 @@ For common, generic robot-specific message types, please see http://www.ros.org/
 ;;~~  - rosconsole_bridge
 ;;~~  - roslz4
 ;;~~  - rostest
-;;~~  - actionlib_msgs
 ;;~~  - diagnostic_msgs
 ;;~~  - geometry_msgs
 ;;~~  - nav_msgs
