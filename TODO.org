@@ -5,3 +5,11 @@
    it is unclear right now how best to integrate this flow with guix.
 4. Documentation: ros has it's own documentation system, could
    export that as a :doc part of split packages for each ROS package
+5. Cleanup:
+   Make a better package structure:
+   ros-noetic/
+
+   Then there will be 1 .scm file per repo that
+   has many packages so the .scm files will
+   map onto meta packages or packages that
+   stand on their own.

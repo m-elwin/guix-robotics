@@ -976,6 +976,34 @@ unit tests, whereas rostest handles integration tests.")
       (synopsis "ROS Packaging System")
       (description "ROS Packaging System")
       (license license:bsd-3))))
+
+(define-public ros-noetic-xmlrpcpp
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-xmlrpcpp")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cpp-common ros-noetic-rostime boost))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "utilities/xmlrpcpp"))))))
+      (home-page "https://wiki.ros.org/xmlrpcpp")
+      (synopsis "C++ implementation of the XML-RPC protocol")
+      (description "This version is heavily modified from the package available
+on SourceForge in order to support roscpp's threading model.
+ As such, we are maintaining our own fork.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
@@ -992,12 +1020,10 @@ unit tests, whereas rostest handles integration tests.")
 ;;~~  - rosconsole_bridge
 ;;~~  - roslz4
 ;;~~  - rostest
-;;~~  - diagnostic_msgs
 ;;~~  - rosgraph_msgs
 ;;~~  - std_srvs
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
-;;~~  - xmlrpcpp
 ;;~~  - roscpp
 ;;~~  - rosout
 ;;~~  - message_filters
