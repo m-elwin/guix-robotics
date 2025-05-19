@@ -1125,7 +1125,7 @@ to quickly interface with ROS Topics, Services, and Parameters.")
                                ;; go to the directory for the ros package
                                (add-after 'unpack 'switch-to-pkg-src
                                  (lambda _ (chdir "tools/rosgraph"))))))
-      (home-page "https://wiki.ros.org/rospy")
+      (home-page "https://wiki.ros.org/rosgraph")
       (synopsis "Contains the rosgraph command-line tool.")
       (description "The rosgraph command-line tool prints information
 about the ROS Computation Graph. it also provides an internal library
@@ -1147,7 +1147,7 @@ that can be used by graphical tools.")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list python-numpy python-rospkg python-yaml
+      (inputs (list python-numpy python-rospkg python-pyyaml
                     ros-noetic-roscpp ros-noetic-rosgraph
                     ros-noetic-rosgraph-msgs ros-noetic-roslib
                     ros-noetic-std-msgs))
