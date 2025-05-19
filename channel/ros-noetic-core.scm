@@ -284,7 +284,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-cpp-core
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "cpp_common"))))))
       (home-page "https://github.com/ros/roscpp_core")
       (synopsis "C++ code for doing things that are not necessarily ROS related")
@@ -313,7 +313,7 @@ backtraces. This package is part of roscpp")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-rostime
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "rostime"))))))
       (home-page "http://wiki.ros.org/roscpp/Overview/Time")
       (synopsis "Time and Duration implementation for C++ libraries, including roscpp")
@@ -340,7 +340,7 @@ This package is a part of roscpp.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-roscpp-traits
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "roscpp_traits"))))))
       (home-page "http://wiki.ros.org/roscpp_traits")
       (synopsis "Message traits as defined in http://www.ros.org/wiki/roscpp/Overview/MessagesTraits")
@@ -367,7 +367,7 @@ This package is a part of roscpp.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-roscpp-core
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "roscpp_core"))))))
       (home-page "http://wiki.ros.org/roscpp")
       (synopsis "Underlying data libraries for roscpp messages")
@@ -394,7 +394,7 @@ This package is a part of roscpp.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-roscpp-serialization
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "roscpp_serialization"))))))
       (home-page "https://github.com/ros/roscpp_core")
       (synopsis "Serialization, as described at https://www.ros.org/wiki/roscpp/Overview/MessageSerializationAndAdaptingTypes")
@@ -465,7 +465,7 @@ For common, generic robot-specific message types, please see http://www.ros.org/
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-actionlib-msgs
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "actionlib_msgs"))))))
       (home-page "https://wiki.ros.org/actionlib_msgs")
       (synopsis "Common messages to interact with an action server and action client")
@@ -492,7 +492,7 @@ For common, generic robot-specific message types, please see http://www.ros.org/
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "diagnostic_msgs"))))))
       (home-page "https://wiki.ros.org/diagnostic_msgs")
       (synopsis "Standardized interface for diagnostic and runtime monitoring in ROS")
@@ -526,7 +526,7 @@ changed unless there is a very important reason.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "geometry_msgs"))))))
       (home-page "https://wiki.ros.org/geometry_msgs")
       (synopsis "Messages for common geometric primitives")
@@ -563,7 +563,7 @@ throughout the system.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "nav_msgs"))))))
       (home-page "https://wiki.ros.org/nav_msgs")
       (synopsis "Messages for the navigation stack")
@@ -595,7 +595,7 @@ throughout the system.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "shape_msgs"))))))
       (home-page "https://wiki.ros.org/shape_msgs")
       (synopsis "Messages for defining shapes")
@@ -651,13 +651,41 @@ primitives (cube, sphere, etc.), planes, and meshes.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                     (add-after 'unpack 'switch-to-pkg-src
                        (lambda _ (chdir "core/rosbuild"))))))
       (home-page "https://wiki.ros.org/rosbuild")
       (synopsis "Scripts for managing CMake-based build system for ROS.")
       (description "This is the build-tool that existied before catkin, not sure why it's still in noetic.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-roslang
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslang")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list pkg-config))
+      (inputs (list
+               ros-noetic-message-generation
+               ))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "core/roslang"))))))
+      (home-page "https://wiki.ros.org/roslang")
+      (synopsis "Common package that all client libraries depend on")
+      (description "Mainly used to find client libraries (via 'rospack depends-on1 roslang').")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - mk
 ;;~~  - ros
