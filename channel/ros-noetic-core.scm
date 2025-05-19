@@ -399,7 +399,7 @@ This package is a part of roscpp.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-message-runtime
-  (let ((commit "6dd393ba9c6a398784da4039c162fc9186f19796")
+  (let ((commit "ebd0e5fc1b66f69c8301dfef55b31ceed83c1e15")
         (revision "0"))
     (package
       (name "ros-noetic-message-runtime")
@@ -410,7 +410,7 @@ This package is a part of roscpp.")
          (uri (git-reference (url "https://github.com/ros/message_runtime")
                              (commit commit)))
          (sha256
-          (base32 "1m36aknbv42m4jjaacnclm4frk5hg6aw9nql26jiphcfk3559iir"))
+          (base32 "148jhpxir4fwp8xgk72gcn4m58kricg4ckmhnsilbrsq5ci4h1iy"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list ros-noetic-cpp-common ros-noetic-roscpp-serialization ros-noetic-roscpp-traits ros-noetic-rostime ros-noetic-genpy))
@@ -420,8 +420,6 @@ This package is a part of roscpp.")
       (license license:bsd-3))))
 
 ;;~~  - common_msgs
-;;~~  - cpp_common
-;;~~  - message_runtime
 ;;~~  - mk
 ;;~~  - ros
 ;;~~  - ros_comm
@@ -432,7 +430,6 @@ This package is a part of roscpp.")
 ;;~~  - rosboost_cfg
 ;;~~  - rosbuild
 ;;~~  - rosclean
-;;~~  - roscpp_core
 ;;~~  - roscreate
 ;;~~  - rosgraph
 ;;~~  - roslang
