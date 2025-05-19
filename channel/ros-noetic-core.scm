@@ -1103,16 +1103,79 @@ that end users do not interact with.")
 to quickly interface with ROS Topics, Services, and Parameters.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rosgraph
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosgraph")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-mock))
+      (inputs (list python-netifaces python-rospkg python-pyyaml))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosgraph"))))))
+      (home-page "https://wiki.ros.org/rospy")
+      (synopsis "Contains the rosgraph command-line tool.")
+      (description "The rosgraph command-line tool prints information
+about the ROS Computation Graph. it also provides an internal library
+that can be used by graphical tools.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rospy
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rospy")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list python-numpy python-rospkg python-yaml
+                    ros-noetic-roscpp ros-noetic-rosgraph
+                    ros-noetic-rosgraph-msgs ros-noetic-roslib
+                    ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "clients/rospy"))))))
+      (home-page "https://wiki.ros.org/rospy")
+      (synopsis "The Python client library for ROS")
+      (description "rospy is a pure Python client library for ROS. The rospy client
+API enables Python programmers to quickly interface with ROS Topics,
+Services, and Parameters. The design of rospy favors implementation speed
+(i.e. developer time) over runtime performance so that algorithms can be quickly
+prototyped and tested within ROS. It is also ideal for non-critical-path code,
+such as configuration and initialization code.
+any of the ROS tools are written in rospy to take advantage of the type introspection capabilities.
+
+Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
+  (license license:bsd-3))))
 
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
 ;;~~  - rosbag_migration_rule
-;;~~  - rosgraph
 ;;~~  - roslisp
 ;;~~  - rosmaster
 ;;~~  - rosparam
-;;~~  - rospy
 ;;~~  - rosservice
 ;;~~  - roslaunch
 ;;~~  - pluginlib
