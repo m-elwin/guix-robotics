@@ -1077,11 +1077,11 @@ that end users do not interact with.")
                     ros-noetic-message-runtime
                     ros-noetic-roscpp-serialization
                     ros-noetic-roscpp-traits
-                    ros-noetic-rosgraph-msgs
                     ros-noetic-roslang
                     ros-noetic-rostime))
       (propagated-inputs (list ros-noetic-cpp-common
                                ros-noetic-rosconsole
+                               ros-noetic-rosgraph-msgs
                                ros-noetic-std-msgs
                                ros-noetic-xmlrpcpp))
       (arguments (list
@@ -1416,6 +1416,42 @@ LZ4 compression algorithm.")
       (description "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
       (license license:bsd-3))))
 
+(define-public ros-noetic-topic-tools
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-topic-tools")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest
+                           ros-noetic-message-generation
+                           ros-noetic-rosbash))
+      (inputs (list ros-noetic-cpp-common
+                    ros-noetic-rosconsole
+                    ros-noetic-roscpp
+                    ros-noetic-rostime
+                    ros-noetic-std-msgs
+                    ros-noetic-xmlrpcpp))
+
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/topic_tools"))))))
+      (home-page "https://wiki.ros.org/rosbag_storage")
+      (synopsis "Tools for messing with ROS topics at the meta level.")
+      (description " Tools for directing, throttling, selecting, and otherwise messing with ROS topics at a meta level.
+None of the programs in this package actually know about the topics whose streams they are altering; instead, these
+tools deal with messages as generic binary blobs. This means they can be applied to any ROS topic.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
@@ -1430,8 +1466,6 @@ LZ4 compression algorithm.")
 ;;~~  - rosmsg
 ;;~~  - rosnode
 ;;~~  - rostopic
-;;~~  - topic_tools
-;;~~  - rosbag
 ;;~~  - roswtf
 ;;~~  - sensor_msgs
 ;;~~  - stereo_msgs

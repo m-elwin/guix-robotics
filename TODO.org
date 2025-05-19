@@ -1,3 +1,5 @@
+0. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
+   - need to get these paths working better
 1. Add more packages.
 2. Make rosdep work
    - Plan is to create a separate rosdep repo for this
