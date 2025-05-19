@@ -630,15 +630,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
                ros-noetic-message-generation
                ))
       (native-search-paths (list (ros-package-path-search-path)))
-;      (arguments
-;       (list
-;        #:phases
-;        #~(modify-phases %standard-phases
-;              (add-after 'wrap 'ros-wrap
-;                (lambda _
-;                  (wrap-program (string-append #$output "/bin/rospack")
-;                    `("ROS_PACKAGE_PATH" ":" prefix
-;                      ,(list (getenv "GUIX_ROS_PACKAGE_PATH")))))))))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
       (description "Retrieves information about ROS packages from the filesystem")
@@ -791,8 +782,9 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list boost ros-noetic-rosmake ros-noetic-rospack))
-      (inputs (list ros-noetic-ros-environment python-rospkg ros-noetic-rospack))
+      (native-inputs (list boost ros-noetic-rosmake))
+      (inputs (list ros-noetic-ros-environment python-rospkg))
+      (propagated-inputs (list ros-noetic-rospack))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1053,12 +1045,8 @@ that end users do not interact with.")
       (native-inputs (list ros-noetic-rosunit))
       (inputs (list apr
                     boost
-                    ros-noetic-cpp-common
-                    ros-noetic-rostime
                     ros-noetic-rosbuild))
-      ;; roscpp depends on this, it needs headers from log4cxx-noetic but does not
-      ;; explicitly depend, therefore we propagate to stay consistent with ros package.xml
-      (propagated-inputs (list log4cxx-noetic))
+      (propagated-inputs (list log4cxx-noetic ros-noetic-cpp-common ros-noetic-rostime))
       (home-page "https://wiki.ros.org/rosconsole")
       (synopsis "ROS console output library")
       (description "ROS console output library. ")
@@ -1167,6 +1155,37 @@ such as configuration and initialization code.
 any of the ROS tools are written in rospy to take advantage of the type introspection capabilities.
 
 Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
+  (license license:bsd-3))))
+
+(define-public ros-noetic-pluginlib
+  (let ((commit "8d4bf7e4fab132d6b7d894d446631a9161f2afec")
+        (revision "0"))
+    (package
+      (name "ros-noetic-pluginlib")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/pluginlib")
+                             (commit commit)))
+         (sha256
+          (base32 "133bxdlw4ggsicyzql82hmvfji8lpd60qj2cqrvci3bfc1nr2j7z"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-class-loader
+                    ros-noetic-rosconsole
+                    ros-noetic-roslib
+                    tinyxml2
+                    ros-noetic-cmake-modules
+                    boost))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "pluginlib"))))))
+      (home-page "https://wiki.ros.org/pluginlib")
+      (synopsis "Tools for writing and dynamically loading plugins using the ROS build infrastructure")
+      (description "These tools require plugin providers to register their plugins in the package.xml of their package.")
   (license license:bsd-3))))
 
 ;;~~  - common_msgs
