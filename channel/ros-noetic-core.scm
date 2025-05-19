@@ -19,7 +19,13 @@
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages shells)
   #:use-module (gnu packages xml)
-  #:use-module (ros-noetic-deps))
+  #:use-module (ros-noetic-deps)
+  #:export (guix-ros-package-path-search-path))
+
+(define (ros-package-path-search-path)
+  "Generate a ROS_PACKAGE_PATH search path specification."
+  (search-path-specification (variable "ROS_PACKAGE_PATH")
+                             (files (list "."))))
 
 (define-public catkin
   (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
@@ -623,6 +629,16 @@ primitives (cube, sphere, etc.), planes, and meshes.")
                ros-noetic-message-runtime
                ros-noetic-message-generation
                ))
+      (native-search-paths (list (guix-ros-package-path-search-path)))
+;      (arguments
+;       (list
+;        #:phases
+;        #~(modify-phases %standard-phases
+;              (add-after 'wrap 'ros-wrap
+;                (lambda _
+;                  (wrap-program (string-append #$output "/bin/rospack")
+;                    `("ROS_PACKAGE_PATH" ":" prefix
+;                      ,(list (getenv "GUIX_ROS_PACKAGE_PATH")))))))))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
       (description "Retrieves information about ROS packages from the filesystem")
