@@ -1181,7 +1181,37 @@ Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
                                  (lambda _ (chdir "tools/rosmaster"))))))
       (home-page "https://wiki.ros.org/rosmaster")
       (synopsis "ROS Master implementation")
-      (description "All ROS 1 systems must run a rosmaster to coordinate communication.")
+      (description "All ROS 1 systems must run a rosmaster to coordinate
+communication.")
+      (license license:bsd-3))))
+
+
+(define-public ros-noetic-rosparam
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosparam")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list python-pyyaml ros-noetic-rosgraph))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosparam"))))))
+      (home-page "https://wiki.ros.org/rosparam")
+      (synopsis "The rosparam command-line tool for getting and setting ROS parameters")
+      (description "The rosparam command-line tool for getting and setting ROS parameters
+on the Parameter Server using YAML-encoded files. It also contains an experimental
+library for using YAML with the Paramter Server. This library is intended for internal use only. rosparam can be invoked within a roslaunch file.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-pluginlib
