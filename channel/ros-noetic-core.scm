@@ -41,7 +41,7 @@
         (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
     (build-system catkin-build-system)
-    (native-inputs (list fish zsh googletest python-nose coreutils))
+    (native-inputs (list fish zsh coreutils))
     (inputs (list cmake))
     ;; The only input is cmake because calling cmake is hard-coded into catkin
     ;; However, cmake itself can find different compilers and be used with Make or ninja, etc
@@ -91,7 +91,6 @@
         (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
        (file-name (git-file-name name version))))
     (build-system catkin-build-system)
-    (native-inputs (list python-nose))
      (home-page "https://docs.ros.org/en/api/genmsg/html/")
      (synopsis "Decouple code generation from .msg .srv files from build system")
      (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
@@ -199,7 +198,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
         (base32 "06a10p3kmy6m7mvkybj8pbl4pfrl9mm0wdgxbz67jr1disa1zj88"))
        (file-name (git-file-name name version))))
     (build-system catkin-build-system)
-    (native-inputs (list ros-noetic-genmsg python-nose python-pyyaml python-numpy))
+    (native-inputs (list ros-noetic-genmsg python-pyyaml python-numpy))
     (propagated-inputs (list python-pyyaml python-numpy))
      (home-page "https://github.com/ros/genpy")
      (synopsis "Python ROS message and service generators")
@@ -242,7 +241,7 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list boost console-bridge
-                           googletest poco ros-noetic-cmake-modules))
+                           poco ros-noetic-cmake-modules))
       (home-page "https://github.com/ros/class_loader")
       (synopsis "ROS-independent plugin loading package")
       (description "The class_loader package is a ROS-independent package for loading plugins during runtime and the foundation of the higher level ROS pluginlib library. class_loader utilizes the host operating system's runtime loader to open runtime libraries (e.g. .so/.dll/dylib files), introspect the library for exported plugin classes, and allows users to instantiate objects of said exported classes without the explicit declaration (i.e. header file) for those classes.")
@@ -314,7 +313,7 @@ backtraces. This package is part of roscpp")
           (base32 "0zs0wlkldjkvyi2d74ri93hykbq2a5wmkb1x0jibnashlyiijiwj"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list boost googletest ros-noetic-cpp-common))
+      (native-inputs (list boost ros-noetic-cpp-common))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -623,7 +622,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "025y5zvmh29xvzqdrif4rymwli4xqm3h7d2kvcxsndflpv4cg1m4"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list boost pkg-config tinyxml2 googletest ros-noetic-cmake-modules))
+      (native-inputs (list boost pkg-config tinyxml2 ros-noetic-cmake-modules))
       (inputs (list
                ros-noetic-message-runtime
                ros-noetic-message-generation
@@ -717,7 +716,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list python-nose))
       (inputs (list python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
@@ -791,7 +789,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list boost googletest python-nose ros-noetic-rosmake ros-noetic-rospack))
+      (native-inputs (list boost ros-noetic-rosmake ros-noetic-rospack))
       (inputs (list ros-noetic-ros-environment ros-noetic-rospack))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
