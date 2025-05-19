@@ -790,7 +790,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list boost ros-noetic-rosmake ros-noetic-rospack))
-      (inputs (list ros-noetic-ros-environment ros-noetic-rospack))
+      (inputs (list ros-noetic-ros-environment python-rospkg ros-noetic-rospack))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -871,11 +871,17 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (inputs (list python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
                      (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "tools/rosclean"))))))
+                       (lambda _ (chdir "tools/rosclean")))
+                     (add-after 'wrap 'wrap-script
+                       (lambda _
+                         (wrap-program (string-append #$output "/bin/rosclean")
+                           `("PATH" ":" prefix
+                             ,(list (string-append #$coreutils "/bin")))))))))
       (home-page "https://wiki.ros.org/rosclean")
       (synopsis "Cleanup file system resources (e.g. log files)")
       (description "Cleanup file system resources (e.g. log files).")
@@ -974,7 +980,6 @@ unit tests, whereas rostest handles integration tests.")
 ;;~~  - ros_comm
 ;;~~  - ros_core
 ;;~~  - rosbag_migration_rule
-;;~~  - rosclean
 ;;~~  - rosgraph
 ;;~~  - roslisp
 ;;~~  - rosmaster
