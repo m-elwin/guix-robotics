@@ -1031,6 +1031,33 @@ on SourceForge in order to support roscpp's threading model.
 that end users do not interact with.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-std-srvs
+  (let ((commit "2475ee81a55297a8e8007fea4d5bffaad36a2401")
+        (revision "0"))
+    (package
+      (name "ros-noetic-std-srvs")
+      (version (git-version "1.11.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "0m6qc7ddi7j4aw5dn4ly8vdc3apciwm4x5bmszi3wdm4rbb8vsv8"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "std_srvs/"))))))
+      (home-page "https://wiki.ros.org/std_srvs")
+      (synopsis "Common service definitions")
+      (description "Common service definitions")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rosconsole
   (let ((commit "44ad0b1f0eccc7f5abd14144e4fe5f74f85592d6")
         (revision "0"))
@@ -1399,13 +1426,12 @@ LZ4 compression algorithm.")
                     gpgme
                     openssl
                     ros-noetic-cpp-common
-                    ros-noetic-pluginlib
                     ros-noetic-roscpp-serialization
                     ros-noetic-roscpp-traits
                     ros-noetic-rostime
-                    ros-noetic-roslz4
                     ros-noetic-std-msgs))
-
+      (propagated-inputs (list ros-noetic-pluginlib
+                               ros-noetic-roslz4))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1446,24 +1472,129 @@ LZ4 compression algorithm.")
                                ;; go to the directory for the ros package
                                (add-after 'unpack 'switch-to-pkg-src
                                  (lambda _ (chdir "tools/topic_tools"))))))
-      (home-page "https://wiki.ros.org/rosbag_storage")
-      (synopsis "Tools for messing with ROS topics at the meta level.")
-      (description " Tools for directing, throttling, selecting, and otherwise messing with ROS topics at a meta level.
+      (home-page "https://wiki.ros.org/topic_tools")
+      (synopsis "Tools for messing with ROS topics at the meta level")
+      (description "Tools for directing, throttling, selecting, and otherwise messing with ROS topics at a meta level.
 None of the programs in this package actually know about the topics whose streams they are altering; instead, these
 tools deal with messages as generic binary blobs. This means they can be applied to any ROS topic.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rosbag
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosbag")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-pillow
+                           ros-noetic-roscpp-serialization))
+      (inputs (list
+               ros-noetic-cpp-common
+                    ros-noetic-topic-tools
+                    python-pycryptodomex
+                    python-gnupg
+                    python-rospkg
+                    ros-noetic-roslib
+                    ros-noetic-rospy))
+      (propagated-inputs (list
+                          boost
+                          ros-noetic-rosbag-storage
+                          ros-noetic-rosconsole
+                          ros-noetic-roscpp
+                          ros-noetic-std-srvs
+                          ros-noetic-xmlrpcpp))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosbag"))))))
+      (home-page "https://wiki.ros.org/rosbag")
+      (synopsis "Tools for recording and playing back to ROS topics")
+      (description "Tools for recording and playing back ROS topics to ROS bags. It is intended to
+be high performance and avoids deserialization and reserialization of messages.")
+      (license license:bsd-3))))
+
+;(define-public ros-noetic-rosmsg
+;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+;        (revision "0"))
+;    (package
+;      (name "ros-noetic-rosmsg")
+;      (version (git-version "1.17.3" revision commit))
+;      (source
+;       (origin
+;         (method git-fetch)
+;         (uri (git-reference (url "https://github.com/ros/ros_comm")
+;                             (commit commit)))
+;         (sha256
+;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+;         (file-name (git-file-name name version))))
+;      (build-system catkin-build-system)
+;      (inputs (list ros-noetic-genmsg
+;                    ros-noetic-genpy
+;                    python-rospkg
+;                    ros-noetic-rospy
+;                    ros-noetic-rosmsg))
+;      (arguments (list
+;                  #:phases #~(modify-phases %standard-phases
+;                               ;; go to the directory for the ros package
+;                               (add-after 'unpack 'switch-to-pkg-src
+;                                 (lambda _ (chdir "tools/rosmsg"))))))
+;      (home-page "https://wiki.ros.org/rosmsg")
+;      (synopsis "The rosmsg and rossrv command-line tools for displaying message/service type information")
+;      (description "The rosmsg and rossrv command-line tools. rosmsg displays information about message types.
+;rossrv displays information about serfvice types.")
+;      (license license:bsd-3))))
+;
+;(define-public ros-noetic-rosservice
+;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+;        (revision "0"))
+;    (package
+;      (name "ros-noetic-rosservice")
+;      (version (git-version "1.17.3" revision commit))
+;      (source
+;       (origin
+;         (method git-fetch)
+;         (uri (git-reference (url "https://github.com/ros/ros_comm")
+;                             (commit commit)))
+;         (sha256
+;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+;         (file-name (git-file-name name version))))
+;      (build-system catkin-build-system)
+;      (inputs (list ros-noetic-genpy
+;                    ros-noetic-rosgraph
+;                    ros-noetic-roslib
+;                    ros-noetic-rospy
+;                    ros-noetic-rosmsg))
+;      (arguments (list
+;                  #:phases #~(modify-phases %standard-phases
+;                               ;; go to the directory for the ros package
+;                               (add-after 'unpack 'switch-to-pkg-src
+;                                 (lambda _ (chdir "tools/rosservice"))))))
+;      (home-page "https://wiki.ros.org/rosservice")
+;      (synopsis "The rosservice command-line tool for listing and querying ROS services")
+;      (description "The rosservice command-line tool for listing and querying ROS services.
+;Also contains a Python library for tetrieving information about
+;Services and dynamically invoking them. The Python library is experimental and is for
+;internal-use only.")
+;      (license license:bsd-3))))
+
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
 ;;~~  - rosbag_migration_rule
 ;;~~  - roslisp
-;;~~  - rosservice
 ;;~~  - rosconsole_bridge
-;;~~  - std_srvs
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
 ;;~~  - message_filters
-;;~~  - rosmsg
 ;;~~  - rosnode
 ;;~~  - rostopic
 ;;~~  - roswtf
