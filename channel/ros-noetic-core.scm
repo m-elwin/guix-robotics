@@ -14,9 +14,11 @@
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages cpp)
   #:use-module (gnu packages commencement)
+  #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages shells)
+  #:use-module (gnu packages xml)
   #:use-module (ros-noetic-deps))
 
 (define-public catkin
@@ -600,6 +602,62 @@ throughout the system.")
       (description "Messages for defining shapes such as simple solid object
 primitives (cube, sphere, etc.), planes, and meshes.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rospack
+  (let ((commit "63bf5288618e6a44e2f12fbd43ea6fd4e6b5e984")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rospack")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/rospack")
+                             (commit commit)))
+         (sha256
+          (base32 "025y5zvmh29xvzqdrif4rymwli4xqm3h7d2kvcxsndflpv4cg1m4"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list boost pkg-config tinyxml2 googletest ros-noetic-cmake-modules))
+      (inputs (list
+               ros-noetic-message-runtime
+               ros-noetic-message-generation
+               ))
+      (home-page "https://wiki.ros.org/rospack")
+      (synopsis "ROS Package Tool")
+      (description "Retrieves information about ROS packages from the filesystem")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rosbuild
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosbuild")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list pkg-config))
+      (inputs (list
+               ros-noetic-message-runtime
+               ros-noetic-message-generation
+               ))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-diagnostic-msgs
+                       (lambda _ (chdir "core/rosbuild"))))))
+      (home-page "https://wiki.ros.org/rosbuild")
+      (synopsis "Scripts for managing CMake-based build system for ROS.")
+      (description "This is the build-tool that existied before catkin, not sure why it's still in noetic.")
+      (license license:bsd-3))))
+
 ;;~~  - common_msgs
 ;;~~  - mk
 ;;~~  - ros
@@ -609,7 +667,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
 ;;~~  - rosbag_migration_rule
 ;;~~  - rosbash
 ;;~~  - rosboost_cfg
-;;~~  - rosbuild
 ;;~~  - rosclean
 ;;~~  - roscreate
 ;;~~  - rosgraph
@@ -617,7 +674,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
 ;;~~  - roslisp
 ;;~~  - rosmake
 ;;~~  - rosmaster
-;;~~  - rospack
 ;;~~  - roslib
 ;;~~  - rosparam
 ;;~~  - rospy
