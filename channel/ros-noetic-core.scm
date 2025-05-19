@@ -195,27 +195,26 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
      (synopsis "Python ROS message and service generators")
      (description "Python ROS message and service generators.")
      (license license:bsd-3))))
-;
-;(define-public ros-noetic-cmake-modules
-;  (let ((commit "3f8318d8f673e619023e9a526b6ee37536be1659")
-;        (revision "0"))
-;    (package
-;      (name "ros-noetic-cmake-modules")
-;      (version (git-version "0.5.2" revision commit))
-;    (source
-;     (origin
-;       (method git-fetch)
-;       (uri (git-reference (url "https://github.com/ros/cmake_modules")
-;                           (commit commit)))
-;       (sha256
-;        (base32 "0zaiv1hr5hx64mm64620kigin2bck1msfv87cdk36im7bzpa7jsv"))
-;       (file-name (git-file-name name version))))
-;    (build-system cmake-build-system)
-;    (native-inputs (list catkin python))
-;     (home-page "https://github.com/ros/cmake_modules")
-;     (synopsis "CMake modules used by ROS but not included with CMake")
-;     (description "CMake modules used by ROS but not included with CMake")
-;     (license license:bsd-3))))
+
+(define-public ros-noetic-cmake-modules
+  (let ((commit "3f8318d8f673e619023e9a526b6ee37536be1659")
+        (revision "0"))
+    (package
+      (name "ros-noetic-cmake-modules")
+      (version (git-version "0.5.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/cmake_modules")
+                             (commit commit)))
+         (sha256
+          (base32 "0zaiv1hr5hx64mm64620kigin2bck1msfv87cdk36im7bzpa7jsv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "https://github.com/ros/cmake_modules")
+      (synopsis "CMake modules used by ROS but not included with CMake")
+      (description "CMake modules used by ROS but not included with CMake")
+      (license license:bsd-3))))
 ;
 ;;~~  - class_loader
 ;;~~  - common_msgs
