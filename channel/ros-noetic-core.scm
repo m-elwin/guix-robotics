@@ -717,6 +717,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (native-inputs (list python-nose))
       (inputs (list python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
@@ -755,6 +756,53 @@ primitives (cube, sphere, etc.), planes, and meshes.")
     The other files in this package are intended for use in exotic situations that mostly arise when importing 3rdparty code.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-ros-environment
+  (let ((commit "090da7f2ba21fc17f44bba782fb39f3e6da93308")
+        (revision "0"))
+    (package
+      (name "ros-noetic-ros-environment")
+      (version (git-version "1.3.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_environment")
+                             (commit commit)))
+         (sha256
+          (base32 "1kpj8zaw3gkwhjkaxx1ccy5jlpc0zcsf2qwzppx5whv7pl9k7ygf"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "https://wiki.ros.org/ros_environment")
+      (synopsis "Provides the environment variables ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR")
+      (description "Provides the environment variables ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR.")
+      (license license:apsl2))))
+
+(define-public ros-noetic-roslib
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslib")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list boost googletest python-nose ros-noetic-rosmake ros-noetic-rospack))
+      (inputs (list ros-noetic-ros-environment ros-noetic-rospack))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "core/roslib"))))))
+      (home-page "https://wiki.ros.org/roslib")
+      (synopsis "Base dependencies and support libraries for ROS")
+      (description "Contains many of the common data structures and tools that
+are shared across ROS client library implementations")
+      (license license:bsd-3))))
 
 ;;~~  - common_msgs
 ;;~~  - ros
@@ -770,7 +818,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
 ;;~~  - roslang
 ;;~~  - roslisp
 ;;~~  - rosmaster
-;;~~  - roslib
 ;;~~  - rosparam
 ;;~~  - rospy
 ;;~~  - rosservice
