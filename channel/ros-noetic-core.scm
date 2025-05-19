@@ -21,6 +21,7 @@
   #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages shells)
+  #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
   #:use-module (contributed)
   #:use-module (ros-noetic-deps)
@@ -1344,43 +1345,37 @@ Large data streams are split into blocks which are compressed using the very fas
 LZ4 compression algorithm.")
       (license license:bsd-3))))
 
-;;(define-public ros-noetic-rostest
-;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
-;        (revision "0"))
-;    (package
-;      (name "ros-noetic-rostest")
-;      (version (git-version "1.17.3" revision commit))
-;      (source
-;       (origin
-;         (method git-fetch)
-;         (uri (git-reference (url "https://github.com/ros/ros_comm")
-;                             (commit commit)))
-;         (sha256
-;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
-;         (file-name (git-file-name name version))))
-;      (build-system catkin-build-system)
-;      (native-inputs (list ros-noetic-rostest))
-;      (inputs (list bzip2
-;                    boost
-;                    openssl
-;                    ros-noetic-cpp-common
-;                    ros-noetic-pluginlib
-;                    ros-noetic-roscpp-serialization
-;                    ros-noetic-roscpp-traits
-;                    ros-noetic-rostime
-;                    ros-noetic-roslz4
-;                    ros-noetic-std-msgs))
-;
-;      (arguments (list
-;                  #:phases #~(modify-phases %standard-phases
-;                               ;; go to the directory for the ros package
-;                               (add-after 'unpack 'switch-to-pkg-src
-;                                 (lambda _ (chdir "tools/rostest"))))))
-;      (home-page "https://wiki.ros.org/rostest")
-;      (synopsis "Integration test suite based on roslaunch that is compatibile with xUnit frameworks")
-;      (description"Integration test suite based on roslaunch that is compatibile with xUnit frameworks.")
-;      (license license:bsd-3))))
-;
+(define-public ros-noetic-rostest
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rostest")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list boost
+                    ros-noetic-rosgraph
+                    ros-noetic-roslaunch
+                    ros-noetic-rosmaster
+                    ros-noetic-rospy
+                    ros-noetic-rosunit))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rostest"))))))
+      (home-page "https://wiki.ros.org/rostest")
+      (synopsis "Integration test suite based on roslaunch that is compatibile with xUnit frameworks")
+      (description"Integration test suite based on roslaunch that is compatibile with xUnit frameworks.")
+      (license license:bsd-3))))
+
 ;(define-public ros-noetic-rosbag-storage
 ;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
 ;        (revision "0"))
@@ -1425,7 +1420,6 @@ LZ4 compression algorithm.")
 ;;~~  - roslisp
 ;;~~  - rosservice
 ;;~~  - rosconsole_bridge
-;;~~  - roslz4
 ;;~~  - std_srvs
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
