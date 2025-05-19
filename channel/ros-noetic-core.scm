@@ -16,6 +16,7 @@
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages cpp)
   #:use-module (gnu packages commencement)
+  #:use-module (gnu packages gnupg)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-crypto)
@@ -27,8 +28,7 @@
   #:use-module (ros-noetic-deps)
   #:export (guix-ros-package-path-search-path))
 
-(define (ros-package-path-search-path)
-  "Generate a ROS_PACKAGE_PATH search path specification."
+(define ros-package-path-search-path
   (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "."))))
 
 (define-public catkin
@@ -447,7 +447,7 @@ This package is a part of roscpp.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
-      (inputs (list ros-noetic-message-runtime))
+      (propagated-inputs (list ros-noetic-message-runtime))
       (home-page "https://wiki.ros.org/std_msgs")
       (synopsis "Standard ROS messages including common message types representing primitive data types")
       (description "Standard ROS Messages including common message types representing primitive data types and other basic message constructs, such as multiarrays.
@@ -632,7 +632,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
                ros-noetic-message-runtime
                ros-noetic-message-generation
                ))
-      (native-search-paths (list (ros-package-path-search-path)))
+      (native-search-paths (list ros-package-path-search-path))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
       (description "Retrieves information about ROS packages from the filesystem")
@@ -1298,12 +1298,13 @@ be run on.")
           (base32 "133bxdlw4ggsicyzql82hmvfji8lpd60qj2cqrvci3bfc1nr2j7z"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-class-loader
-                    ros-noetic-rosconsole
-                    ros-noetic-roslib
-                    tinyxml2
+      (inputs (list tinyxml2
                     ros-noetic-cmake-modules
                     boost))
+      (propagated-inputs (list ros-noetic-class-loader
+                               ros-noetic-rosconsole
+                               ros-noetic-roslib
+                               ))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1376,42 +1377,44 @@ LZ4 compression algorithm.")
       (description"Integration test suite based on roslaunch that is compatibile with xUnit frameworks.")
       (license license:bsd-3))))
 
-;(define-public ros-noetic-rosbag-storage
-;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
-;        (revision "0"))
-;    (package
-;      (name "ros-noetic-rosbag-storage")
-;      (version (git-version "1.17.3" revision commit))
-;      (source
-;       (origin
-;         (method git-fetch)
-;         (uri (git-reference (url "https://github.com/ros/ros_comm")
-;                             (commit commit)))
-;         (sha256
-;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
-;         (file-name (git-file-name name version))))
-;      (build-system catkin-build-system)
-;      (native-inputs (list ros-noetic-rostest))
-;      (inputs (list bzip2
-;                    boost
-;                    openssl
-;                    ros-noetic-cpp-common
-;                    ros-noetic-pluginlib
-;                    ros-noetic-roscpp-serialization
-;                    ros-noetic-roscpp-traits
-;                    ros-noetic-rostime
-;                    ros-noetic-roslz4
-;                    ros-noetic-std-msgs))
-;
-;      (arguments (list
-;                  #:phases #~(modify-phases %standard-phases
-;                               ;; go to the directory for the ros package
-;                               (add-after 'unpack 'switch-to-pkg-src
-;                                 (lambda _ (chdir "tools/rosbag_storage"))))))
-;      (home-page "https://wiki.ros.org/rosbag_storage")
-;      (synopsis "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
-;      (description "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
-;      (license license:bsd-3))))
+(define-public ros-noetic-rosbag-storage
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosbag-storage")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (inputs (list bzip2
+                    boost
+                    console-bridge
+                    gpgme
+                    openssl
+                    ros-noetic-cpp-common
+                    ros-noetic-pluginlib
+                    ros-noetic-roscpp-serialization
+                    ros-noetic-roscpp-traits
+                    ros-noetic-rostime
+                    ros-noetic-roslz4
+                    ros-noetic-std-msgs))
+
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosbag_storage"))))))
+      (home-page "https://wiki.ros.org/rosbag_storage")
+      (synopsis "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
+      (description "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
+      (license license:bsd-3))))
 
 ;;~~  - common_msgs
 ;;~~  - ros_comm
