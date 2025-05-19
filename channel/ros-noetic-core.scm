@@ -24,8 +24,7 @@
 
 (define (ros-package-path-search-path)
   "Generate a ROS_PACKAGE_PATH search path specification."
-  (search-path-specification (variable "ROS_PACKAGE_PATH")
-                             (files (list "."))))
+  (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "."))))
 
 (define-public catkin
   (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
@@ -629,7 +628,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
                ros-noetic-message-runtime
                ros-noetic-message-generation
                ))
-      (native-search-paths (list (guix-ros-package-path-search-path)))
+      (native-search-paths (list (ros-package-path-search-path)))
 ;      (arguments
 ;       (list
 ;        #:phases
@@ -702,8 +701,62 @@ primitives (cube, sphere, etc.), planes, and meshes.")
       (synopsis "Common package that all client libraries depend on")
       (description "Mainly used to find client libraries (via 'rospack depends-on1 roslang').")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rosmake
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosmake")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list python-rospkg))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "tools/rosmake"))))))
+      (home-page "https://wiki.ros.org/rosmake")
+      (synopsis "A ros dependency aware build tool")
+      (description "A tool that can build all ros dependencies in the correct order")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-mk
+  (let ((commit "f143ced5be791fd844e697fd5bf6b8d0a1f633e0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-mk")
+      (version (git-version "1.15.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros")
+                             (commit commit)))
+         (sha256
+          (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-rosbuild ros-noetic-rosmake))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "core/mk"))))))
+      (home-page "https://wiki.ros.org/mk")
+      (synopsis "A collection of .mk include files for building ROS architectural elements")
+      (description "Most package authors should use cmake .mk, which calls CMake for the build of the package.
+    The other files in this package are intended for use in exotic situations that mostly arise when importing 3rdparty code.")
+      (license license:bsd-3))))
+
+
 ;;~~  - common_msgs
-;;~~  - mk
 ;;~~  - ros
 ;;~~  - ros_comm
 ;;~~  - ros_core
@@ -716,7 +769,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
 ;;~~  - rosgraph
 ;;~~  - roslang
 ;;~~  - roslisp
-;;~~  - rosmake
 ;;~~  - rosmaster
 ;;~~  - roslib
 ;;~~  - rosparam
