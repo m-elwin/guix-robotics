@@ -12,6 +12,7 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages cpp)
   #:use-module (gnu packages commencement)
@@ -1312,6 +1313,37 @@ be run on.")
       (description "These tools require plugin providers to register their plugins in the package.xml of their package.")
   (license license:bsd-3))))
 
+(define-public ros-noetic-roslz4
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslz4")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rosunit))
+      (inputs (list lz4
+                    ros-noetic-cpp-common))
+
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "utilities/roslz4"))))))
+      (home-page "https://wiki.ros.org/rostest")
+      (synopsis "A Python and C++ implementation of the LZ4 streaming format")
+      (description "A Pyhthon and C++ implementation of the LZ4 streaming format.
+Large data streams are split into blocks which are compressed using the very fast
+LZ4 compression algorithm.")
+      (license license:bsd-3))))
+
 ;;(define-public ros-noetic-rostest
 ;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
 ;        (revision "0"))
@@ -1393,7 +1425,6 @@ be run on.")
 ;;~~  - roslisp
 ;;~~  - rosservice
 ;;~~  - rosconsole_bridge
-;;~~  - rosbag-storage
 ;;~~  - roslz4
 ;;~~  - std_srvs
 ;;~~  - trajectory_msgs
