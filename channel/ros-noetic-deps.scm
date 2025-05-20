@@ -114,8 +114,8 @@ but for applications that are not necessarily using ROS")
         (base32 "1v0f8g3sycb8rkb6xqkl3pbpxikfya72xfrzpa37hgvpx9ixsxza"))
         (file-name (git-file-name name version))))
     (build-system pyproject-build-system)
-    (propagated-inputs (list python-catkin-pkg python-pyyaml))
-    (native-inputs (list python-distro python-pytest python-setuptools python-wheel))
+    (propagated-inputs (list python-catkin-pkg python-distro python-pyyaml))
+    (native-inputs (list python-pytest python-setuptools python-wheel))
     (home-page "http://wiki.ros.org/rospkg")
     (synopsis "ROS package library")
     (description "ROS package library.")
@@ -171,8 +171,8 @@ but for applications that are not necessarily using ROS")
                 (setenv "HOME" "/tmp")))
             )))
     (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
-                             python-rospkg))
-    (native-inputs (list python-distro
+                             python-rospkg python-distro))
+    (native-inputs (list
                          python-flake8
                          python-flake8-builtins
                          python-flake8-comprehensions

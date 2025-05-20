@@ -798,10 +798,13 @@ such as laser range finders, cameras, point clouds.")
           (base32 "025y5zvmh29xvzqdrif4rymwli4xqm3h7d2kvcxsndflpv4cg1m4"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list boost pkg-config tinyxml2 ros-noetic-cmake-modules))
-      (inputs (list
-               ros-noetic-message-runtime
-               ros-noetic-message-generation))
+      (native-inputs
+       (list boost
+             pkg-config
+             tinyxml2
+             ros-noetic-cmake-modules
+             ros-noetic-message-generation))
+      (inputs (list ros-noetic-message-runtime python-rosdep))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
       (description "Retrieves information about ROS packages from the filesystem")
