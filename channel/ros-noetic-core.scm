@@ -1690,6 +1690,36 @@ information. This library is intended for internal use only.")
 Think of it as a FAQ implemented in code.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-message-filters
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-message-filters")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest
+                           ros-noetic-rosunit))
+      (inputs (list boost
+                    ros-noetic-rosconsole
+                    ros-noetic-roscpp))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "utilities/message_filters"))))))
+      (home-page "https://wiki.ros.org/message_filters")
+      (synopsis "A set of message filters for ROS messages")
+      (description  "A set of message filters which take in messages and may output those messages at a later time, based on the conditions that filter needs met.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rosbag-migration-rule
   (let ((commit "c5c63f7b646be4c7c25218d5abe0c897a29c2e14")
         (revision "0"))
@@ -1716,7 +1746,6 @@ Think of it as a FAQ implemented in code.")
 ;;~~  - rosconsole_bridge
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
-;;~~  - message_filters
 ;;~~  - sensor_msgs
 ;;~~  - stereo_msgs
 ;;~~  - ros
