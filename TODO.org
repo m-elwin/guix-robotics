@@ -1,14 +1,13 @@
-0. roswtf uses ROS_ROOT. Should define this
-0. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
+0. Some packages are not working as expected. Likely due to mix ups with proper dependencies.
+
+1. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
    - need to get these paths working better
    - do a guix shell -D ros-noetic-pluginlib to get the dev environment
 
-1. Add more packages.
-3. There are several ROS paths and env variables that need to be setup
-   it is unclear right now how best to integrate this flow with guix.
-4. Documentation: ros has it's own documentation system, could
+2. Documentation: ros has it's own documentation system, could
    export that as a :doc part of split packages for each ROS package
-5. Cleanup:
+
+3. Cleanup:
    Make a better package structure:
    ros-noetic/
 
@@ -17,5 +16,8 @@
    map onto meta packages or packages that
    stand on their own. It would help keep track of ros meta packages
 
-   6. Can we change the prefix>?
-      CMAKE_INSTALL_PREFIX is only pat of it. might be a catkin_prefix of some kind
+4. Can we change the prefix?
+      CMAKE_INSTALL_PREFIX is only part of it. The problem is the prefix for python packages
+      cannot be changed (easily) in guix as far as I know since it messes with GUIX_PATH
+      - so far there are no naming conflicts so have not needed to put everything under a separate sub-directory
+5. Add more packages.
