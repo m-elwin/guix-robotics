@@ -17,6 +17,7 @@
   #:use-module (gnu packages cpp)
   #:use-module (gnu packages commencement)
   #:use-module (gnu packages gnupg)
+  #:use-module (gnu packages lisp)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-crypto)
@@ -1179,6 +1180,32 @@ any of the ROS tools are written in rospy to take advantage of the type introspe
 Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
   (license license:bsd-3))))
 
+(define-public ros-noetic-roslisp
+  (let ((commit "bf35424b9be97417236237145b7c5c2b33783b5e")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslisp")
+      (version (git-version "1.9.25" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/roslisp")
+                             (commit commit)))
+         (sha256
+          (base32 "14xhaibfdzi332cpxgz7iprzss012qczj7ymfnjc4236l14ih1pp"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-roslang
+                    sbcl
+                    ros-noetic-rospack
+                    ros-noetic-rosgraph-msgs
+                    ros-noetic-std-srvs
+                    ros-noetic-ros-environment))
+      (home-page "https://wiki.ros.org/roslisp")
+      (synopsis "Lisp client library for ROS")
+      (description "Lisp client library for ROS")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rosmaster
   (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
         (revision "0"))
@@ -1720,6 +1747,55 @@ Think of it as a FAQ implemented in code.")
       (description  "A set of message filters which take in messages and may output those messages at a later time, based on the conditions that filter needs met.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-ros-comm
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-ros-comm")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list
+                          ros-noetic-roscpp
+                          ros-noetic-rospy
+                          ros-noetic-rosgraph-msgs
+                          ros-noetic-std-srvs
+                          ros-noetic-ros
+                          ros-noetic-rosbag
+                          ros-noetic-rosconsole
+                          ros-noetic-rosgraph
+                          ros-noetic-roslaunch
+                          ros-noetic-roslisp
+                          ros-noetic-rosmaster
+                          ros-noetic-rosmsg
+                          ros-noetic-rosnode
+                          ros-noetic-rosout
+                          ros-noetic-rosparam
+                          ros-noetic-rosservice
+                          ros-noetic-rostest
+                          ros-noetic-rostopic
+                          ros-noetic-topic-tools
+                          ros-noetic-message-filters
+                          ros-noetic-roswtf
+                          ros-noetic-xmlrpcpp))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "ros_comm"))))))
+      (home-page "https://wiki.ros.org/ros_comm")
+      (synopsis "ROS communications-related packages")
+      (description "ROS communications-related packages, including core
+client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnode, rosservice, rosparam).")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rosbag-migration-rule
   (let ((commit "c5c63f7b646be4c7c25218d5abe0c897a29c2e14")
         (revision "0"))
@@ -1740,12 +1816,9 @@ Think of it as a FAQ implemented in code.")
       (description "Empty package to allow exporting rosbag migration rule files without depending on rosbag.")
       (license license:bsd-3))))
 ;;~~  - common_msgs
-;;~~  - ros_comm
 ;;~~  - ros_core
-;;~~  - roslisp
 ;;~~  - rosconsole_bridge
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
 ;;~~  - sensor_msgs
 ;;~~  - stereo_msgs
-;;~~  - ros
