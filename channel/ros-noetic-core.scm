@@ -1522,37 +1522,41 @@ tools deal with messages as generic binary blobs. This means they can be applied
 be high performance and avoids deserialization and reserialization of messages.")
       (license license:bsd-3))))
 
-;(define-public ros-noetic-rosmsg
-;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
-;        (revision "0"))
-;    (package
-;      (name "ros-noetic-rosmsg")
-;      (version (git-version "1.17.3" revision commit))
-;      (source
-;       (origin
-;         (method git-fetch)
-;         (uri (git-reference (url "https://github.com/ros/ros_comm")
-;                             (commit commit)))
-;         (sha256
-;          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
-;         (file-name (git-file-name name version))))
-;      (build-system catkin-build-system)
-;      (inputs (list ros-noetic-genmsg
-;                    ros-noetic-genpy
-;                    python-rospkg
-;                    ros-noetic-rospy
-;                    ros-noetic-rosmsg))
-;      (arguments (list
-;                  #:phases #~(modify-phases %standard-phases
-;                               ;; go to the directory for the ros package
-;                               (add-after 'unpack 'switch-to-pkg-src
-;                                 (lambda _ (chdir "tools/rosmsg"))))))
-;      (home-page "https://wiki.ros.org/rosmsg")
-;      (synopsis "The rosmsg and rossrv command-line tools for displaying message/service type information")
-;      (description "The rosmsg and rossrv command-line tools. rosmsg displays information about message types.
-;rossrv displays information about serfvice types.")
-;      (license license:bsd-3))))
-;
+(define-public ros-noetic-rosmsg
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosmsg")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest
+                           ros-noetic-std-msgs
+                           ros-noetic-std-srvs
+                           ros-noetic-diagnostic-msgs))
+      (inputs (list ros-noetic-genmsg
+                    ros-noetic-genpy
+                    python-rospkg
+                    ros-noetic-rosbag
+                    ros-noetic-roslib))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosmsg"))))))
+      (home-page "https://wiki.ros.org/rosmsg")
+      (synopsis "The rosmsg and rossrv command-line tools for displaying message/service type information")
+      (description "The rosmsg and rossrv command-line tools. rosmsg displays information about message types.
+rossrv displays information about serfvice types.")
+      (license license:bsd-3))))
+
 ;(define-public ros-noetic-rosservice
 ;  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
 ;        (revision "0"))

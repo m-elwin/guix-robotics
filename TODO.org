@@ -1,8 +1,8 @@
 0. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
    - need to get these paths working better
+   - do a guix shell -D ros-noetic-pluginlib to get the dev environment
+
 1. Add more packages.
-2. Make rosdep work
-   - Plan is to create a separate rosdep repo for this
 3. There are several ROS paths and env variables that need to be setup
    it is unclear right now how best to integrate this flow with guix.
 4. Documentation: ros has it's own documentation system, could
@@ -14,4 +14,7 @@
    Then there will be 1 .scm file per repo that
    has many packages so the .scm files will
    map onto meta packages or packages that
-   stand on their own.
+   stand on their own. It would help keep track of ros meta packages
+
+   6. Can we change the prefix>?
+      CMAKE_INSTALL_PREFIX is only pat of it. might be a catkin_prefix of some kind
