@@ -1689,10 +1689,29 @@ information. This library is intended for internal use only.")
       (description  "A tool for diagnosing issues with the ROS system.
 Think of it as a FAQ implemented in code.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rosbag-migration-rule
+  (let ((commit "c5c63f7b646be4c7c25218d5abe0c897a29c2e14")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosbag-migration-rule")
+      (version (git-version "1.0.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/rosbag_migration_rule")
+                             (commit commit)))
+         (sha256
+          (base32 "0a6vl6vlypv2ywxpf2wvjrvqvmbra20k0nsvrrv9z4bbpxj048pc"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "http://wiki.ros.org/rosbag_migration_rule")
+      (synopsis "Empty package to allow exporting rosbag migration rule files without depending on rosbag")
+      (description "Empty package to allow exporting rosbag migration rule files without depending on rosbag.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
-;;~~  - rosbag_migration_rule
 ;;~~  - roslisp
 ;;~~  - rosconsole_bridge
 ;;~~  - trajectory_msgs
@@ -1700,3 +1719,4 @@ Think of it as a FAQ implemented in code.")
 ;;~~  - message_filters
 ;;~~  - sensor_msgs
 ;;~~  - stereo_msgs
+;;~~  - ros
