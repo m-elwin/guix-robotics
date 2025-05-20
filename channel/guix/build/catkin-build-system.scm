@@ -21,7 +21,8 @@ Also creates an opt/ros/ directory with noetic symlinking back"
      (newline)
      (wrap-program file
        `("ROS_DISTRO" "" = ,(list "noetic"))
-       `("ROS_MASTER_URI" "" = ,(list "${ROS_MASTER_URI:=http://localhost:11311}"))))
+       `("ROS_MASTER_URI" "" = ,(list "${ROS_MASTER_URI:=http://localhost:11311}"))
+       `("CMAKE_PREFIX_PATH" = ,(list "${ROS_CMAKE_PREFIX_PATH}"))))
    (find-files (string-append (assoc-ref outputs "out") "/bin") "^[^\\.].*")))
 
 (define %standard-phases

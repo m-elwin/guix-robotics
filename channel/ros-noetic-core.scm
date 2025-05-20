@@ -34,6 +34,15 @@
 (define ros-package-path-search-path
   (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "share"))))
 
+;;; We define an unused variable ROS_CMAKE_PREFIX_PATH to hold
+;;; The catkin build-system then wraps all executables
+;;; (e.g., files catkin puts in bin/)
+;;; such that they set the CMAKE_PREFIX_PATH to ROS_CMAKE_PREFIX_PATH
+;;; In this way each catkin executable sets the proper CMAKE_PREFIX_PATH
+;;; without it interfering with other programs that may use CMAKE_PREFIX_PATH
+(define ros-cmake-prefix-path-search-path
+  (search-path-specification (variable "ROS_CMAKE_PREFIX_PATH") (files (list ""))))
+
 (define-public catkin
   (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
         (revision "0"))
@@ -49,6 +58,7 @@
         (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
     (build-system catkin-build-system)
+    (native-search-paths (list ros-cmake-prefix-path-search-path))
     (native-inputs (list fish zsh coreutils))
     (inputs (list cmake))
     ;; The only input is cmake because calling cmake is hard-coded into catkin
