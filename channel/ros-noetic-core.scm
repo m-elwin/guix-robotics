@@ -1614,13 +1614,43 @@ internal-use only.")
                                ;; go to the directory for the ros package
                                (add-after 'unpack 'switch-to-pkg-src
                                  (lambda _ (chdir "tools/rostopic"))))))
-      (home-page "https://wiki.ros.org/rosservice")
+      (home-page "https://wiki.ros.org/rostopic")
       (synopsis "The rostopic command-line tool for displaying debug information about ROS topics")
       (description "The rostopic command-line tool for displaying
 debug information about ROS Topics, including publishers, subscribers,
 publishing rate,and ROS Messages. It also contains an experimental Python library
 for getting information about and interacting with topics dynamically. This library is for internal-use only as the code API may change, though it does provide
 examples of how to implement dynamic subscription and publication behaviors in ROS.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rosnode
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosnode")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (inputs (list ros-noetic-rosgraph
+                    ros-noetic-rostopic))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "tools/rosnode"))))))
+      (home-page "https://wiki.ros.org/rosnode")
+      (synopsis "The rosnode command-line tool for displaying debug information about ROS nodes")
+      (description  "A command-line tool for displaying debug information about ROS Nodes,
+including publications, subscriptions and connections. It also contains an experimental library for retrieving node
+information. This library is intended for internal use only.")
       (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros_comm
@@ -1631,8 +1661,6 @@ examples of how to implement dynamic subscription and publication behaviors in R
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
 ;;~~  - message_filters
-;;~~  - rosnode
-;;~~  - rostopic
 ;;~~  - roswtf
 ;;~~  - sensor_msgs
 ;;~~  - stereo_msgs
