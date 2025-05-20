@@ -579,6 +579,39 @@ throughout the system.")
       (description "Messages for the navigation stack.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-sensor-msgs
+  (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-sensor-msgs")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/common_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation
+                           ros-noetic-rosbag
+                           ros-noetic-rosunit))
+      (propagated-inputs (list
+               ros-noetic-message-runtime
+               ros-noetic-geometry-msgs
+               ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "sensor_msgs"))))))
+      (home-page "https://wiki.ros.org/sensor_msgs")
+      (synopsis "Messages for commonly used sensors")
+      (description "Messages for commonly used sensors including cameras and scanning
+laser rangefinders.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-shape-msgs
   (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
         (revision "0"))
@@ -1820,5 +1853,4 @@ client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnod
 ;;~~  - rosconsole_bridge
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
-;;~~  - sensor_msgs
 ;;~~  - stereo_msgs
