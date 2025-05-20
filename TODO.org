@@ -1,3 +1,4 @@
+0. roswtf uses ROS_ROOT. Should define this
 0. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
    - need to get these paths working better
    - do a guix shell -D ros-noetic-pluginlib to get the dev environment

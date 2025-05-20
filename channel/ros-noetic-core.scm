@@ -470,7 +470,7 @@ For common, generic robot-specific message types, please see http://www.ros.org/
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
+      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -497,7 +497,7 @@ For common, generic robot-specific message types, please see http://www.ros.org/
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
+      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -531,7 +531,7 @@ changed unless there is a very important reason.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
+      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -560,11 +560,8 @@ throughout the system.")
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-actionlib-msgs
-                           ros-noetic-geometry-msgs
-                           ros-noetic-message-generation
-                           ros-noetic-std-msgs))
-      (inputs (list
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list
                ros-noetic-actionlib-msgs
                ros-noetic-message-runtime
                ros-noetic-geometry-msgs
@@ -594,10 +591,8 @@ throughout the system.")
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-geometry-msgs
-                           ros-noetic-message-generation
-                           ros-noetic-std-msgs))
-      (inputs (list
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list
                ros-noetic-message-runtime
                ros-noetic-geometry-msgs
                ros-noetic-std-msgs))
@@ -630,8 +625,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
       (native-inputs (list boost pkg-config tinyxml2 ros-noetic-cmake-modules))
       (inputs (list
                ros-noetic-message-runtime
-               ros-noetic-message-generation
-               ))
+               ros-noetic-message-generation))
       (native-search-paths (list ros-package-path-search-path))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
@@ -653,11 +647,8 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list pkg-config))
-      (inputs (list
-               ros-noetic-message-runtime
-               ros-noetic-message-generation
-               ))
+      (native-inputs (list pkg-config ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -683,10 +674,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list pkg-config))
-      (inputs (list
-               ros-noetic-message-generation
-               ))
+      (native-inputs (list pkg-config ros-noetic-message-generation))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -712,7 +700,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list python-rospkg))
+      (propagated-inputs (list python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -738,7 +726,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-rosbuild ros-noetic-rosmake))
+      (propagated-inputs (list ros-noetic-rosbuild ros-noetic-rosmake))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -786,8 +774,8 @@ primitives (cube, sphere, etc.), planes, and meshes.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list boost ros-noetic-rosmake))
-      (inputs (list ros-noetic-ros-environment python-rospkg))
-      (propagated-inputs (list ros-noetic-rospack))
+      (propagated-inputs
+       (list ros-noetic-rospack ros-noetic-ros-environment python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -814,7 +802,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-rospack))
+      (propagated-inputs (list ros-noetic-rospack))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -841,7 +829,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-rospack))
+      (propagated-inputs (list ros-noetic-rospack))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -868,7 +856,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list python-rospkg))
+      (propagated-inputs (list python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -899,7 +887,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-roslib python-rospkg))
+      (propagated-inputs (list ros-noetic-roslib python-rospkg))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -925,7 +913,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-roslib))
+      (propagated-inputs (list ros-noetic-roslib))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -989,7 +977,8 @@ unit tests, whereas rostest handles integration tests.")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-cpp-common ros-noetic-rostime boost))
+      (native-inputs (list ros-noetic-cpp-common boost))
+      (propagated-inputs (list ros-noetic-rostime))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1017,9 +1006,8 @@ on SourceForge in order to support roscpp's threading model.
           (base32 "0m6qc7ddi7j4aw5dn4ly8vdc3apciwm4x5bmszi3wdm4rbb8vsv8"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (inputs (list ros-noetic-std-msgs))
-      (propagated-inputs (list ros-noetic-message-runtime))
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1101,16 +1089,16 @@ that end users do not interact with.")
       (inputs (list boost
                     pkg-config
                     ros-noetic-message-generation
-                    ros-noetic-message-runtime
                     ros-noetic-roscpp-serialization
-                    ros-noetic-roscpp-traits
-                    ros-noetic-roslang
-                    ros-noetic-rostime))
+                    ros-noetic-roscpp-traits))
       (propagated-inputs (list ros-noetic-cpp-common
                                ros-noetic-rosconsole
                                ros-noetic-rosgraph-msgs
                                ros-noetic-std-msgs
-                               ros-noetic-xmlrpcpp))
+                               ros-noetic-xmlrpcpp
+                               ros-noetic-roslang
+                               ros-noetic-rostime
+                               ros-noetic-message-runtime))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1138,7 +1126,7 @@ to quickly interface with ROS Topics, Services, and Parameters.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-mock))
-      (inputs (list python-netifaces python-rospkg python-pyyaml))
+      (propagated-inputs (list python-netifaces python-rospkg python-pyyaml))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1166,9 +1154,9 @@ that can be used by graphical tools.")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list python-numpy python-rospkg python-pyyaml
-                    ros-noetic-roscpp ros-noetic-rosgraph
-                    ros-noetic-rosgraph-msgs ros-noetic-roslib
+      (inputs (list ros-noetic-roscpp))
+      (propagated-inputs (list python-numpy python-rospkg python-pyyaml
+                    ros-noetic-rosgraph ros-noetic-rosgraph-msgs ros-noetic-roslib
                     ros-noetic-std-msgs))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
@@ -1203,8 +1191,7 @@ Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list python-defusedxml
-                    ros-noetic-rosgraph))
+      (propagated-inputs (list python-defusedxml ros-noetic-rosgraph))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1232,7 +1219,7 @@ communication.")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list python-pyyaml ros-noetic-rosgraph))
+      (propagated-inputs (list python-pyyaml ros-noetic-rosgraph))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1287,14 +1274,17 @@ library for using YAML with the Paramter Server. This library is intended for in
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild))
-      (inputs (list python-paramiko python-rospkg python-pyyaml
-                    ros-noetic-rosclean
-                    ros-noetic-rosgraph-msgs
-                    ros-noetic-roslib
-                    ros-noetic-rosmaster
-                    ros-noetic-rosout
-                    ros-noetic-rosparam
-                    ros-noetic-rosunit))
+      (propagated-inputs
+       (list python-paramiko
+             python-rospkg
+             python-pyyaml
+             ros-noetic-rosclean
+             ros-noetic-rosgraph-msgs
+             ros-noetic-roslib
+             ros-noetic-rosmaster
+             ros-noetic-rosout
+             ros-noetic-rosparam
+             ros-noetic-rosunit))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1388,12 +1378,14 @@ LZ4 compression algorithm.")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list boost
-                    ros-noetic-rosgraph
-                    ros-noetic-roslaunch
-                    ros-noetic-rosmaster
-                    ros-noetic-rospy
-                    ros-noetic-rosunit))
+      (inputs (list boost))
+      (propagated-inputs
+       (list
+        ros-noetic-rosgraph
+        ros-noetic-roslaunch
+        ros-noetic-rosmaster
+        ros-noetic-rospy
+        ros-noetic-rosunit))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1427,11 +1419,11 @@ LZ4 compression algorithm.")
                     openssl
                     ros-noetic-cpp-common
                     ros-noetic-roscpp-serialization
-                    ros-noetic-roscpp-traits
-                    ros-noetic-rostime
-                    ros-noetic-std-msgs))
+                    ros-noetic-roscpp-traits))
       (propagated-inputs (list ros-noetic-pluginlib
-                               ros-noetic-roslz4))
+                               ros-noetic-roslz4
+                               ros-noetic-rostime
+                               ros-noetic-std-msgs))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1497,20 +1489,20 @@ tools deal with messages as generic binary blobs. This means they can be applied
       (native-inputs (list python-pillow
                            ros-noetic-roscpp-serialization))
       (inputs (list
-               ros-noetic-cpp-common
-                    ros-noetic-topic-tools
-                    python-pycryptodomex
-                    python-gnupg
-                    python-rospkg
-                    ros-noetic-roslib
-                    ros-noetic-rospy))
+               boost
+               ros-noetic-cpp-common))
       (propagated-inputs (list
-                          boost
-                          ros-noetic-rosbag-storage
-                          ros-noetic-rosconsole
-                          ros-noetic-roscpp
-                          ros-noetic-std-srvs
-                          ros-noetic-xmlrpcpp))
+               python-pycryptodomex
+               ros-noetic-rosbag-storage
+               ros-noetic-rosconsole
+               python-gnupg
+               python-rospkg
+               ros-noetic-roscpp
+               ros-noetic-roslib
+               ros-noetic-rospy
+               ros-noetic-std-srvs
+               ros-noetic-topic-tools
+               ros-noetic-xmlrpcpp))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1541,7 +1533,7 @@ be high performance and avoids deserialization and reserialization of messages."
                            ros-noetic-std-msgs
                            ros-noetic-std-srvs
                            ros-noetic-diagnostic-msgs))
-      (inputs (list ros-noetic-genmsg
+      (propagated-inputs (list ros-noetic-genmsg
                     ros-noetic-genpy
                     python-rospkg
                     ros-noetic-rosbag
@@ -1572,7 +1564,7 @@ rossrv displays information about serfvice types.")
           (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-genpy
+      (propagated-inputs (list ros-noetic-genpy
                     ros-noetic-rosgraph
                     ros-noetic-roslib
                     ros-noetic-rospy
@@ -1606,9 +1598,10 @@ internal-use only.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
-      (inputs (list ros-noetic-genpy
-                    ros-noetic-rospy
-                    ros-noetic-rosbag))
+      (propagated-inputs
+       (list ros-noetic-genpy
+             ros-noetic-rospy
+             ros-noetic-rosbag))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -1639,7 +1632,7 @@ examples of how to implement dynamic subscription and publication behaviors in R
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
-      (inputs (list ros-noetic-rosgraph
+      (propagated-inputs (list ros-noetic-rosgraph
                     ros-noetic-rostopic))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
@@ -1674,13 +1667,14 @@ information. This library is intended for internal use only.")
                            ros-noetic-rosbag
                            ros-noetic-roslang
                            ros-noetic-std-srvs))
-      (inputs (list ros-noetic-rosbuild
-                    ros-noetic-rosgraph
-                    ros-noetic-roslaunch
-                    ros-noetic-roslib
-                    ros-noetic-rosnode
-                    ros-noetic-rosservice
-                    ))
+      (propagated-inputs
+       (list
+        ros-noetic-rosbuild
+        ros-noetic-rosgraph
+        ros-noetic-roslaunch
+        ros-noetic-roslib
+        ros-noetic-rosnode
+        ros-noetic-rosservice))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
