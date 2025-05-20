@@ -1652,6 +1652,45 @@ examples of how to implement dynamic subscription and publication behaviors in R
 including publications, subscriptions and connections. It also contains an experimental library for retrieving node
 information. This library is intended for internal use only.")
       (license license:bsd-3))))
+
+
+(define-public ros-noetic-roswtf
+  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roswtf")
+      (version (git-version "1.17.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm")
+                             (commit commit)))
+         (sha256
+          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest
+                           ros-noetic-cmake-modules
+                           ros-noetic-rosbag
+                           ros-noetic-roslang
+                           ros-noetic-std-srvs))
+      (inputs (list ros-noetic-rosbuild
+                    ros-noetic-rosgraph
+                    ros-noetic-roslaunch
+                    ros-noetic-roslib
+                    ros-noetic-rosnode
+                    ros-noetic-rosservice
+                    ))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "utilities/roswtf"))))))
+      (home-page "https://wiki.ros.org/roswtf")
+      (synopsis "A tool for diagnosing issues with the ROS system")
+      (description  "A tool for diagnosing issues with the ROS system.
+Think of it as a FAQ implemented in code.")
+      (license license:bsd-3))))
 ;;~~  - common_msgs
 ;;~~  - ros_comm
 ;;~~  - ros_core
