@@ -705,6 +705,44 @@ primitives (cube, sphere, etc.), planes, and meshes.")
 These messages are also the building blocks of most of the control_msgs actions.")
       (license license:bsd-3))))
 
+
+(define-public ros-noetic-visualization-msgs
+  (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-visualization-msgs")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/common_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list
+               ros-noetic-message-runtime
+               ros-noetic-geometry-msgs
+               ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "visualization_msgs"))))))
+      (home-page "https://wiki.ros.org/visualization_msgs")
+      (synopsis "Messages for visualization data, used by packages such as rviz")
+      (description "visualization_msgs is a set of messages used by
+higher level packages, such as rviz, that deal in visualization-specific data.
+
+The main messages in visualization_msgs is visualization_msgs/Marker.
+The marker message is used to send visualization \"markers\" such as boxes,
+spheres, arrows, lines, etc. to a visualization environment such as rviz.
+See the rviz tutorial http://www.ros.org/wiki/rviz/Tutorials
+for more information.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rospack
   (let ((commit "63bf5288618e6a44e2f12fbd43ea6fd4e6b5e984")
         (revision "0"))
@@ -1913,4 +1951,3 @@ client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnod
 ;;~~  - common_msgs
 ;;~~  - ros_core
 ;;~~  - rosconsole_bridge
-;;~~  - visualization_msgs
