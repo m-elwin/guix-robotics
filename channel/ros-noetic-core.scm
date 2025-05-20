@@ -1670,6 +1670,7 @@ information. This library is intended for internal use only.")
                            ros-noetic-rosbag
                            ros-noetic-roslang
                            ros-noetic-std-srvs))
+      (inputs (list python-distro))
       (propagated-inputs
        (list
         ros-noetic-rosbuild
@@ -1697,6 +1698,5 @@ Think of it as a FAQ implemented in code.")
 ;;~~  - trajectory_msgs
 ;;~~  - visualization_msgs
 ;;~~  - message_filters
-;;~~  - roswtf
 ;;~~  - sensor_msgs
 ;;~~  - stereo_msgs
