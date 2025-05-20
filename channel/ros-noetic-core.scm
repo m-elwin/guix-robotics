@@ -743,6 +743,47 @@ See the rviz tutorial http://www.ros.org/wiki/rviz/Tutorials
 for more information.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-common-msgs
+  (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-common-msgs")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/common_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs
+       (list
+        ros-noetic-message-runtime
+        ros-noetic-actionlib-msgs
+        ros-noetic-geometry-msgs
+        ros-noetic-nav-msgs
+        ros-noetic-sensor-msgs
+        ros-noetic-shape-msgs
+        ros-noetic-stereo-msgs
+        ros-noetic-trajectory-msgs
+        ros-noetic-visualization-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "common_msgs"))))))
+      (home-page "https://wiki.ros.org/common_msgs")
+      (synopsis "Messages that are widely used by other ROS packages")
+      (description "Messages that are widely used by other ROS packages.
+These includes messages for actions (actionlib_msgs),
+diagnostics (diagnostic_msgs), geometric primitives (geometry_msgs),
+robot navigation (nav_msgs), and common sensors (sensor_msgs)
+such as laser range finders, cameras, point clouds.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rospack
   (let ((commit "63bf5288618e6a44e2f12fbd43ea6fd4e6b5e984")
         (revision "0"))
@@ -1948,6 +1989,5 @@ client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnod
       (synopsis "Empty package to allow exporting rosbag migration rule files without depending on rosbag")
       (description "Empty package to allow exporting rosbag migration rule files without depending on rosbag.")
       (license license:bsd-3))))
-;;~~  - common_msgs
 ;;~~  - ros_core
 ;;~~  - rosconsole_bridge
