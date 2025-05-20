@@ -25,11 +25,13 @@
   #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
   #:use-module (contributed)
-  #:use-module (ros-noetic-deps)
-  #:export (guix-ros-package-path-search-path))
+  #:use-module (ros-noetic-deps))
+
+(define ros-root-search-path
+  (search-path-specification (variable "ROS_ROOT") (files (list "share/ros"))))
 
 (define ros-package-path-search-path
-  (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "."))))
+  (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "share"))))
 
 (define-public catkin
   (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")
@@ -626,7 +628,6 @@ primitives (cube, sphere, etc.), planes, and meshes.")
       (inputs (list
                ros-noetic-message-runtime
                ros-noetic-message-generation))
-      (native-search-paths (list ros-package-path-search-path))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
       (description "Retrieves information about ROS packages from the filesystem")
@@ -649,6 +650,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
       (build-system catkin-build-system)
       (native-inputs (list pkg-config ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime))
+      (native-search-paths (list ros-root-search-path))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
@@ -753,6 +755,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
           (base32 "1kpj8zaw3gkwhjkaxx1ccy5jlpc0zcsf2qwzppx5whv7pl9k7ygf"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (native-search-paths (list ros-package-path-search-path))
       (home-page "https://wiki.ros.org/ros_environment")
       (synopsis "Provides the environment variables ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR")
       (description "Provides the environment variables ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR.")

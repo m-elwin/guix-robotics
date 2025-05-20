@@ -4,6 +4,7 @@
   #:use-module (guix build-system gnu)
   #:use-module (guix build-system cmake)
   #:use-module (guix build-system python)
+  #:use-module (guix search-paths)
   #:use-module (guix utils)
   #:use-module (guix gexp)
   #:use-module (gnu packages check)
@@ -43,6 +44,8 @@
                        (test-target "run_tests")
                        #:allow-other-keys
                        #:rest arguments)
+  "Lower into a bag. Uses the cmake lower function but adjusts arguments.
+CATKIN? Include catkin as an input. Set to #f so we can use the rest of this with the catkin package."
   (define lower (build-system-lower cmake-build-system))
   "Return a bag for NAME. catkin? is #f to not include catkin as an input, such as when building the catkin package itself"
   (define private-keywords '(#:catkin?))
@@ -50,7 +53,8 @@
          (substitute-keyword-arguments
              (strip-keyword-arguments private-keywords
                                       (append
-                                       arguments (list #:test-target test-target)))
+                                       arguments (list
+                                                  #:test-target test-target)))
            ((#:native-inputs original-native-inputs '())
             (append (if catkin? `(("catkin" ,(default-catkin))) '())
                     `(("python" ,python)

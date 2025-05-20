@@ -11,6 +11,19 @@
 ;;
 ;; Code:
 
+(define* (ros-wrap #:key outputs #:allow-other-keys)
+  "Set's ROS Environment variables for each ROS-related program.
+See http://wiki.ros.org/ROS/EnvironmentVariables.
+Also creates an opt/ros/ directory with noetic symlinking back"
+  (for-each
+   (lambda (file) ; wrap all binaries with the proper ROS env variables
+     (display (string-append "ROS Wrapping " file))
+     (newline)
+     (wrap-program file
+       `("ROS_DISTRO" "" = ,(list "noetic"))
+       `("ROS_MASTER_URI" "" = ,(list "${ROS_MASTER_URI:=http://localhost:11311}"))))
+   (find-files (string-append (assoc-ref outputs "out") "/bin") "^[^\\.].*")))
+
 (define %standard-phases
   (modify-phases cmake-build:%standard-phases
     (add-after 'unpack 'ensure-no-mtimes-pre-1980
@@ -23,5 +36,6 @@
       (assoc-ref py-build:%standard-phases 'add-install-to-pythonpath))
     (add-after 'add-install-to-pythonpath 'add-install-to-path
       (assoc-ref py-build:%standard-phases 'add-install-to-path))
-    (add-after 'add-install-to-pythonpath 'wrap
-      (assoc-ref py-build:%standard-phases 'wrap))))
+    (add-after 'add-install-to-path 'wrap
+      (assoc-ref py-build:%standard-phases 'wrap))
+    (add-after 'wrap 'ros-wrap ros-wrap)))
