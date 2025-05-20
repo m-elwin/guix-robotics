@@ -1989,5 +1989,29 @@ client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnod
       (synopsis "Empty package to allow exporting rosbag migration rule files without depending on rosbag")
       (description "Empty package to allow exporting rosbag migration rule files without depending on rosbag.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rosconsole-bridge
+  (let ((commit "ba01216e44b3f70cb1166b5b2d292ba594718205")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosconsole-bridge")
+      (version (git-version "0.5.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/rosconsole_bridge")
+                             (commit commit)))
+         (sha256
+          (base32 "13pjbfscx6cwr8fkdh8fq4ga1kbmdyf6sjzcyvpbwdycz70y4fgc"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs
+       (list ros-noetic-cpp-common
+             console-bridge
+             ros-noetic-rosconsole))
+      (home-page "http://wiki.ros.org/rosconsole_bridge")
+      (synopsis "Used in conjunction with console_bridge and rosconsole to connect console_bridge-based logging to rosconsole-logging")
+      (description "Used in conjunction with consoel_bridge and rosconsole to connect console_bridge-based logging to rosconsole-logging.")
+      (license license:bsd-3))))
 ;;~~  - ros_core
 ;;~~  - rosconsole_bridge
