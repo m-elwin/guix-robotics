@@ -57,9 +57,6 @@ CATKIN? Include catkin as an input. Set to #f so we can use the rest of this wit
                                       (append
                                        arguments (list
                                                   #:test-target test-target)))
-           ((#:configure-flags original-configure-flags '())
-            ;; make sure cmake finds the guix python rather than the system python
-            (append original-configure-flags `(list (string-append "-DCMAKE_PROGRAM_PATH=" ,(location-file (package-location python)) "/bin"))))
            ((#:native-inputs original-native-inputs '())
             (append (if catkin? `(("catkin" ,(default-catkin))) '())
                     `(("python" ,python)
