@@ -1,3 +1,23 @@
+0. Native inputs, inputs, propagated inputs
+1. Native inputs: used only during build time
+2. Inputs, used during build time and during runtime, but not by dependencies
+3. Propagated-inputs: used by dependencies during runtime (should be minimized)
+   - Examples:
+     If python library A uses another python library B, B should be propagated input from A
+     If C++ library A uses C++ library B: If users of A also need B, then B is propagated. If they don't it's an input
+
+1. When trying to use catkin as normal in a shell:
+   1. Need the -D ros-noetic-core so the dev tools are instaleld properly
+   2. SetupToolsDebLayout will break things if run in non --pure mode on a debain system.
+      (Effectively it tries to use a flag that is in the debian-patched version of python)
+   3. Doesn't work in a container, unless --emulate-fhs.
+- So the test is get the following command
+  guix shell -D ros-noetic-ros-core to allow building a catkin workspace
+  1. In container mode, when emulating the root FHS
+  1. In container mode, without emulating the root fhs
+  2. In pure mode
+  3. On an ubuntu system with ROS 2 installed without pure mode.
+
 0. Some packages are not working as expected. Likely due to mix ups with proper dependencies.
 
 1. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
