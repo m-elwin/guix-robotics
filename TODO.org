@@ -1,3 +1,8 @@
+0. Patch catkin to use the guix path when finding
+   python. This is not just the catkin executable,
+   it needs to be the CMakeFile that it uses to find python.
+   This is so that when using cmake on programs that rely
+   on catkin the right python is found
 0. Native inputs, inputs, propagated inputs
 1. Native inputs: used only during build time
 2. Inputs, used during build time and during runtime, but not by dependencies
