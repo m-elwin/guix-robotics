@@ -10,6 +10,7 @@
   #:use-module (gnu packages check)
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages linux)
   #:use-module (ros-noetic-deps))
 
 ;; Commentary:
@@ -62,7 +63,7 @@ CATKIN? Include catkin as an input. Set to #f so we can use the rest of this wit
                       ("python-empy" ,python-empy)
                       ("googletest" ,googletest)
                       ("python-nose" ,python-nose)
-                      )
+                      ("util-linux" ,util-linux))
                     original-native-inputs))
            ((#:modules orig-modules '())
             (append `(((guix build cmake-build-system) #:select (cmake-build))
