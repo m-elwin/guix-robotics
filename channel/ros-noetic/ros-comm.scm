@@ -26,6 +26,7 @@
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic core)
+  #:use-module (ros-noetic roscpp-core)
   #:use-module (contributed))
 
 

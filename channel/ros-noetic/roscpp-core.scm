@@ -24,6 +24,8 @@
   #:use-module (gnu packages shells)
   #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
+  #:use-module (ros-noetic bootstrap)
+  #:use-module (ros-noetic core)
   #:use-module (contributed))
 
 (define-public ros-noetic-cpp-common
@@ -79,6 +81,59 @@ backtraces. This package is part of roscpp")
       (home-page "http://wiki.ros.org/roscpp/Overview/Time")
       (synopsis "Time and Duration implementation for C++ libraries, including roscpp")
       (description "Time and Duration implementation for C++ libraries, including for roscpp.
+This package is a part of roscpp.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-roscpp-serialization
+  (let ((commit "2951f0579a94955f5529d7f24bb1c8c7f0256451")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roscpp-serialization")
+      (version (git-version "0.7.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/roscpp_core")
+                             (commit commit)))
+         (sha256
+          (base32 "0zs0wlkldjkvyi2d74ri93hykbq2a5wmkb1x0jibnashlyiijiwj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cpp-common ros-noetic-roscpp-traits ros-noetic-rostime))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "roscpp_serialization"))))))
+      (home-page "https://github.com/ros/roscpp_core")
+      (synopsis "Serialization, as described at https://www.ros.org/wiki/roscpp/Overview/MessageSerializationAndAdaptingTypes")
+      (description "Enables serializaing/deserializing ROS messages to memory. This package is a part of roscpp.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-roscpp-traits
+  (let ((commit "2951f0579a94955f5529d7f24bb1c8c7f0256451")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roscpp-traits")
+      (version (git-version "0.7.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/roscpp_core")
+                             (commit commit)))
+         (sha256
+          (base32 "0zs0wlkldjkvyi2d74ri93hykbq2a5wmkb1x0jibnashlyiijiwj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cpp-common ros-noetic-rostime))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "roscpp_traits"))))))
+      (home-page "http://wiki.ros.org/roscpp_traits")
+      (synopsis "Message traits as defined in http://www.ros.org/wiki/roscpp/Overview/MessagesTraits")
+      (description "Message traits as defined in http://www.ros.org/wiki/roscpp/Overview/MessagesTraits.
 This package is a part of roscpp.")
       (license license:bsd-3))))
 
