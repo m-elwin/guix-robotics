@@ -64,7 +64,7 @@ exec guix shell -L "$curr_dir/channel" -C \
    "python-netifaces"
    "python-nose"
    "python-rosdep"
-   "python-rosinstall-generator"
+   "rosinstall-generator"
    "sed"
    "tinyxml2"
    "vcstool"

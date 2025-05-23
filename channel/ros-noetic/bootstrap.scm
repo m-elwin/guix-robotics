@@ -1,3 +1,20 @@
+;;; Guix-Robotics --- GNU Guix Channel
+;;; Copyright © 2025 Matthew Elwin <elwin@northwestern.edu>
+;;; This file is part of Guix-Robotics.
+;;;
+;;; Guix-Robotics is free software; you can redistribute it and/or modify it
+;;; under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or (at
+;;; your option) any later version.
+;;;
+;;; GNU Guix is distributed in the hope that it will be useful, but
+;;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
+
 (define-module (ros-noetic bootstrap)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
@@ -34,58 +51,64 @@
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/console_bridge")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/console_bridge")
+               (commit commit)))
          (sha256
           (base32 "18rjjzkg1ml2p4aa41kvfgamkxc88g0iv3fd94vxr8917mqshw9k"))
          (file-name (git-file-name name version))))
       (build-system cmake-build-system)
-      (arguments (list
-                  #:configure-flags #~(list "-DBUILD_TESTING=ON")))
+      (arguments
+       (list
+        #:configure-flags
+        #~(list "-DBUILD_TESTING=ON")))
       (native-inputs (list python))
       (home-page "https://github.com/ros/console_bridge")
-      (synopsis "A ROS-independent pure CMake package for logging")
-      (description "Provides logging calls that mirror those found in rosconsole,
+      (synopsis "ROS-independent pure CMake package for logging")
+      (description
+       "Provides logging calls that mirror those found in rosconsole,
 but for applications that are not necessarily using ROS")
       (license license:bsd-3))))
 
 (define-public python-catkin-pkg
   (let ((commit "fb2468e6c2565802bc3ef6134a76db76ae9f3632")
-        (revision "1"))
-  (package
-    (name "python-catkin-pkg")
-    (version (git-version "1.0.0" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros-infrastructure/catkin_pkg")
-                           (commit commit)))
-       (sha256
-        (base32 "0m5w3fq8gwh2kb08yvdy37sxrc8s490vab5r66sv6h2x9y20lxcl"))
+        (revision "2"))
+    (package
+      (name "python-catkin-pkg")
+      (version (git-version "1.0.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-infrastructure/catkin_pkg")
+               (commit commit)))
+         (sha256
+          (base32 "0m5w3fq8gwh2kb08yvdy37sxrc8s490vab5r66sv6h2x9y20lxcl"))
          (file-name (git-file-name name version))))
-    (build-system pyproject-build-system)
-    (propagated-inputs (list python-docutils python-pyparsing python-dateutil
-                             python-setuptools))
-    (native-inputs (list python-flake8
-                         python-flake8-blind-except
-                         python-flake8-builtins
-                         python-flake8-class-newline
-                         python-flake8-comprehensions
-                         python-flake8-deprecated
-                         python-flake8-docstrings
-                         python-flake8-import-order
-                         python-flake8-quotes
-                         python-pytest
-                         python-setuptools
-                         python-wheel))
-    (home-page "http://wiki.ros.org/catkin_pkg")
-    (synopsis "catkin package library")
-    (description "catkin package library.")
-    (license license:bsd-3))))
+      (build-system pyproject-build-system)
+      (propagated-inputs (list python-pyparsing python-dateutil
+                               python-setuptools))
+      (native-inputs (list python-docutils
+                           python-flake8
+                           python-flake8-blind-except
+                           python-flake8-builtins
+                           python-flake8-class-newline
+                           python-flake8-comprehensions
+                           python-flake8-deprecated
+                           python-flake8-docstrings
+                           python-flake8-import-order
+                           python-flake8-quotes
+                           python-pytest
+                           python-setuptools
+                           python-wheel))
+      (home-page "http://wiki.ros.org/catkin_pkg")
+      (synopsis "Catkin package library")
+      (description "Catkin package library.")
+      (license license:bsd-3))))
 
-(define-public python-rosinstall-generator
+(define-public rosinstall-generator
   (package
-    (name "python-rosinstall-generator")
+    (name "rosinstall-generator")
     (version "0.1.23")
     (source
      (origin
@@ -94,99 +117,113 @@ but for applications that are not necessarily using ROS")
        (sha256
         (base32 "0w8sj3628m0q8d59d7ckjn8cam39pa2k22fv6gid3nh4izxydb95"))))
     (build-system pyproject-build-system)
-    (propagated-inputs (list nss-certs python-catkin-pkg python-pyyaml python-rosdistro
+    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
                              python-rospkg))
-    (native-inputs (list python-distro python-mock python-pytest python-setuptools
-                         python-wheel))
-    (native-search-paths (list $SSL_CERT_DIR $SSL_CERT_FILE))
+    (native-inputs (list python-distro python-mock python-pytest
+                         python-setuptools python-wheel))
+    (native-search-paths
+     (list $SSL_CERT_DIR $SSL_CERT_FILE))
     (home-page "http://wiki.ros.org/rosinstall_generator")
-    (synopsis "A tool for generating rosinstall files")
+    (synopsis "Generates rosinstall files for ROS distributions")
     (description
-     "This package provides a tool for generating rosinstall files.")
+     "Provides a tool for generating rosinstall files.
+These files are used to download source code archives for ROS distributions.")
     (license license:bsd-3)))
 
 (define-public python-rospkg
   (let ((commit "db7614e5209137faa6ec01e2edaf34f775780b1a")
         (revision "1"))
-  (package
-    (name "python-rospkg")
-    (version "1.6.0")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros-infrastructure/rospkg")
-                           (commit commit)))
-       (sha256
-        (base32 "1v0f8g3sycb8rkb6xqkl3pbpxikfya72xfrzpa37hgvpx9ixsxza"))
-        (file-name (git-file-name name version))))
-    (build-system pyproject-build-system)
-    (propagated-inputs (list python-catkin-pkg python-distro python-pyyaml))
-    (native-inputs (list python-pytest python-setuptools python-wheel))
-    (home-page "http://wiki.ros.org/rospkg")
-    (synopsis "ROS package library")
-    (description "ROS package library.")
-    (license license:bsd-3))))
+    (package
+      (name "python-rospkg")
+      (version "1.6.0")
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-infrastructure/rospkg")
+               (commit commit)))
+         (sha256
+          (base32 "1v0f8g3sycb8rkb6xqkl3pbpxikfya72xfrzpa37hgvpx9ixsxza"))
+         (file-name (git-file-name name version))))
+      (build-system pyproject-build-system)
+      (propagated-inputs (list python-catkin-pkg python-distro python-pyyaml))
+      (native-inputs (list python-docutils python-pytest python-setuptools
+                           python-wheel))
+      (home-page "http://wiki.ros.org/rospkg")
+      (synopsis "ROS package library")
+      (description "ROS package library.")
+      (license license:bsd-3))))
 
 (define-public python-rosdistro
   (let ((commit "9c909bfb7f34e13e8229f1742b6493b228a3cfa9")
         (revision "1"))
-  (package
-    (name "python-rosdistro")
-    (version (git-version "1.0.1" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros-infrastructure/rosdistro")
-                           (commit commit)))
-       (sha256
-        (base32 "1g4h2grqqa4952zrr3kyp2d22f8karx2ygyjqkhv86i8dg6i0fqi"))
-        (file-name (git-file-name name version))))
-    (build-system pyproject-build-system)
-    (arguments (list
-     #:test-flags #~(list "--ignore=test/test_manifest_providers.py"))) ; test downloads a lot and is hard to mock
-    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rospkg
-                             python-setuptools))
-    (native-inputs (list python-distro python-pytest python-setuptools python-wheel git))
-    (home-page "http://wiki.ros.org/rosdistro")
-    (synopsis "A tool to work with rosdistro files")
-    (description "This package provides a tool to work with rosdistro files.")
-    (license license:bsd-3))))
+    (package
+      (name "python-rosdistro")
+      (version (git-version "1.0.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-infrastructure/rosdistro")
+               (commit commit)))
+         (sha256
+          (base32 "1g4h2grqqa4952zrr3kyp2d22f8karx2ygyjqkhv86i8dg6i0fqi"))
+         (file-name (git-file-name name version))))
+      (build-system pyproject-build-system)
+      (arguments
+       (list
+        #:test-flags
+        ;; test requires internet and is hard to mock
+        #~(list "--ignore=test/test_manifest_providers.py")))
+      (propagated-inputs (list python-catkin-pkg python-pyyaml python-rospkg
+                               python-setuptools))
+      (native-inputs (list python-docutils
+                           python-distro
+                           python-pytest
+                           python-setuptools
+                           python-wheel
+                           git))
+      (home-page "http://wiki.ros.org/rosdistro")
+      (synopsis "Tool to work with rosdistro files")
+      (description
+       "This package provides a tool to work with rosdistro files.")
+      (license license:bsd-3))))
 
 (define-public python-rosdep
   (let ((commit "78f3744f9054ed188bc23b830854080dc9face70")
         (revision "1"))
-  (package
-    (name "python-rosdep")
-    (version (git-version "0.25.1" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros-infrastructure/rosdep")
-                           (commit commit)))
-       (sha256
-        (base32 "1n7fw73ikp02c8hxgg0vx3nl6zxdyxqy9lcl70162f3ss0lxkrl2"))
-        (file-name (git-file-name name version))))
-    (build-system pyproject-build-system)
+    (package
+      (name "python-rosdep")
+      (version (git-version "0.25.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-infrastructure/rosdep")
+               (commit commit)))
+         (sha256
+          (base32 "1n7fw73ikp02c8hxgg0vx3nl6zxdyxqy9lcl70162f3ss0lxkrl2"))
+         (file-name (git-file-name name version))))
+      (build-system pyproject-build-system)
       (arguments
        (list
-        #:tests? #f ; too many tests that depend on environment
+        #:tests? #f ;too many tests that depend on environment
         #:phases
         #~(modify-phases %standard-phases
             (add-before 'check 'pre-check
               (lambda _
-                (setenv "HOME" "/tmp")))
-            )))
-    (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
-                             python-rospkg python-distro))
-    (native-inputs (list
-                         python-flake8
-                         python-flake8-builtins
-                         python-flake8-comprehensions
-                         python-flake8-quotes
-                         python-pytest
-                         python-setuptools
-                         python-wheel))
-    (home-page "http://wiki.ros.org/rosdep")
-    (synopsis "rosdep package manager abstraction tool for ROS")
-    (description "rosdep package manager abstraction tool for ROS.")
-    (license license:bsd-3))))
+                (setenv "HOME" "/tmp"))))))
+      (propagated-inputs (list python-catkin-pkg python-pyyaml
+                               python-rosdistro python-rospkg python-distro))
+      (native-inputs (list python-docutils
+                           python-flake8
+                           python-flake8-builtins
+                           python-flake8-comprehensions
+                           python-flake8-quotes
+                           python-pytest
+                           python-setuptools
+                           python-wheel))
+      (home-page "http://wiki.ros.org/rosdep")
+      (synopsis "Package manager abstraction tool for ROS")
+      (description "Package manager abstraction tool for ROS.")
+      (license license:bsd-3))))
