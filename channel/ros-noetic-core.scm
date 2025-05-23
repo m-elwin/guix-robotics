@@ -26,7 +26,7 @@
   #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
   #:use-module (contributed)
-  #:use-module (ros-noetic-deps))
+  #:use-module (ros-noetic bootstrap))
 
 (define ros-root-search-path
   (search-path-specification (variable "ROS_ROOT") (files (list "share/ros"))))

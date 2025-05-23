@@ -12,7 +12,7 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages linux)
-  #:use-module (ros-noetic-deps))
+  #:use-module (ros-noetic bootstrap))
 
 ;; Commentary:
 ;;
