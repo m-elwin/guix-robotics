@@ -1,5 +1,5 @@
 ;;; ROS noetic core dependencies
-(define-module (ros-noetic-core)
+(define-module (ros-noetic core)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)

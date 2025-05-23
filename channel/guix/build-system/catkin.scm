@@ -30,7 +30,7 @@
   ;; I think what the comment above means is we don't use the module that contains catkin here
   ;; because catkin uses catkin-build-system to build itself, so instead we fetch the catkin package
   ;; directly
-  (let ((module (resolve-interface '(ros-noetic-core))))
+  (let ((module (resolve-interface '(ros-noetic core))))
     (module-ref module 'catkin)))
 
 (define %catkin-build-system-modules
