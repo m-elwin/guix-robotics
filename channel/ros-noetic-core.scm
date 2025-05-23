@@ -79,13 +79,17 @@
                         (("#! /usr/bin/env sh") (string-append "#! " (search-input-file inputs "/bin/env") " sh")))
                       (substitute* "test/utils.py"
                         (("/bin/ln") (search-input-file inputs "/bin/ln")))
+                 ;; make sure to find guix's python.
                       (substitute* "cmake/python.cmake"
                         (("find_package\\(PythonInterp \\$\\{PYTHON_VERSION\\} REQUIRED\\)")
                          (string-append
                           "set(PYTHON_EXECUTABLE "
                           (search-input-file inputs "/bin/python3")
                           " CACHE STRING \"Use GUIX python by default\")\n"
-                          "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)")))))
+                          "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)")))
+                      ;; don't use lsb
+                      (substitute* "cmake/all.cmake"
+                        (("platform/lsb") ""))))
             (add-after 'wrap 'wrap-script
               (lambda _
                   (for-each

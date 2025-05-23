@@ -1,3 +1,4 @@
+* List
 0. Patch catkin to use the guix path when finding
    python. This is not just the catkin executable,
    it needs to be the CMakeFile that it uses to find python.
@@ -46,3 +47,6 @@
       cannot be changed (easily) in guix as far as I know since it messes with GUIX_PATH
       - so far there are no naming conflicts so have not needed to put everything under a separate sub-directory
 5. Add more packages.
+
+* Notes
+1. when using catkin_make_isolated within something that is not a container it is necessary to specify -DPYTHON_EXECUTABLE=$(which python) so that the guix python is found
