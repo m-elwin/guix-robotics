@@ -402,31 +402,6 @@ unit tests, whereas rostest handles integration tests.")
       (description "These tools require plugin providers to register their plugins in the package.xml of their package.")
   (license license:bsd-3))))
 
-(define-public ros-noetic-roslisp
-  (let ((commit "bf35424b9be97417236237145b7c5c2b33783b5e")
-        (revision "0"))
-    (package
-      (name "ros-noetic-roslisp")
-      (version (git-version "1.9.25" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/roslisp")
-                             (commit commit)))
-         (sha256
-          (base32 "14xhaibfdzi332cpxgz7iprzss012qczj7ymfnjc4236l14ih1pp"))
-         (file-name (git-file-name name version))))
-      (build-system catkin-build-system)
-      (inputs (list ros-noetic-roslang
-                    sbcl
-                    ros-noetic-rospack
-                    ros-noetic-rosgraph-msgs
-                    ros-noetic-std-srvs
-                    ros-noetic-ros-environment))
-      (home-page "https://wiki.ros.org/roslisp")
-      (synopsis "Lisp client library for ROS")
-      (description "Lisp client library for ROS")
-      (license license:bsd-3))))
 
 (define-public ros-noetic-rosconsole-bridge
   (let ((commit "ba01216e44b3f70cb1166b5b2d292ba594718205")
