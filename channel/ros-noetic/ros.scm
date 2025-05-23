@@ -344,3 +344,110 @@ unit tests, whereas rostest handles integration tests.")
       (synopsis "ROS Packaging System")
       (description "ROS Packaging System")
       (license license:bsd-3))))
+
+(define-public ros-noetic-rosconsole
+  (let ((commit "44ad0b1f0eccc7f5abd14144e4fe5f74f85592d6")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosconsole")
+      (version (git-version "1.14.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/rosconsole")
+                             (commit commit)))
+         (sha256
+          (base32 "0dgxs7x9f8gbigvnbnkn2j066fzlz38avk28av90214bc0ny27yv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rosunit))
+      (inputs (list apr
+                    boost
+                    ros-noetic-rosbuild))
+      (propagated-inputs (list log4cxx-noetic ros-noetic-cpp-common ros-noetic-rostime))
+      (home-page "https://wiki.ros.org/rosconsole")
+      (synopsis "ROS console output library")
+      (description "ROS console output library. ")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-pluginlib
+  (let ((commit "8d4bf7e4fab132d6b7d894d446631a9161f2afec")
+        (revision "0"))
+    (package
+      (name "ros-noetic-pluginlib")
+      (version (git-version "1.13.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/pluginlib")
+                             (commit commit)))
+         (sha256
+          (base32 "133bxdlw4ggsicyzql82hmvfji8lpd60qj2cqrvci3bfc1nr2j7z"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list tinyxml2
+                    ros-noetic-cmake-modules
+                    boost))
+      (propagated-inputs (list ros-noetic-class-loader
+                               ros-noetic-rosconsole
+                               ros-noetic-roslib
+                               ))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                               (add-after 'unpack 'switch-to-pkg-src
+                                 (lambda _ (chdir "pluginlib"))))))
+      (home-page "https://wiki.ros.org/pluginlib")
+      (synopsis "Tools for writing and dynamically loading plugins using the ROS build infrastructure")
+      (description "These tools require plugin providers to register their plugins in the package.xml of their package.")
+  (license license:bsd-3))))
+
+(define-public ros-noetic-roslisp
+  (let ((commit "bf35424b9be97417236237145b7c5c2b33783b5e")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslisp")
+      (version (git-version "1.9.25" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/roslisp")
+                             (commit commit)))
+         (sha256
+          (base32 "14xhaibfdzi332cpxgz7iprzss012qczj7ymfnjc4236l14ih1pp"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-roslang
+                    sbcl
+                    ros-noetic-rospack
+                    ros-noetic-rosgraph-msgs
+                    ros-noetic-std-srvs
+                    ros-noetic-ros-environment))
+      (home-page "https://wiki.ros.org/roslisp")
+      (synopsis "Lisp client library for ROS")
+      (description "Lisp client library for ROS")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rosconsole-bridge
+  (let ((commit "ba01216e44b3f70cb1166b5b2d292ba594718205")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosconsole-bridge")
+      (version (git-version "0.5.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/rosconsole_bridge")
+                             (commit commit)))
+         (sha256
+          (base32 "13pjbfscx6cwr8fkdh8fq4ga1kbmdyf6sjzcyvpbwdycz70y4fgc"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs
+       (list ros-noetic-cpp-common
+             console-bridge
+             ros-noetic-rosconsole))
+      (home-page "http://wiki.ros.org/rosconsole_bridge")
+      (synopsis "Used in conjunction with console_bridge and rosconsole to connect console_bridge-based logging to rosconsole-logging")
+      (description "Used in conjunction with consoel_bridge and rosconsole to connect console_bridge-based logging to rosconsole-logging.")
+      (license license:bsd-3))))
