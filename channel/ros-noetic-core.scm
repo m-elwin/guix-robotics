@@ -70,7 +70,7 @@
       #:phases
       #~(begin
            (modify-phases %standard-phases
-            (add-after 'unpack 'fix-usr-bin-env
+            (add-after 'unpack 'fix-paths
               (lambda* (#:key inputs #:allow-other-keys)
                 ;;replace hard-coded paths with the proper location for guix
                       (substitute* "cmake/templates/python_distutils_install.sh.in"
@@ -78,7 +78,14 @@
                       (substitute* "test/unit_tests/test_environment_cache.py"
                         (("#! /usr/bin/env sh") (string-append "#! " (search-input-file inputs "/bin/env") " sh")))
                       (substitute* "test/utils.py"
-                        (("/bin/ln") (search-input-file inputs "/bin/ln")))))
+                        (("/bin/ln") (search-input-file inputs "/bin/ln")))
+                      (substitute* "cmake/python.cmake"
+                        (("find_package\\(PythonInterp \\$\\{PYTHON_VERSION\\} REQUIRED\\)")
+                         (string-append
+                          "set(PYTHON_EXECUTABLE "
+                          (search-input-file inputs "/bin/python3")
+                          " CACHE STRING \"Use GUIX python by default\")\n"
+                          "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)")))))
             (add-after 'wrap 'wrap-script
               (lambda _
                   (for-each
