@@ -28,7 +28,6 @@
   #:use-module (ros-noetic core)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic ros-comm-msgs)
   #:use-module (ros-noetic roscpp-core)
   #:use-module (contributed))
 
@@ -725,4 +724,59 @@ Think of it as a FAQ implemented in code.")
       (synopsis "ROS communications-related packages")
       (description "ROS communications-related packages, including core
 client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnode, rosservice, rosparam).")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rosgraph-msgs
+  (let ((commit "2475ee81a55297a8e8007fea4d5bffaad36a2401")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rosgraph-msgs")
+      (version (git-version "1.11.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "0m6qc7ddi7j4aw5dn4ly8vdc3apciwm4x5bmszi3wdm4rbb8vsv8"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "rosgraph_msgs/"))))))
+      (home-page "https://wiki.ros.org/rosgraph_msgs")
+      (synopsis "Messages relating to the ROS Computation Graph")
+      (description "These are generally considered to be low-level messages
+that end users do not interact with.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-std-srvs
+  (let ((commit "2475ee81a55297a8e8007fea4d5bffaad36a2401")
+        (revision "0"))
+    (package
+      (name "ros-noetic-std-srvs")
+      (version (git-version "1.11.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference (url "https://github.com/ros/ros_comm_msgs")
+                             (commit commit)))
+         (sha256
+          (base32 "0m6qc7ddi7j4aw5dn4ly8vdc3apciwm4x5bmszi3wdm4rbb8vsv8"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime))
+      (arguments (list
+                  #:phases #~(modify-phases %standard-phases
+                               ;; go to the directory for the ros package
+                     (add-after 'unpack 'switch-to-pkg-src
+                       (lambda _ (chdir "std_srvs/"))))))
+      (home-page "https://wiki.ros.org/std_srvs")
+      (synopsis "Common service definitions")
+      (description "Common service definitions")
       (license license:bsd-3))))

@@ -28,7 +28,6 @@
   #:use-module (contributed)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
-  #:use-module (ros-noetic ros-comm-msgs)
   #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic bootstrap))
 
