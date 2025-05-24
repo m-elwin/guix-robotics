@@ -33,18 +33,18 @@
 
 
 (define-public ros-noetic-xmlrpcpp
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-xmlrpcpp")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cpp-common boost))
@@ -63,18 +63,18 @@ on SourceForge in order to support roscpp's threading model.
 
 
 (define-public ros-noetic-roscpp
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-roscpp")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list boost
@@ -102,18 +102,18 @@ to quickly interface with ROS Topics, Services, and Parameters.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosgraph
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosgraph")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-mock))
@@ -131,18 +131,18 @@ that can be used by graphical tools.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosmaster
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosmaster")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-defusedxml ros-noetic-rosgraph))
@@ -159,18 +159,18 @@ communication.")
 
 
 (define-public ros-noetic-rosparam
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosparam")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-pyyaml ros-noetic-rosgraph))
@@ -187,18 +187,18 @@ library for using YAML with the Paramter Server. This library is intended for in
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosout
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosout")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list ros-noetic-roscpp ros-noetic-rosgraph-msgs))
@@ -213,18 +213,18 @@ library for using YAML with the Paramter Server. This library is intended for in
       (license license:bsd-3))))
 
 (define-public ros-noetic-roslaunch
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-roslaunch")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild))
@@ -254,18 +254,18 @@ be run on.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rospy
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rospy")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list ros-noetic-roscpp))
@@ -292,18 +292,18 @@ Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
 
 
 (define-public ros-noetic-roslz4
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-roslz4")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosunit))
@@ -323,18 +323,18 @@ LZ4 compression algorithm.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rostest
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rostest")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list boost))
@@ -356,18 +356,18 @@ LZ4 compression algorithm.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosbag-storage
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosbag-storage")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
@@ -394,18 +394,18 @@ LZ4 compression algorithm.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-topic-tools
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-topic-tools")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest
@@ -431,18 +431,18 @@ tools deal with messages as generic binary blobs. This means they can be applied
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosbag
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosbag")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-pillow
@@ -474,18 +474,18 @@ be high performance and avoids deserialization and reserialization of messages."
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosmsg
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosmsg")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest
@@ -509,18 +509,18 @@ rossrv displays information about serfvice types.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosservice
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosservice")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-genpy
@@ -542,18 +542,18 @@ internal-use only.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rostopic
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rostopic")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
@@ -576,18 +576,18 @@ examples of how to implement dynamic subscription and publication behaviors in R
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosnode
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-rosnode")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
@@ -607,18 +607,18 @@ information. This library is intended for internal use only.")
 
 
 (define-public ros-noetic-roswtf
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-roswtf")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest
@@ -647,18 +647,18 @@ Think of it as a FAQ implemented in code.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-message-filters
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-message-filters")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest
@@ -678,18 +678,18 @@ Think of it as a FAQ implemented in code.")
 
 
 (define-public ros-noetic-ros-comm
-  (let ((commit "b6c57e76a764252cf50d8d24053f32e2ad54a264")
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
     (package
       (name "ros-noetic-ros-comm")
-      (version (git-version "1.17.3" revision commit))
+      (version (git-version "1.17.4" revision commit))
       (source
        (origin
          (method git-fetch)
          (uri (git-reference (url "https://github.com/ros/ros_comm")
                              (commit commit)))
          (sha256
-          (base32 "0baagfh3933y2si4sz7iqr5mzcyncjghgj4jz0bd7axv9y46nkzb"))
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list
@@ -784,7 +784,7 @@ that end users do not interact with.")
 ;; technically not part of ros-comm, but it is the lisp client library
 ;; (analagous to roscpp and rospy)
 (define-public ros-noetic-roslisp
-  (let ((commit "bf35424b9be97417236237145b7c5c2b33783b5e")
+  (let ((commit "bf35424b9be97417.46237145b7c5c2b33783b5e")
         (revision "0"))
     (package
       (name "ros-noetic-roslisp")
