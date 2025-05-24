@@ -1,34 +1,41 @@
-;;; ROS noetic core dependencies
+;;; Guix-Robotics --- GNU Guix Channel
+;;; Copyright © 2025 Matthew Elwin <elwin@northwestern.edu>
+;;; This file is part of Guix-Robotics.
+;;;
+;;; Guix-Robotics is free software; you can redistribute it and/or modify it
+;;; under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or (at
+;;; your option) any later version.
+;;;
+;;; GNU Guix is distributed in the hope that it will be useful, but
+;;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
 (define-module (ros-noetic core)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-  #:use-module (guix search-paths)
   #:use-module (guix gexp)
-  #:use-module (guix utils)
-  #:use-module (gnu packages apr)
   #:use-module (gnu packages base)
   #:use-module (gnu packages boost)
-  #:use-module (gnu packages check)
-  #:use-module (gnu packages compression)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages cpp)
-  #:use-module (gnu packages commencement)
-  #:use-module (gnu packages gnupg)
-  #:use-module (gnu packages lisp)
   #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python)
-  #:use-module (gnu packages python-crypto)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages shells)
-  #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
-  #:use-module (contributed)
-  #:use-module (ros-noetic roscpp-core)
-  #:use-module (ros-noetic bootstrap))
+  #:use-module (ros-noetic bootstrap)
+  #:use-module (ros-noetic roscpp-core))
 
+;; Commentary:
+;;
+;; Packages that are part of ros_core but do not fall into any other metapackage.
+;;
+;; Code:
 
 (define ros-package-path-search-path
   (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "share"))))
