@@ -25,6 +25,12 @@ Also creates an opt/ros/ directory with noetic symlinking back"
        `("CMAKE_PREFIX_PATH" = ,(list "${ROS_CMAKE_PREFIX_PATH}"))))
    (find-files (string-append (assoc-ref outputs "out") "/bin") "^[^\\.].*")))
 
+(define* (catkin-test-results #:key inputs outputs #:allow-other-keys)
+  "Run catkin-test-results so that the result or run_tests failing will cause the build to fail"
+  (let ((catkin (assoc-ref inputs "catkin")))
+    (if catkin ;when catkin? was #f, catkin is not an input so we can't run this step
+        (invoke (string-append catkin "/bin/catkin_test_results")))))
+
 (define %standard-phases
   (modify-phases cmake-build:%standard-phases
     (add-after 'unpack 'ensure-no-mtimes-pre-1980
@@ -39,4 +45,5 @@ Also creates an opt/ros/ directory with noetic symlinking back"
       (assoc-ref py-build:%standard-phases 'add-install-to-path))
     (add-after 'add-install-to-path 'wrap
       (assoc-ref py-build:%standard-phases 'wrap))
-    (add-after 'wrap 'ros-wrap ros-wrap)))
+    (add-after 'wrap 'ros-wrap ros-wrap)
+  (add-after 'check 'post-check catkin-test-results)))
