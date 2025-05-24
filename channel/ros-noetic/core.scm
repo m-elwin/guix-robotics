@@ -47,62 +47,71 @@
         (revision "0"))
     (package
       (name "catkin")
-    (version (git-version "0.8.12" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/catkin")
-                           (commit commit)))
-       (sha256
-        (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
+      (version (git-version "0.8.12" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/catkin")
+               (commit commit)))
+         (sha256
+          (base32 "10cci6qxjp9gdyr7awvwq72zzrazqny7mc2jyfzrp6hzvmm5746d"))
          (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-    (native-search-paths (list ros-cmake-prefix-path-search-path))
-    (native-inputs (list fish zsh coreutils))
-    (inputs (list cmake))
-    ;; The only input is cmake because calling cmake is hard-coded into catkin
-    ;; However, cmake itself can find different compilers and be used with Make or ninja, etc
-    ;; Thus, the choice of make and compiler etc is left to the environment.
-    (arguments
-     (list
-      #:catkin? #f
-      #:phases
-      #~(begin
-           (modify-phases %standard-phases
-            (add-after 'unpack 'fix-paths
-              (lambda* (#:key inputs #:allow-other-keys)
-                ;;replace hard-coded paths with the proper location for guix
-                      (substitute* "cmake/templates/python_distutils_install.sh.in"
-                        (("/usr/bin/env") (search-input-file inputs "/bin/env")))
-                      (substitute* "test/unit_tests/test_environment_cache.py"
-                        (("#! /usr/bin/env sh") (string-append "#! " (search-input-file inputs "/bin/env") " sh")))
-                      (substitute* "test/utils.py"
-                        (("/bin/ln") (search-input-file inputs "/bin/ln")))
-                 ;; make sure to find guix's python.
-                      (substitute* "cmake/python.cmake"
-                        (("find_package\\(PythonInterp \\$\\{PYTHON_VERSION\\} REQUIRED\\)")
-                         (string-append
-                          "set(PYTHON_EXECUTABLE "
-                          (search-input-file inputs "/bin/python3")
-                          " CACHE STRING \"Use GUIX python by default\")\n"
-                          "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)")))
-                      ;; don't use lsb
-                      (substitute* "cmake/all.cmake"
-                        (("platform/lsb") ""))))
-            (add-after 'wrap 'wrap-script
-              (lambda _
-                  (for-each
-                   (lambda (file)
-                     (display (string-append "Wrapping " file))
-                     (newline)
-                     (wrap-program file
-                       `("PATH" prefix
-                         ,(list (string-append #$cmake "/bin")))))
-                  (find-files (string-append #$output "/bin") "^catkin_*"))))))))
-    (home-page "http://wiki.ros.org/catkin")
-    (synopsis "catkin build tool")
-    (description "ROS 1 Catkin build tool")
-    (license license:bsd-3))))
+      (build-system catkin-build-system)
+      (native-search-paths
+       (list ros-cmake-prefix-path-search-path))
+      (native-inputs (list fish zsh coreutils))
+      (inputs (list cmake))
+      ;; The only input is cmake because calling cmake is hard-coded into catkin
+      ;; However, cmake itself can find different compilers and be used
+      ;; with Make or ninja, etc
+      ;; Thus, the choice of make and compiler etc is left to the environment.
+      (arguments
+       (list
+        #:catkin? #f
+        #:phases
+        #~(begin
+            (modify-phases %standard-phases
+              (add-after 'unpack 'fix-paths
+                (lambda* (#:key inputs #:allow-other-keys)
+                  ;; replace hard-coded paths with the proper location for guix
+                  (substitute* "cmake/templates/python_distutils_install.sh.in"
+                    (("/usr/bin/env")
+                     (search-input-file inputs "/bin/env")))
+                  (substitute* "test/unit_tests/test_environment_cache.py"
+                    (("#! /usr/bin/env sh")
+                     (string-append "#! "
+                                    (search-input-file inputs "/bin/env")
+                                    " sh")))
+                  (substitute* "test/utils.py"
+                    (("/bin/ln")
+                     (search-input-file inputs "/bin/ln")))
+                  ;; make sure to find guix's python.
+                  (substitute* "cmake/python.cmake"
+                    (("find_package\\(PythonInterp \\$\\{PYTHON_VERSION\\} REQUIRED\\)")
+                     (string-append "set(PYTHON_EXECUTABLE "
+                      (search-input-file inputs "/bin/python3")
+                      " CACHE STRING \"Use GUIX python by default\")
+"
+                      "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)")))
+                  ;; don't use lsb
+                  (substitute* "cmake/all.cmake"
+                    (("platform/lsb")
+                     ""))))
+              (add-after 'wrap 'wrap-script
+                (lambda _
+                  (for-each (lambda (file)
+                              (display (string-append "Wrapping " file))
+                              (newline)
+                              (wrap-program file
+                                `("PATH" prefix
+                                  ,(list (string-append #$cmake "/bin")))))
+                            (find-files (string-append #$output "/bin")
+                                        "^catkin_*"))))))))
+      (home-page "http://wiki.ros.org/catkin")
+      (synopsis "ROS 1 catkin build tool")
+      (description "ROS 1 catkin build tool.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-genmsg
   (let ((commit "393871225e1458d2a8db41761759e57ca01a1801")
@@ -110,22 +119,26 @@
     (package
       (name "ros-noetic-genmsg")
       (version (git-version "0.6.1" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/genmsg")
-                           (commit commit)))
-       (sha256
-        (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
-       (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-     (home-page "https://docs.ros.org/en/api/genmsg/html/")
-     (synopsis "Decouple code generation from .msg .srv files from build system")
-     (description "Project genmsg exists in order to decouple code generation from .msg & .srv format
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/genmsg")
+               (commit commit)))
+         (sha256
+          (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "https://docs.ros.org/en/api/genmsg/html/")
+      (synopsis
+       "Decouple code generation from .msg .srv files from build system")
+      (description
+       "Project genmsg exists in order to decouple code generation from .msg & .srv format
 files from the parsing of these files and from impementation details of the build system
-(project directory layout, existence or nonexistence of utilities like rospack, values of environment
-variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set in any particular way.")
-     (license license:bsd-3))))
+(project directory layout, existence or nonexistence of utilities like rospack,
+values of environment variables such as ROS_PACKAGE_PATH): i.e. none of these
+are required to be set in any particular way.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-gencpp
   (let ((commit "cc7e11cf67ec5c5f49b1d539e80475073f3864b4")
@@ -133,20 +146,21 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
     (package
       (name "ros-noetic-gencpp")
       (version (git-version "0.7.2" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/gencpp")
-                           (commit commit)))
-       (sha256
-        (base32 "1nwia7j7390x8574cw1iz4w1phv8q67w3khykfphsssbbxly3v44"))
-       (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-    (propagated-inputs (list ros-noetic-genmsg))
-     (home-page "https://wiki.ros.org/gencpp")
-     (synopsis "ROS C++ message definition and serialization generators")
-     (description "Generate ROS msgs and srvs for C++")
-     (license license:bsd-3))))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/gencpp")
+               (commit commit)))
+         (sha256
+          (base32 "1nwia7j7390x8574cw1iz4w1phv8q67w3khykfphsssbbxly3v44"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-genmsg))
+      (home-page "https://wiki.ros.org/gencpp")
+      (synopsis "ROS C++ message definition and serialization generators")
+      (description "Generate ROS msgs and srvs for C++")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-geneus
   (let ((commit "ec388e279ce4fd52ec78a4144ba52014ab4dd824")
@@ -154,20 +168,21 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
     (package
       (name "ros-noetic-geneus")
       (version (git-version "3.0.0" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/jsk-ros-pkg/geneus")
-                           (commit commit)))
-       (sha256
-        (base32 "0hz6jy7f9wxn9m1ni4zawmiqk87zqc0hcf652prxnlm79xri0aj6"))
-       (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-    (propagated-inputs (list ros-noetic-genmsg))
-     (home-page "https://github.com/jsk-ros-pkg/geneus")
-     (synopsis "EusLisp ROS message and service generators")
-     (description "EusLisp ROS message and service generators.")
-     (license license:bsd-3))))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/jsk-ros-pkg/geneus")
+               (commit commit)))
+         (sha256
+          (base32 "0hz6jy7f9wxn9m1ni4zawmiqk87zqc0hcf652prxnlm79xri0aj6"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-genmsg))
+      (home-page "https://github.com/jsk-ros-pkg/geneus")
+      (synopsis "EusLisp ROS message and service generators")
+      (description "EusLisp ROS message and service generators.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-genlisp
   (let ((commit "3ac633abacdf5ab321d23ed013c7d5b7da97736d")
@@ -175,20 +190,21 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
     (package
       (name "ros-noetic-genlisp")
       (version (git-version "0.4.18" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/genlisp")
-                           (commit commit)))
-       (sha256
-        (base32 "07qx0blkfx6n8i5c5mj1yzpi9y099npw4f0rzbs5p3gjpq2gh0m2"))
-       (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-    (propagated-inputs (list ros-noetic-genmsg))
-     (home-page "https://github.com/ros/genlisp")
-     (synopsis "Common-Lisp ROS message and service generators")
-     (description "Common-Lisp ROS emssage and service generators.")
-     (license license:bsd-3))))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/genlisp")
+               (commit commit)))
+         (sha256
+          (base32 "07qx0blkfx6n8i5c5mj1yzpi9y099npw4f0rzbs5p3gjpq2gh0m2"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-genmsg))
+      (home-page "https://github.com/ros/genlisp")
+      (synopsis "Common-Lisp ROS message and service generators")
+      (description "Common-Lisp ROS emssage and service generators.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-gennodejs
   (let ((commit "53cf97ce44a6f592c69cd6f6d07bb7825b6ea243")
@@ -196,20 +212,21 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
     (package
       (name "ros-noetic-gennodejs")
       (version (git-version "2.0.2" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/sloretz/gennodejs")
-                           (commit commit)))
-       (sha256
-        (base32 "0ybiih22mmcbkdcpyv6b4yfnssmc5n8ksl74ghvkjpyr55h7k6v7"))
-       (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-    (propagated-inputs (list ros-noetic-genmsg))
-     (home-page "https://github.com/ros/genlisp")
-     (synopsis "Javascript ROS message and service generators")
-     (description "Javascript ROS emssage and service generators.")
-     (license license:bsd-3))))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/sloretz/gennodejs")
+               (commit commit)))
+         (sha256
+          (base32 "0ybiih22mmcbkdcpyv6b4yfnssmc5n8ksl74ghvkjpyr55h7k6v7"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-genmsg))
+      (home-page "https://github.com/ros/genlisp")
+      (synopsis "Javascript ROS message and service generators")
+      (description "Javascript ROS emssage and service generators.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-genpy
   (let ((commit "323d861c512ba912a8c7e842647fe2d9657fd15b")
@@ -217,20 +234,21 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
     (package
       (name "ros-noetic-genpy")
       (version (git-version "0.6.18" revision commit))
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference (url "https://github.com/ros/genpy")
-                           (commit commit)))
-       (sha256
-        (base32 "06a10p3kmy6m7mvkybj8pbl4pfrl9mm0wdgxbz67jr1disa1zj88"))
-       (file-name (git-file-name name version))))
-    (build-system catkin-build-system)
-    (propagated-inputs (list python-pyyaml python-numpy ros-noetic-genmsg))
-     (home-page "https://github.com/ros/genpy")
-     (synopsis "Python ROS message and service generators")
-     (description "Python ROS message and service generators.")
-     (license license:bsd-3))))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/genpy")
+               (commit commit)))
+         (sha256
+          (base32 "06a10p3kmy6m7mvkybj8pbl4pfrl9mm0wdgxbz67jr1disa1zj88"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-pyyaml python-numpy ros-noetic-genmsg))
+      (home-page "https://github.com/ros/genpy")
+      (synopsis "Python ROS message and service generators")
+      (description "Python ROS message and service generators.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-cmake-modules
   (let ((commit "3f8318d8f673e619023e9a526b6ee37536be1659")
@@ -241,8 +259,9 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/cmake_modules")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/cmake_modules")
+               (commit commit)))
          (sha256
           (base32 "0zaiv1hr5hx64mm64620kigin2bck1msfv87cdk36im7bzpa7jsv"))
          (file-name (git-file-name name version))))
@@ -261,8 +280,9 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/class_loader")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/class_loader")
+               (commit commit)))
          (sha256
           (base32 "05chprdj4p5bs84zb36v13vfbr41biqi6g5zwq3px8sqhwlzkb3s"))
          (file-name (git-file-name name version))))
@@ -271,7 +291,14 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (propagated-inputs (list boost console-bridge poco))
       (home-page "https://github.com/ros/class_loader")
       (synopsis "ROS-independent plugin loading package")
-      (description "The class_loader package is a ROS-independent package for loading plugins during runtime and the foundation of the higher level ROS pluginlib library. class_loader utilizes the host operating system's runtime loader to open runtime libraries (e.g. .so/.dll/dylib files), introspect the library for exported plugin classes, and allows users to instantiate objects of said exported classes without the explicit declaration (i.e. header file) for those classes.")
+      (description
+       "The class_loader package is a ROS-independent package for loading
+plugins during runtime and the foundation of the higher level ROS pluginlib
+library. class_loader utilizes the host operating system's runtime loader
+to open runtime libraries (e.g. .so/.dll/dylib files), introspect the
+library for exported plugin classes, and allows users to instantiate
+objects of said exported classes without the explicit declaration
+(i.e. header file) for those classes.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-message-generation
@@ -283,16 +310,23 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/message_generation")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/message_generation")
+               (commit commit)))
          (sha256
           (base32 "1m36aknbv42m4jjaacnclm4frk5hg6aw9nql26jiphcfk3559iir"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-gencpp ros-noetic-geneus ros-noetic-gennodejs ros-noetic-genlisp ros-noetic-genmsg ros-noetic-genpy))
+      (propagated-inputs (list ros-noetic-gencpp
+                               ros-noetic-geneus
+                               ros-noetic-gennodejs
+                               ros-noetic-genlisp
+                               ros-noetic-genmsg
+                               ros-noetic-genpy))
       (home-page "https://github.com/ros/message_generation")
       (synopsis "Meta Package for Message generation")
-      (description "Message packages depend on this metapackage to automatically bring in all message generators.")
+      (description "Message packages depend on this metapackage to
+automatically bring in all message generators.")
       (license license:bsd-3))))
 
 
@@ -305,16 +339,22 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/message_runtime")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/message_runtime")
+               (commit commit)))
          (sha256
           (base32 "148jhpxir4fwp8xgk72gcn4m58kricg4ckmhnsilbrsq5ci4h1iy"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-cpp-common ros-noetic-roscpp-serialization ros-noetic-roscpp-traits ros-noetic-rostime ros-noetic-genpy))
+      (propagated-inputs (list ros-noetic-cpp-common
+                               ros-noetic-roscpp-serialization
+                               ros-noetic-roscpp-traits ros-noetic-rostime
+                               ros-noetic-genpy))
       (home-page "https://github.com/ros/message_runtime")
       (synopsis "Meta Package for the runtime components of ROS messages")
-      (description "Message packages depend on this metapackage at runtime to automatically bring in all message generators.")
+      (description
+       "Message packages depend on this metapackage at runtime to
+automatically bring in all message generators.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-std-msgs
@@ -326,8 +366,9 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/std_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/std_msgs")
+               (commit commit)))
          (sha256
           (base32 "0d150h4j2r8km7mx4xhichvliixg69czjbwb14jwa0jkzg5ks093"))
          (file-name (git-file-name name version))))
@@ -335,9 +376,13 @@ variables such as ROS_PACKAGE_PATH): i.e. none of these are required to be set i
       (native-inputs (list ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime))
       (home-page "https://wiki.ros.org/std_msgs")
-      (synopsis "Standard ROS messages including common message types representing primitive data types")
-      (description "Standard ROS Messages including common message types representing primitive data types and other basic message constructs, such as multiarrays.
-For common, generic robot-specific message types, please see http://www.ros.org/wiki/common_msgs.")
+      (synopsis
+       "Standard ROS messages such as those representing primitive data")
+      (description
+       "Standard ROS Messages including common message types
+ representing primitive data types and other basic message constructs,
+such as multiarrays.  For common, generic robot-specific message types,
+please see http://www.ros.org/wiki/common_msgs.")
       (license license:bsd-3))))
 
 
@@ -350,22 +395,20 @@ For common, generic robot-specific message types, please see http://www.ros.org/
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/rospack")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/rospack")
+               (commit commit)))
          (sha256
           (base32 "025y5zvmh29xvzqdrif4rymwli4xqm3h7d2kvcxsndflpv4cg1m4"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs
-       (list boost
-             pkg-config
-             tinyxml2
-             ros-noetic-cmake-modules
-             ros-noetic-message-generation))
+      (native-inputs (list boost pkg-config tinyxml2 ros-noetic-cmake-modules
+                           ros-noetic-message-generation))
       (inputs (list ros-noetic-message-runtime python-rosdep))
       (home-page "https://wiki.ros.org/rospack")
       (synopsis "ROS Package Tool")
-      (description "Retrieves information about ROS packages from the filesystem")
+      (description
+       "Retrieves information about ROS packages from the filesystem")
       (license license:bsd-3))))
 
 
@@ -378,16 +421,21 @@ For common, generic robot-specific message types, please see http://www.ros.org/
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_environment")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_environment")
+               (commit commit)))
          (sha256
           (base32 "1kpj8zaw3gkwhjkaxx1ccy5jlpc0zcsf2qwzppx5whv7pl9k7ygf"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-search-paths (list ros-package-path-search-path))
+      (native-search-paths
+       (list ros-package-path-search-path))
       (home-page "https://wiki.ros.org/ros_environment")
-      (synopsis "Provides the environment variables ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR")
-      (description "Provides the environment variables ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR.")
+      (synopsis
+       "Provides ROS environment variables")
+      (description
+       "Provides the environment variables
+ROS_VERSION, ROS_DISTRO, and ROS_PACKAGE_PATH, and ROS_ETC_DIR.")
       (license license:apsl2))))
 
 (define-public ros-noetic-rosbag-migration-rule
@@ -399,15 +447,17 @@ For common, generic robot-specific message types, please see http://www.ros.org/
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/rosbag_migration_rule")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/rosbag_migration_rule")
+               (commit commit)))
          (sha256
           (base32 "0a6vl6vlypv2ywxpf2wvjrvqvmbra20k0nsvrrv9z4bbpxj048pc"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (home-page "http://wiki.ros.org/rosbag_migration_rule")
-      (synopsis "Empty package to allow exporting rosbag migration rule files without depending on rosbag")
-      (description "Empty package to allow exporting rosbag migration rule files without depending on rosbag.")
+      (synopsis "Empty package for migrating rosbags")
+      (description
+       "Empty package to allow exporting rosbag migration rule files without depending on rosbag.")
       (license license:bsd-3))))
 
 
