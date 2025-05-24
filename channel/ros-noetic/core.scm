@@ -14,6 +14,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
+
 (define-module (ros-noetic core)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
