@@ -135,23 +135,27 @@ to quickly interface with ROS Topics, Services, and Parameters.")
             (add-after 'unpack 'switch-to-pkg-src-and-patch
               (lambda _
                 (chdir "tools/rosgraph")
-                (substitute* ; specify the full path to rosgraph so Popen can find it
-                    "test/test_rosgraph_command_offline.py"
+                ;; specify the full path to rosgraph so Popen can find it
+                (substitute* "test/test_rosgraph_command_offline.py"
                   (("cmd = 'rosgraph'")
-                   (string-append
-                    "cmd = '" (getcwd) "/../build/devel/bin/rosgraph'")))
-                (substitute*
-                    "test/test_names.py" ; This gives a warning, fix it
-                  (("is os.environ") "== os.environ"))
-                (substitute* ; __file__ returns the wrapped .real_test_logging.py file
-                    "test/test_roslogging.py"
-                  (("re.escape\\(this_file\\)") "'.*'") ; don't worry about the filename
-                  ;; everything is a <module> because of the wrapper
-                  (("function = 'logging_on_function'") "function = '<module>'")
-                  (("function = 'LoggingOnClass.__init__'") "function = '<module>'"))))
+                   (string-append "cmd = '"
+                                  (getcwd) "/../build/devel/bin/rosgraph'")))
+                ;; account for the wrapper:
+                ;; __file__ is wrong (so ignore it in the regex)
+                ;; The logging always comes from a <module>
+                (substitute* "test/test_roslogging.py"
+                  (("re.escape\\(this_file\\)")
+                   "'.*'")
+                  (("function = 'logging_on_function'")
+                   "function = '<module>'")
+                  (("function = 'LoggingOnClass.__init__'")
+                   "function = '<module>'"))))
+            ;; Need to specify the log config file
             (add-before 'check 'pre-check
               (lambda _
-                (setenv "ROS_PYTHON_LOG_CONFIG_FILE" (string-append (getcwd) "/../rosgraph/conf/python_logging.conf")))))))
+                (setenv "ROS_PYTHON_LOG_CONFIG_FILE"
+                        (string-append (getcwd)
+                         "/../rosgraph/conf/python_logging.conf")))))))
       (home-page "https://wiki.ros.org/rosgraph")
       (synopsis "Contains the rosgraph command-line tool")
       (description
