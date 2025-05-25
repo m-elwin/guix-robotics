@@ -31,7 +31,6 @@
   #:use-module (ros-noetic roscpp-core)
   #:use-module (contributed))
 
-
 (define-public ros-noetic-xmlrpcpp
   (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
@@ -41,22 +40,27 @@
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cpp-common boost))
       (propagated-inputs (list ros-noetic-rostime))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "utilities/xmlrpcpp"))))))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "utilities/xmlrpcpp"))))))
       (home-page "https://wiki.ros.org/xmlrpcpp")
       (synopsis "C++ implementation of the XML-RPC protocol")
-      (description "This version is heavily modified from the package available
+      (description
+       "This version is heavily modified from the package available
 on SourceForge in order to support roscpp's threading model.
  As such, we are maintaining our own fork.")
       (license license:bsd-3))))
@@ -71,33 +75,37 @@ on SourceForge in order to support roscpp's threading model.
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list boost
-                    pkg-config
-                    ros-noetic-message-generation
-                    ros-noetic-roscpp-serialization
-                    ros-noetic-roscpp-traits))
-      (propagated-inputs (list ros-noetic-cpp-common
-                               ros-noetic-rosconsole
+      (native-inputs (list pkg-config ros-noetic-message-generation))
+      (propagated-inputs (list boost
+                               ros-noetic-cpp-common
                                ros-noetic-rosgraph-msgs
-                               ros-noetic-std-msgs
-                               ros-noetic-xmlrpcpp
+                               ros-noetic-rosconsole
+                               ros-noetic-roscpp-serialization
+                               ros-noetic-roscpp-traits
                                ros-noetic-roslang
+                               ros-noetic-message-runtime
                                ros-noetic-rostime
-                               ros-noetic-message-runtime))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "clients/roscpp"))))))
+                               ros-noetic-std-msgs
+                               ros-noetic-xmlrpcpp))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "clients/roscpp"))))))
       (home-page "https://wiki.ros.org/roscpp")
       (synopsis "The C++ implementation of ROS")
-      (description "Provides a client library that enables C++ programmers
+      (description
+       "Provides a client library that enables C++ programmers
 to quickly interface with ROS Topics, Services, and Parameters.")
       (license license:bsd-3))))
 
@@ -110,22 +118,39 @@ to quickly interface with ROS Topics, Services, and Parameters.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-mock))
-      (propagated-inputs (list python-netifaces python-rospkg python-pyyaml))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosgraph"))))))
+      (inputs (list python-netifaces python-rospkg python-pyyaml))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src-and-patch
+              (lambda _
+                (chdir "tools/rosgraph")
+                (substitute*
+                    "test/test_rosgraph_command_offline.py"
+                  (("cmd = 'rosgraph'")
+                   (string-append
+                    "cmd = '" (getcwd) "/../build/devel/bin/rosgraph'")))))
+            (add-before 'check 'pre-check
+              (lambda _
+                (setenv "ROS_PYTHON_LOG_CONFIG_FILE" (string-append (getcwd) "/../rosgraph/conf/python_logging.conf"))
+                (display "CONFIG: :::: ")
+                (display (getenv "ROS_PYTHON_LOG_CONFIG_FILE"))
+                (newline)
+                )))))
       (home-page "https://wiki.ros.org/rosgraph")
-      (synopsis "Contains the rosgraph command-line tool.")
-      (description "The rosgraph command-line tool prints information
+      (synopsis "Contains the rosgraph command-line tool")
+      (description
+       "The rosgraph command-line tool prints information
 about the ROS Computation Graph. it also provides an internal library
 that can be used by graphical tools.")
       (license license:bsd-3))))
@@ -139,18 +164,22 @@ that can be used by graphical tools.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-defusedxml ros-noetic-rosgraph))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosmaster"))))))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/rosmaster"))))))
       (home-page "https://wiki.ros.org/rosmaster")
       (synopsis "ROS Master implementation")
       (description "All ROS 1 systems must run a rosmaster to coordinate
@@ -167,23 +196,31 @@ communication.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-pyyaml ros-noetic-rosgraph))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosparam"))))))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/rosparam"))))))
       (home-page "https://wiki.ros.org/rosparam")
-      (synopsis "The rosparam command-line tool for getting and setting ROS parameters")
-      (description "The rosparam command-line tool for getting and setting ROS parameters
-on the Parameter Server using YAML-encoded files. It also contains an experimental
-library for using YAML with the Paramter Server. This library is intended for internal use only. rosparam can be invoked within a roslaunch file.")
+      (synopsis
+       "The rosparam command-line tool for getting and setting ROS parameters")
+      (description
+       "The rosparam command-line tool for getting and setting ROS parameters
+on the Parameter Server using YAML-encoded files.  It also contains an experimental
+library for using YAML with the Paramter Server.
+This library is intended for internal use only.
+rosparam can be invoked within a roslaunch file.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosout
@@ -195,21 +232,27 @@ library for using YAML with the Paramter Server. This library is intended for in
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list ros-noetic-roscpp ros-noetic-rosgraph-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosout"))))))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/rosout"))))))
       (home-page "https://wiki.ros.org/rosout")
-      (synopsis "System-wide logging mechanism for messages sent to the /rosout topic")
-      (description "System-wide logging mechanism for messages sent to the /rosout topic.")
+      (synopsis
+       "System-wide logging mechanism for messages sent to the /rosout topic")
+      (description
+       "System-wide logging mechanism for messages sent to the /rosout topic.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-roslaunch
@@ -221,33 +264,38 @@ library for using YAML with the Paramter Server. This library is intended for in
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-rosbuild))
-      (propagated-inputs
-       (list python-paramiko
-             python-rospkg
-             python-pyyaml
-             ros-noetic-rosclean
-             ros-noetic-rosgraph-msgs
-             ros-noetic-roslib
-             ros-noetic-rosmaster
-             ros-noetic-rosout
-             ros-noetic-rosparam
-             ros-noetic-rosunit))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/roslaunch"))))))
+      (native-inputs (list ros-noetic-rosbuild ros-noetic-rosunit))
+      (inputs (list ros-noetic-rosout))
+      (propagated-inputs (list python-paramiko
+                               python-rospkg
+                               python-pyyaml
+                               ros-noetic-rosclean
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-roslib
+                               ros-noetic-rosmaster
+                               ros-noetic-rosparam))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/roslaunch"))))))
       (home-page "https://wiki.ros.org/roslaunch")
-      (synopsis "A tool for easily launching multiple ROS nodes locally and remotely as well as setting parameters on the Paramter Server")
-      (description "A tool for easily launching multiple ROS nodes locally and remotely as well as setting parameters on the Paramter Server. Includes options to
-automatically respawn processes that have already died. roslaunch takes in one or
+      (synopsis
+       "Launch multiple ROS nodes locally and remotely and set ROS parameters")
+      (description
+       "A tool for easily launching multiple ROS nodes locally and remotely
+as well as setting parameters on the Paramter Server.  Includes options to
+automatically respawn processes that have already died.  roslaunch takes in one or
 more XML configuration files (with the .launch extension) that specify the
 parameters to set and nodes to launch, as well as the machines that they should
 be run on.")
@@ -262,33 +310,41 @@ be run on.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-roscpp))
-      (propagated-inputs (list python-numpy python-rospkg python-pyyaml
-                    ros-noetic-rosgraph ros-noetic-rosgraph-msgs ros-noetic-roslib
-                    ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "clients/rospy"))))))
+      (propagated-inputs (list python-numpy
+                               python-rospkg
+                               python-pyyaml
+                               ros-noetic-roscpp
+                               ros-noetic-rosgraph
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-roslib
+                               ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "clients/rospy"))))))
       (home-page "https://wiki.ros.org/rospy")
       (synopsis "The Python client library for ROS")
-      (description "rospy is a pure Python client library for ROS. The rospy client
+      (description
+       "Pure Python client library for ROS. The rospy client
 API enables Python programmers to quickly interface with ROS Topics,
-Services, and Parameters. The design of rospy favors implementation speed
+Services, and Parameters.  The design of rospy favors implementation speed
 (i.e. developer time) over runtime performance so that algorithms can be quickly
-prototyped and tested within ROS. It is also ideal for non-critical-path code,
+prototyped and tested within ROS.  It is also ideal for non-critical-path code,
 such as configuration and initialization code.
-any of the ROS tools are written in rospy to take advantage of the type introspection capabilities.
-
-Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
-  (license license:bsd-3))))
+Many of the ROS tools, such rostopic and rosservice
+are built on top of rospy")
+      (license license:bsd-3))))
 
 
 (define-public ros-noetic-roslz4
@@ -300,24 +356,27 @@ Many of the ROS tools, such rostopic and rosservice are built on top of rospy")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosunit))
-      (inputs (list lz4
-                    ros-noetic-cpp-common))
-
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "utilities/roslz4"))))))
+      (propagated-inputs (list lz4 ros-noetic-cpp-common))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "utilities/roslz4"))))))
       (home-page "https://wiki.ros.org/rostest")
-      (synopsis "A Python and C++ implementation of the LZ4 streaming format")
-      (description "A Pyhthon and C++ implementation of the LZ4 streaming format.
+      (synopsis "Python and C++ implementation of the LZ4 streaming format")
+      (description
+       "A Pyhthon and C++ implementation of the LZ4 streaming format.
 Large data streams are split into blocks which are compressed using the very fast
 LZ4 compression algorithm.")
       (license license:bsd-3))))
@@ -331,28 +390,32 @@ LZ4 compression algorithm.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list boost))
-      (propagated-inputs
+      (propagated-inputs (list boost
+                               ros-noetic-rosgraph
+                               ros-noetic-roslaunch
+                               ros-noetic-rosmaster
+                               ros-noetic-rospy
+                               ros-noetic-rosunit))
+      (arguments
        (list
-        ros-noetic-rosgraph
-        ros-noetic-roslaunch
-        ros-noetic-rosmaster
-        ros-noetic-rospy
-        ros-noetic-rosunit))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rostest"))))))
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/rostest"))))))
       (home-page "https://wiki.ros.org/rostest")
-      (synopsis "Integration test suite based on roslaunch that is compatibile with xUnit frameworks")
-      (description"Integration test suite based on roslaunch that is compatibile with xUnit frameworks.")
+      (synopsis "Integration test suite based on roslaunch")
+      (description
+       "Integration test suite based on roslaunch.
+It is compatibile with xUnit frameworks.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosbag-storage
@@ -364,33 +427,39 @@ LZ4 compression algorithm.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-rostest))
-      (inputs (list bzip2
-                    boost
-                    console-bridge
-                    gpgme
-                    openssl
-                    ros-noetic-cpp-common
-                    ros-noetic-roscpp-serialization
-                    ros-noetic-roscpp-traits))
-      (propagated-inputs (list ros-noetic-pluginlib
+      (native-inputs (list ros-noetic-std-msgs ros-noetic-rostest))
+      (propagated-inputs (list boost
+                               bzip2
+                               console-bridge
+                               gpgme
+                               openssl
+                               ros-noetic-cpp-common
+                               ros-noetic-pluginlib
                                ros-noetic-roslz4
+                               ros-noetic-roscpp-serialization
                                ros-noetic-rostime
-                               ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosbag_storage"))))))
+                               ros-noetic-roscpp-traits))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/rosbag_storage"))))))
       (home-page "https://wiki.ros.org/rosbag_storage")
-      (synopsis "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
-      (description "Tools for recording from and playinb back ROS messages without relying on the ROS client library")
+      (synopsis
+       "Record and play back ROS messages without the ROS client library")
+      (description
+       "Tools for recording from and playing
+ back ROS messages without relying on the ROS client library")
       (license license:bsd-3))))
 
 (define-public ros-noetic-topic-tools

@@ -31,6 +31,12 @@ Also creates an opt/ros/ directory with noetic symlinking back"
     (if catkin ;when catkin? was #f, catkin is not an input so we can't run this step
         (invoke (string-append catkin "/bin/catkin_test_results")))))
 
+(define (check-with-results . args)
+  "Run the check then run catkin-test-results so check fails if tests did"
+  (setenv "ROS_LOG_DIR" "/tmp") ; must be a writeable dir
+  (apply (assoc-ref cmake-build:%standard-phases 'check) args)
+  (apply catkin-test-results args))
+
 (define %standard-phases
   (modify-phases cmake-build:%standard-phases
     (add-after 'unpack 'ensure-no-mtimes-pre-1980
@@ -46,4 +52,4 @@ Also creates an opt/ros/ directory with noetic symlinking back"
     (add-after 'add-install-to-path 'wrap
       (assoc-ref py-build:%standard-phases 'wrap))
     (add-after 'wrap 'ros-wrap ros-wrap)
-  (add-after 'check 'post-check catkin-test-results)))
+    (replace 'check check-with-results)))

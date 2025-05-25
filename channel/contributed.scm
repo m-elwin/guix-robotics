@@ -10,6 +10,7 @@
   #:use-module (guix gexp)
   #:use-module (gnu packages apr)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python-xyz)
@@ -52,3 +53,23 @@ and should be usable on any platform supported by APR")
         (base32 "14xkb34svkgn08gz7qbama3idlk2a4q5y7ansccvkrf4wdg705n3"))))))
 
 (define-public log4cxx-noetic log4cxx-0.11)
+
+;;; Fix nose (which is not maintained) for python3.11
+(define-public python-nose-noetic
+  (package
+    (inherit python-nose)
+    (name "python-nose-noetic")
+    (source
+     (origin
+       (inherit (package-source python-nose))
+       (modules '((guix build utils)))
+       (snippet
+        '(substitute* '("nose/util.py" "nose/plugins/manager.py")
+           ;; Convert the inspect.getargspec(...) into inspect.getfullargspec(...)
+           ;; getfullargspec returns a named tuple and getargspec returns a tuple
+           ;; so we convert the return value from a named-tuple into a tuple
+           (("inspect.getargspec\\((.*)\\)" _ func-arg)
+            (string-append
+             "tuple(getattr(inspect.getfullargspec("
+             func-arg
+             "), attr) for attr in ['args', 'varargs', 'varkw', 'defaults'])"))))))))

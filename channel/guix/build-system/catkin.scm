@@ -12,7 +12,8 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages linux)
-  #:use-module (ros-noetic bootstrap))
+  #:use-module (ros-noetic bootstrap)
+  #:use-module (contributed))
 
 ;; Commentary:
 ;;
@@ -63,7 +64,7 @@ CATKIN? Include catkin as an input. Set to #f so we can use the rest of this wit
                       ("python-catkin-pkg" ,python-catkin-pkg)
                       ("python-empy" ,python-empy)
                       ("googletest" ,googletest)
-                      ("python-nose" ,python-nose)
+                      ("python-nose-noetic" ,python-nose-noetic)
                       ("util-linux" ,util-linux))
                     original-native-inputs))
            ((#:modules orig-modules '())
