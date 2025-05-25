@@ -126,7 +126,7 @@ to quickly interface with ROS Topics, Services, and Parameters.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-mock))
-      (inputs (list python-netifaces python-rospkg python-pyyaml))
+      (propagated-inputs (list python-netifaces python-rospkg python-pyyaml))
       (arguments
        (list
         #:phases
@@ -295,9 +295,19 @@ rosparam can be invoked within a roslaunch file.")
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
+            (add-after 'unpack 'switch-to-pkg-src-and-patch
               (lambda _
-                (chdir "tools/roslaunch"))))))
+                (chdir "tools/roslaunch")
+                ;; Some of these tests depend on the $HOME
+                ;; directory existing in the build environment
+                ;; so set it to /tmp
+                (setenv "HOME" "/tmp")
+                ;; help the test find roslaunch
+                (substitute* '("test/unit/test_roslaunch_dump_params.py"
+                               "test/unit/test_roslaunch_list_files.py")
+                  (("cmd = 'roslaunch'")
+                   (string-append "cmd = '"
+                                  (getcwd) "/../build/devel/bin/roslaunch'"))))))))
       (home-page "https://wiki.ros.org/roslaunch")
       (synopsis
        "Launch multiple ROS nodes locally and remotely and set ROS parameters")
