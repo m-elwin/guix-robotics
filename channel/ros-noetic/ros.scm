@@ -97,21 +97,31 @@
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-rospkg))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "tools/rosmake"))))))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src-and-patch
+              (lambda _
+                (chdir "tools/rosmake")
+                ;; specify the full path to rosmake so Popen can find it
+                (substitute* "test/test_rosmake_commandline.py"
+                  (("'rosmake',")
+                   (string-append "'"
+                                  (getcwd) "/../build/devel/bin/rosmake',"))))))))
       (home-page "https://wiki.ros.org/rosmake")
-      (synopsis "A ros dependency aware build tool")
-      (description "A tool that can build all ros dependencies in the correct order")
+      (synopsis "Legacy ROS build tool")
+      (description
+       "Outdated tool that can build all ros dependencies in the correct order.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-mk
