@@ -295,6 +295,21 @@ are required to be set in any particular way.")
           (base32 "05chprdj4p5bs84zb36v13vfbr41biqi6g5zwq3px8sqhwlzkb3s"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; fix paths where the tests find the plugins
+            (add-after 'unpack 'patch-tests
+              (lambda _
+                (substitute* '("test/shared_ptr_test.cpp" "test/utest.cpp"
+                               "test/unique_ptr_test.cpp")
+                  (("class_loader::systemLibraryFormat\\(\"class_loader_Test(.*)\"\\)"
+                    all lib)
+                   (string-append "\""
+                                  (getcwd)
+                                  "/../build/devel/lib/libclass_loader_Test"
+                                  lib ".so\""))))))))
       (native-inputs (list ros-noetic-cmake-modules))
       (propagated-inputs (list boost console-bridge poco))
       (home-page "https://github.com/ros/class_loader")
