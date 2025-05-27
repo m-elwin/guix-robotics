@@ -392,7 +392,7 @@ are built on top of rospy")
             (add-after 'unpack 'switch-to-pkg-src
               (lambda _
                 (chdir "utilities/roslz4"))))))
-      (home-page "https://wiki.ros.org/rostest")
+      (home-page "https://wiki.ros.org/roslz4")
       (synopsis "Python and C++ implementation of the LZ4 streaming format")
       (description
        "A Pyhthon and C++ implementation of the LZ4 streaming format.
@@ -416,6 +416,7 @@ LZ4 compression algorithm.")
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-std-srvs))
       (propagated-inputs (list boost
                                ros-noetic-rosgraph
                                ros-noetic-roslaunch
@@ -427,9 +428,37 @@ LZ4 compression algorithm.")
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
+            (add-after 'unpack 'switch-to-pkg-src-and-patch
               (lambda _
-                (chdir "tools/rostest"))))))
+                (chdir "tools/rostest")
+                ;; test nodes shebangs refer to "python"
+                ;; switch to "python3" so patch-shebangs works
+                (substitute* '("test_nodes/talker.py"
+                               "test_nodes/service_server.py"
+                               "test_nodes/listener.py"
+                               "test_nodes/publish_once.py"
+                               "test/time_limit_test.py"
+                               "test/test_distro_version.py"
+                               "test/test_clean_master.py"
+                               "test/test_dotname.py")
+                  (("#!/usr/bin/env python") "#!/usr/bin/env python3"))
+                ;; publishtest.test depends on rostopic, which is is cyclic dep
+                ;; Partially fixed in https://github.com/ros/ros_comm/pull/2002/
+                ;; But need to apply the same change to publishtest.test
+                (substitute* '("test/publishtest.test"
+                               "test/advertisetest.test")
+                  (("pkg=\"rostopic\" type=\"rostopic\" name=\"freq.*")
+                   "pkg=\"rostest\" type=\"talker.py\" name=\"freq_topic_pub\"/>\n")
+                  (("pkg=\"rostopic\" type=\"rostopic\" name=\"once.*")
+                   "pkg=\"rostest\" type=\"publish_once.py\" name=\"once_topic_pub\"/>")
+                  (("frequent_topic") "chatter"))
+                ;; the subscribetest node imports rosservice but does not use it
+                (substitute* '("nodes/subscribetest")
+                  (("import rosservice") ""))))
+            ;;; tests need a home directory to work
+            (add-before 'check 'set-home-dir
+              (lambda _
+                (setenv "HOME" "/tmp"))))))
       (home-page "https://wiki.ros.org/rostest")
       (synopsis "Integration test suite based on roslaunch")
       (description
@@ -453,7 +482,11 @@ It is compatibile with xUnit frameworks.")
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-std-msgs ros-noetic-rostest))
+      ;; The package.xml includes <rostest> as a build dep
+      ;; and  the CMakeLists.txt calls find_package(rostest)
+      ;; however, rostest is not used (and cannot be used as it creates
+      ;; a circular dependency)
+      (native-inputs (list ros-noetic-std-msgs))
       (propagated-inputs (list boost
                                bzip2
                                console-bridge
@@ -472,7 +505,11 @@ It is compatibile with xUnit frameworks.")
             ;; go to the directory for the ros package
             (add-after 'unpack 'switch-to-pkg-src
               (lambda _
-                (chdir "tools/rosbag_storage"))))))
+                (chdir "tools/rosbag_storage")))
+            ;; needs a real home directory for tests to pass
+            (add-before 'check 'pre-check
+              (lambda _
+                (setenv "HOME" "/tmp"))))))
       (home-page "https://wiki.ros.org/rosbag_storage")
       (synopsis
        "Record and play back ROS messages without the ROS client library")
@@ -576,8 +613,7 @@ be high performance and avoids deserialization and reserialization of messages."
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-rostest
-                           ros-noetic-std-msgs
+      (native-inputs (list ros-noetic-std-msgs
                            ros-noetic-std-srvs
                            ros-noetic-diagnostic-msgs))
       (propagated-inputs (list ros-noetic-genmsg
