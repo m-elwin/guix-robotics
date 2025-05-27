@@ -1,5 +1,10 @@
 * "/usr/bin/env python" convert to /usr/bin/env python3 automatically in the following directories:
 scripts, test, test_nodes
+
+* setenv(HOME)
+- rostest seems to need HOME set
+  - Is it really HOME or is it some other env var
+-Override this in the rostest wrapper: if home is /homeless-shelter set it to tmp? Unless home is not the env that is necessary
 * Circular dependency
 
 - The dependency can be resolved if topic-tools does not depend on rostest.

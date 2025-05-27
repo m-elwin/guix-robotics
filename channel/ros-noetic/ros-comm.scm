@@ -773,6 +773,11 @@ internal-use only.")
                                (add-after 'unpack 'switch-to-pkg-src-and-patch-tests
                                  (lambda _
                                    (chdir "tools/rostopic")
+                                   (substitute* '("test_nodes/talker.py"
+                                                  "test/test_rostopic.py"
+                                                  "test/test_rostopic_command_line_offline.py"
+                                                  "test/check_rostopic_command_line_online.py")
+                                     (("#!/usr/bin/env python") "#!/usr/bin/env python3"))
                                    (substitute* '("test/test_rostopic.py"
                                                   "test/test_rostopic_command_line_offline.py"
                                                   "test/check_rostopic_command_line_online.py"
@@ -781,7 +786,10 @@ internal-use only.")
                                       (string-append "cmd = '"
                                                      (getcwd) "/../build/devel/bin/rostopic'")))
                                    (substitute* "test/test_rostopic_command_line_offline.py"
-                                     (("%\\(cmd, c\\)") "%('rostopic', c)")))))))
+                                     (("%\\(cmd, c\\)") "%('rostopic', c)"))))
+                               (add-before 'check 'set-home
+                                 ; rostest tests require a home directory to be set
+                                 (lambda _ (setenv "HOME" "/tmp"))))))
       (home-page "https://wiki.ros.org/rostopic")
       (synopsis "The rostopic command-line tool for displaying debug information about ROS topics")
       (description "The rostopic command-line tool for displaying
