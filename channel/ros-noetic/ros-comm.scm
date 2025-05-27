@@ -421,6 +421,7 @@ LZ4 compression algorithm.")
                                ros-noetic-rosgraph
                                ros-noetic-roslaunch
                                ros-noetic-rosmaster
+                               ros-noetic-rosservice
                                ros-noetic-rospy
                                ros-noetic-rosunit))
       (arguments

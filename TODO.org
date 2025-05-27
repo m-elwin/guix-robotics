@@ -1,3 +1,18 @@
+* Circular dependency
+
+- The dependency can be resolved if topic-tools does not depend on rostest.
+
+Since it only depends on ros-test to run it's tests what we'll do is:
+
+topic-tools will depend on
+topic-tools-test and topic-tools-no-tests
+
+rostest will depend on topic-tools-notests directly
+
+everything else will get the tested version.
+
+This way topic-tools will definitely get tested but the cycle will be broken.
+
 * List
 0. Native inputs, inputs, propagated inputs
 1. Native inputs: used only during build time
