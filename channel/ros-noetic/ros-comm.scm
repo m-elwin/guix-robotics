@@ -29,6 +29,7 @@
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic roscpp-core)
+  #:use-module (srfi srfi-1)
   #:use-module (contributed))
 
 (define-public ros-noetic-xmlrpcpp
@@ -467,6 +468,30 @@ LZ4 compression algorithm.")
 It is compatibile with xUnit frameworks.")
       (license license:bsd-3))))
 
+;;; Used by ros-noetic-topic-tools to avoid a circular dependency
+;;; on ros-noetic-rosservice. The advertisetest node uses this
+;;; so minimal is missing that particular node
+(define-public ros-noetic-rostest-minimal
+  (package
+    (inherit ros-noetic-rostest)
+    (name "ros-noetic-rostest-minimal")
+    ;; remove ros-noetic-rosservice from the propagated inputsinputs
+    (propagated-inputs (remove (lambda (pkg)
+                                 (string=? (car pkg) "ros-noetic-rosservice"))
+                               (package-propagated-inputs ros-noetic-rostest)))
+    (arguments
+     (substitute-keyword-arguments (package-arguments ros-noetic-rostest)
+       ((#:phases orig-phases)
+        #~(modify-phases #$orig-phases
+            ;; Remove the advertisetest node and its associated tests
+            (add-after 'switch-to-pkg-src-and-patch 'remove-advertisetest
+              (lambda _
+                (substitute* "CMakeLists.txt"
+                  (("nodes/advertisetest")
+                   "")
+                  (("add_rostest\\(test/advertisetest.test\\)")
+                   ""))))))))))
+
 (define-public ros-noetic-rosbag-storage
   (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
@@ -534,7 +559,7 @@ It is compatibile with xUnit frameworks.")
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-rostest
+      (native-inputs (list ros-noetic-rostest-minimal
                            ros-noetic-message-generation
                            ros-noetic-rosbash))
       (inputs (list ros-noetic-cpp-common
