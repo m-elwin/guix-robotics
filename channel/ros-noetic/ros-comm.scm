@@ -444,7 +444,8 @@ LZ4 compression algorithm.")
                                "test/time_limit_test.py"
                                "test/test_distro_version.py"
                                "test/test_clean_master.py"
-                               "test/test_dotname.py")
+                               "test/test_dotname.py"
+                               "scripts/rostest")
                   (("#!/usr/bin/env python") "#!/usr/bin/env python3"))
                 ;; publishtest.test depends on rostopic, which is is cyclic dep
                 ;; Partially fixed in https://github.com/ros/ros_comm/pull/2002/
@@ -456,9 +457,13 @@ LZ4 compression algorithm.")
                   (("pkg=\"rostopic\" type=\"rostopic\" name=\"once.*")
                    "pkg=\"rostest\" type=\"publish_once.py\" name=\"once_topic_pub\"/>")
                   (("frequent_topic") "chatter"))
-                ;; the subscribetest node imports rosservice but does not use it
+                ;; the subscribetest node imports rosservice but does not use it so remove
                 (substitute* '("nodes/subscribetest")
-                  (("import rosservice") ""))))
+                  (("import rosservice") ""))
+                ;; we wrap the rostest executable with guix (so it is a shell script)
+                ;; need to make sure it's not called with python3 prefixed
+                (substitute* "cmake/rostest-extras.cmake.em"
+                  (("ROSTEST_EXE \"\\$\\{PYTHON_EXECUTABLE\\}") "ROSTEST_EXE \""))))
             ;;; tests need a home directory to work
             (add-before 'check 'set-home-dir
               (lambda _
@@ -765,8 +770,18 @@ internal-use only.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rostopic"))))))
+                               (add-after 'unpack 'switch-to-pkg-src-and-patch-tests
+                                 (lambda _
+                                   (chdir "tools/rostopic")
+                                   (substitute* '("test/test_rostopic.py"
+                                                  "test/test_rostopic_command_line_offline.py"
+                                                  "test/check_rostopic_command_line_online.py"
+                                                  )
+                                     (("cmd = 'rostopic'")
+                                      (string-append "cmd = '"
+                                                     (getcwd) "/../build/devel/bin/rostopic'")))
+                                   (substitute* "test/test_rostopic_command_line_offline.py"
+                                     (("%\\(cmd, c\\)") "%('rostopic', c)")))))))
       (home-page "https://wiki.ros.org/rostopic")
       (synopsis "The rostopic command-line tool for displaying debug information about ROS topics")
       (description "The rostopic command-line tool for displaying

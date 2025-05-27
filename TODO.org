@@ -1,3 +1,5 @@
+* "/usr/bin/env python" convert to /usr/bin/env python3 automatically in the following directories:
+scripts, test, test_nodes
 * Circular dependency
 
 - The dependency can be resolved if topic-tools does not depend on rostest.
