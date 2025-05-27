@@ -588,10 +588,21 @@ depending on topic-tools, breaking a circular dependency.")))
                       (add-after 'unpack 'switch-to-pkg-src
                         (lambda _
                           (chdir "tools/topic_tools")
-                          ;;; some of the tests rely on rostopic which would create
-                          ;;; a circular dependency
- 
-                          )))))
+                          (substitute* '("sample/simple_lazy_transport.py"
+                                         "scripts/mux_add"
+                                         "scripts/demux_add"
+                                         "scripts/transform"
+                                         "scripts/mux_list"
+                                         "scripts/demux_delete"
+                                         "scripts/relay_field"
+                                         "scripts/mux_select"
+                                         "scripts/demux_list"
+                                         "scripts/mux_delete"
+                                         "scripts/demux_select"
+                                         "test/test_transform.py")
+                            (("#!/usr/bin/env python") "#!/usr/bin/env python3"))))
+                      (add-before 'check 'set-home
+                        (lambda _ (setenv "ROS_HOME" "/tmp"))))))
       (home-page "https://wiki.ros.org/topic_tools")
       (synopsis "Tools for messing with ROS topics at the meta level")
       (description "Tools for directing, throttling, selecting, and otherwise messing with ROS topics at a meta level.
