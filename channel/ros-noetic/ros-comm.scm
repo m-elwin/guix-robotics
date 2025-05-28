@@ -589,37 +589,37 @@ This means they can be applied to any ROS topic.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list python-pillow
-                           ros-noetic-roscpp-serialization))
-      (inputs (list
-               boost
-               ros-noetic-cpp-common))
-      (propagated-inputs (list
-               python-pycryptodomex
-               ros-noetic-rosbag-storage
-               ros-noetic-rosconsole
-               python-gnupg
-               python-rospkg
-               ros-noetic-roscpp
-               ros-noetic-roslib
-               ros-noetic-rospy
-               ros-noetic-std-srvs
-               ros-noetic-topic-tools
-               ros-noetic-xmlrpcpp))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosbag"))))))
+      (native-inputs (list python-pillow ros-noetic-roscpp-serialization))
+      (inputs (list boost ros-noetic-cpp-common ros-noetic-xmlrpcpp))
+      (propagated-inputs (list python-pycryptodomex
+                               ros-noetic-rosbag-storage
+                               ros-noetic-rosconsole
+                               python-gnupg
+                               python-rospkg
+                               ros-noetic-roscpp
+                               ros-noetic-roslib
+                               ros-noetic-rospy
+                               ros-noetic-std-srvs
+                               ros-noetic-topic-tools))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/rosbag"))))))
       (home-page "https://wiki.ros.org/rosbag")
       (synopsis "Tools for recording and playing back to ROS topics")
-      (description "Tools for recording and playing back ROS topics to ROS bags. It is intended to
+      (description
+       "Tools for recording and playing back ROS topics to ROS bags. It is intended to
 be high performance and avoids deserialization and reserialization of messages.")
       (license license:bsd-3))))
 
