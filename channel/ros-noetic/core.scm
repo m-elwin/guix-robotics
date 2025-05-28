@@ -38,17 +38,17 @@
 ;;
 ;; Code:
 
+;;; ROS executables are wrapped such that GUIX_ROS_PACKAGE_PATH is
+;;; prepended to the ROS_PACKAGE_PATH.
 (define ros-package-path-search-path
-  (search-path-specification (variable "ROS_PACKAGE_PATH") (files (list "share"))))
+  (search-path-specification
+   (variable "GUIX_ROS_PACKAGE_PATH")
+   (files (list "share"))))
 
-;;; We define an unused variable ROS_CMAKE_PREFIX_PATH to hold
-;;; The catkin build-system then wraps all executables
-;;; (e.g., files catkin puts in bin/)
-;;; such that they set the CMAKE_PREFIX_PATH to ROS_CMAKE_PREFIX_PATH
-;;; In this way each catkin executable sets the proper CMAKE_PREFIX_PATH
-;;; without it interfering with other programs that may use CMAKE_PREFIX_PATH
+;;; ROS executables are wrapped such that GUIX_ROS_CMAKE_PREFIX_PATH
+;;; is prepended to CMAKE_PREFIX_PATH.
 (define ros-cmake-prefix-path-search-path
-  (search-path-specification (variable "ROS_CMAKE_PREFIX_PATH") (files (list ""))))
+  (search-path-specification (variable "GUIX_ROS_CMAKE_PREFIX_PATH") (files (list ""))))
 
 (define-public catkin
   (let ((commit "fdf0b3e13e4281cf90821aeea75aa4932a7ff4f3")

@@ -22,7 +22,8 @@ Also creates an opt/ros/ directory with noetic symlinking back"
      (wrap-program file
        `("ROS_DISTRO" "" = ,(list "noetic"))
        `("ROS_MASTER_URI" "" = ,(list "${ROS_MASTER_URI:=http://localhost:11311}"))
-       `("CMAKE_PREFIX_PATH" = ,(list "${ROS_CMAKE_PREFIX_PATH}"))))
+       `("CMAKE_PREFIX_PATH" prefix ,(list "${GUIX_ROS_CMAKE_PREFIX_PATH}"))
+       `("ROS_PACKAGE_PATH" prefix ,(list "${GUIX_ROS_PACKAGE_PATH}"))))
    (find-files (string-append (assoc-ref outputs "out") "/bin") "^[^\\.].*")))
 
 (define* (catkin-test-results #:key inputs outputs #:allow-other-keys)
