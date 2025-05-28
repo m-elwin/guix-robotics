@@ -57,7 +57,9 @@ Also creates an opt/ros/ directory with noetic symlinking back"
 
 (define (check-with-results . args)
   "Run the check then run catkin-test-results so check fails if tests did"
-  (setenv "ROS_LOG_DIR" "/tmp") ;must be a writeable dir
+  ;; Must be a writeable dir for some ROS integration tests
+  (setenv "ROS_LOG_DIR" "/tmp")
+  (setenv "ROS_HOME" "/tmp")
   (apply (assoc-ref cmake-build:%standard-phases
                     'check) args)
   (apply catkin-test-results args))

@@ -301,10 +301,6 @@ rosparam can be invoked within a roslaunch file.")
             (add-after 'unpack 'switch-to-pkg-src-and-patch
               (lambda _
                 (chdir "tools/roslaunch")
-                ;; Some of these tests depend on the $HOME
-                ;; directory existing in the build environment
-                ;; so set it to /tmp
-                (setenv "HOME" "/tmp")
                 ;; help the test find roslaunch
                 (substitute* '("test/unit/test_roslaunch_dump_params.py"
                                "test/unit/test_roslaunch_list_files.py")

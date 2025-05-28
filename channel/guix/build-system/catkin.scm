@@ -64,7 +64,8 @@
                        (test-target "run_tests")
                        #:allow-other-keys #:rest arguments)
   "Lower into a bag. Uses the cmake lower function but adjusts arguments.
-CATKIN? Include catkin as an input. Set to #f so we can use the rest of this with the catkin package."
+CATKIN? Include catkin as an input. Set to #f so we can use the rest of this with the catkin package.
+test-target (defaults to run_tests) the test target to pass to make."
   (define lower
     (build-system-lower cmake-build-system))
   "Return a bag for NAME. catkin? is #f to not include catkin as an input, such as when building the catkin package itself"
