@@ -451,10 +451,7 @@ LZ4 compression algorithm.")
                 ;; after being wrapped.
                 (substitute* "cmake/rostest-extras.cmake.em"
                   (("ROSTEST_EXE \"\\$\\{PYTHON_EXECUTABLE\\}") "ROSTEST_EXE \""))))
-            ;;; tests need a home directory to work
-            (add-before 'check 'set-home-dir
-              (lambda _
-                (setenv "ROS_HOME" "/tmp"))))))
+              )))
       (home-page "https://wiki.ros.org/rostest")
       (synopsis "Integration test suite based on roslaunch")
       (description
@@ -551,54 +548,36 @@ depending on topic-tools, breaking a circular dependency.")))
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest-minimal
-                           ros-noetic-message-generation
-                           ros-noetic-rosmsg
-                           ros-noetic-rosbash))
-      (inputs (list ros-noetic-cpp-common
-                    ros-noetic-rosconsole
-                    ros-noetic-rostopic
-                    ros-noetic-roscpp
-                    ros-noetic-rostime
-                    ros-noetic-std-msgs
-                    ros-noetic-xmlrpcpp))
-
-      (arguments (list
-                  #:phases
-                  #~(modify-phases %standard-phases
-                      ;; go to the directory for the ros package
-                      (add-after 'unpack 'switch-to-pkg-src
-                        (lambda _
-                          (chdir "tools/topic_tools")
-                          (substitute* '("sample/simple_lazy_transport.py"
-                                         "scripts/mux_add"
-                                         "scripts/demux_add"
-                                         "scripts/transform"
-                                         "scripts/mux_list"
-                                         "scripts/demux_delete"
-                                         "scripts/relay_field"
-                                         "scripts/mux_select"
-                                         "scripts/demux_list"
-                                         "scripts/mux_delete"
-                                         "scripts/demux_select"
-                                         "test/test_transform.py"
-                                         "test/test_throttle_simtime_loop.py"
-                                         "test/test_lazy_transport.py"
-                                         "test/test_relay_stealth.py")
-                            (("#!/usr/bin/env python") "#!/usr/bin/env python3"))))
-                      (add-before 'check 'set-home
-                        (lambda _ (setenv "ROS_HOME" "/tmp"))))))
+                           ros-noetic-message-generation ros-noetic-rosmsg
+                           ros-noetic-rosbash ros-noetic-std-msgs))
+      (inputs (list ros-noetic-xmlrpcpp))
+      (propagated-inputs (list ros-noetic-cpp-common ros-noetic-rosconsole
+                               ros-noetic-rostopic ros-noetic-roscpp
+                               ros-noetic-rostime))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (chdir "tools/topic_tools"))))))
       (home-page "https://wiki.ros.org/topic_tools")
       (synopsis "Tools for messing with ROS topics at the meta level")
-      (description "Tools for directing, throttling, selecting, and otherwise messing with ROS topics at a meta level.
-None of the programs in this package actually know about the topics whose streams they are altering; instead, these
-tools deal with messages as generic binary blobs. This means they can be applied to any ROS topic.")
+      (description
+       "Tools for directing, throttling, selecting, and otherwise messing
+with ROS topics at a meta level.  None of the programs in this package
+actually know about the topics whose streams they are altering; instead, these
+tools deal with messages as generic binary blobs.
+This means they can be applied to any ROS topic.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosbag
