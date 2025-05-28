@@ -572,6 +572,7 @@ depending on topic-tools, breaking a circular dependency.")))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest-minimal
                            ros-noetic-message-generation
+                           ros-noetic-rosmsg
                            ros-noetic-rosbash))
       (inputs (list ros-noetic-cpp-common
                     ros-noetic-rosconsole
@@ -599,7 +600,10 @@ depending on topic-tools, breaking a circular dependency.")))
                                          "scripts/demux_list"
                                          "scripts/mux_delete"
                                          "scripts/demux_select"
-                                         "test/test_transform.py")
+                                         "test/test_transform.py"
+                                         "test/test_throttle_simtime_loop.py"
+                                         "test/test_lazy_transport.py"
+                                         "test/test_relay_stealth.py")
                             (("#!/usr/bin/env python") "#!/usr/bin/env python3"))))
                       (add-before 'check 'set-home
                         (lambda _ (setenv "ROS_HOME" "/tmp"))))))
@@ -708,17 +712,22 @@ be high performance and avoids deserialization and reserialization of messages."
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-std-msgs
                            ros-noetic-std-srvs
-                           ros-noetic-diagnostic-msgs))
+                           ros-noetic-diagnostic-msgs
+                           ros-noetic-rostest-minimal))
       (propagated-inputs (list ros-noetic-genmsg
                     ros-noetic-genpy
                     python-rospkg
-                    ros-noetic-rosbag
+                    ros-noetic-rosbag-minimal
                     ros-noetic-roslib))
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
                                (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosmsg"))))))
+                                 (lambda _
+                                   (chdir "tools/rosmsg")
+                                   (substitute* '("test/test_rosmsg_command_line.py")
+                                     (("Popen\\(\\['rosmsg") (string-append "Popen(['" (getcwd) "/../build/devel/bin/rosmsg"))
+                                     (("Popen\\(\\['rossrv") (string-append "Popen(['" (getcwd) "/../build/devel/bin/rossrv"))))))))
       (home-page "https://wiki.ros.org/rosmsg")
       (synopsis "The rosmsg and rossrv command-line tools for displaying message/service type information")
       (description "The rosmsg and rossrv command-line tools. rosmsg displays information about message types.
