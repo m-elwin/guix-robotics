@@ -32,7 +32,8 @@
   ;; because catkin uses catkin-build-system to build itself, so instead we fetch the catkin package
   ;; directly
   (let ((module (resolve-interface '(ros-noetic core))))
-    (module-ref module 'catkin)))
+    (module-ref module
+                'catkin)))
 
 (define %catkin-build-system-modules
   ;; Build-side modules imported by default.
@@ -40,43 +41,48 @@
     ,@%cmake-build-system-modules
     ,@%python-build-system-modules))
 
-  ;;; adds some python phases to gnu
+;;; adds some python phases to gnu
 ;;; Defined to augment the native inputs of anything that uses this build system
-(define* (lower-catkin name #:key
-                       (catkin? #t)
+(define* (lower-catkin name
+                       #:key (catkin? #t)
                        (test-target "run_tests")
-                       #:allow-other-keys
-                       #:rest arguments)
+                       #:allow-other-keys #:rest arguments)
   "Lower into a bag. Uses the cmake lower function but adjusts arguments.
 CATKIN? Include catkin as an input. Set to #f so we can use the rest of this with the catkin package."
-  (define lower (build-system-lower cmake-build-system))
+  (define lower
+    (build-system-lower cmake-build-system))
   "Return a bag for NAME. catkin? is #f to not include catkin as an input, such as when building the catkin package itself"
-  (define private-keywords '(#:catkin?))
+  (define private-keywords
+    '(#:catkin?))
   (apply lower name
-         (substitute-keyword-arguments
-             (strip-keyword-arguments private-keywords
-                                      (append
-                                       arguments (list
-                                                  #:test-target test-target)))
-           ((#:native-inputs original-native-inputs '())
-            (append (if catkin? `(("catkin" ,(default-catkin))) '())
+         (substitute-keyword-arguments (strip-keyword-arguments
+                                        private-keywords
+                                        (append arguments
+                                                (list #:test-target
+                                                      test-target)))
+           ((#:native-inputs original-native-inputs
+             '())
+            (append (if catkin?
+                        `(("catkin" ,(default-catkin)))
+                        '())
                     `(("python" ,python)
                       ("python-catkin-pkg" ,python-catkin-pkg)
                       ("python-empy" ,python-empy)
                       ("googletest" ,googletest)
                       ("python-nose-noetic" ,python-nose-noetic)
-                      ("util-linux" ,util-linux))
-                    original-native-inputs))
-           ((#:modules orig-modules '())
-            (append `(((guix build cmake-build-system) #:select (cmake-build))
+                      ("util-linux" ,util-linux)) original-native-inputs))
+           ((#:modules orig-modules
+             '())
+            (append `(((guix build cmake-build-system)
+                       #:select (cmake-build))
                       (guix build catkin-build-system)
                       (guix build utils)) orig-modules))
-           ((#:imported-modules orig-imported-modules '())
-             (append %catkin-build-system-modules orig-imported-modules)))))
+           ((#:imported-modules orig-imported-modules
+             '())
+            (append %catkin-build-system-modules orig-imported-modules)))))
 
 (define-public catkin-build-system
-  (build-system
-    (name "catkin-build-system")
-    (description "The build system for ros-noetic using catkin")
-    (lower lower-catkin)))
+  (build-system (name "catkin-build-system")
+                (description "The build system for ros-noetic using catkin")
+                (lower lower-catkin)))
 
