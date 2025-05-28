@@ -1,25 +1,7 @@
-* "/usr/bin/env python" convert to /usr/bin/env python3 automatically in the following directories:
-scripts, test, test_nodes
-
-* setenv(HOME)
-- rostest seems to need HOME set
-  - Is it really HOME or is it some other env var
--Override this in the rostest wrapper: if home is /homeless-shelter set it to tmp? Unless home is not the env that is necessary
-* Circular dependency
-
-- The dependency can be resolved if topic-tools does not depend on rostest.
-
-Since it only depends on ros-test to run it's tests what we'll do is:
-
-topic-tools will depend on
-topic-tools-test and topic-tools-no-tests
-
-rostest will depend on topic-tools-notests directly
-
-everything else will get the tested version.
-
-This way topic-tools will definitely get tested but the cycle will be broken.
-
+* Create a custom
+keyword argument to the build phase that sets the original directory
+- This might require wrapping/overriding cmake-build.
+  Or more simply, can add a custom phase in the lwoer function (then it's not accessible to modify-phases however)
 * List
 0. Native inputs, inputs, propagated inputs
 1. Native inputs: used only during build time
