@@ -435,18 +435,6 @@ LZ4 compression algorithm.")
             (add-after 'unpack 'switch-to-pkg-src-and-patch
               (lambda _
                 (chdir "tools/rostest")
-                ;; test nodes shebangs refer to "python"
-                ;; switch to "python3" so patch-shebangs works
-                (substitute* '("test_nodes/talker.py"
-                               "test_nodes/service_server.py"
-                               "test_nodes/listener.py"
-                               "test_nodes/publish_once.py"
-                               "test/time_limit_test.py"
-                               "test/test_distro_version.py"
-                               "test/test_clean_master.py"
-                               "test/test_dotname.py"
-                               "scripts/rostest")
-                  (("#!/usr/bin/env python") "#!/usr/bin/env python3"))
                 ;; publishtest.test depends on rostopic, which is is cyclic dep
                 ;; Partially fixed in https://github.com/ros/ros_comm/pull/2002/
                 ;; But need to apply the same change to publishtest.test
@@ -460,14 +448,17 @@ LZ4 compression algorithm.")
                 ;; the subscribetest node imports rosservice but does not use it so remove
                 (substitute* '("nodes/subscribetest")
                   (("import rosservice") ""))
-                ;; we wrap the rostest executable with guix (so it is a shell script)
-                ;; need to make sure it's not called with python3 prefixed
+                ;; we wrap the rostest executable with guix
+                ;; so rostest is actually a shell script that calls
+                ;; The .real_rostest  python script. Therefore we need to make sure
+                ;; rostest is not invoked with python3 since it is not a python file
+                ;; after being wrapped.
                 (substitute* "cmake/rostest-extras.cmake.em"
                   (("ROSTEST_EXE \"\\$\\{PYTHON_EXECUTABLE\\}") "ROSTEST_EXE \""))))
             ;;; tests need a home directory to work
             (add-before 'check 'set-home-dir
               (lambda _
-                (setenv "HOME" "/tmp"))))))
+                (setenv "ROS_HOME" "/tmp"))))))
       (home-page "https://wiki.ros.org/rostest")
       (synopsis "Integration test suite based on roslaunch")
       (description
