@@ -725,22 +725,36 @@ examples of how to implement dynamic subscription and publication behaviors in R
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
-      (propagated-inputs (list ros-noetic-rosgraph
-                    ros-noetic-rostopic))
-      (arguments (list #:package-dir "tools/rosnode"))
+      (propagated-inputs (list ros-noetic-rosgraph ros-noetic-rostopic))
+      (arguments
+       (list
+        #:package-dir "tools/rosnode"
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'patch-tests
+              (lambda _
+                (substitute* '("test/test_rosnode_command_offline.py"
+                               "test/test_rosnode.py"
+                               "test/check_rosnode_command_online.py")
+                  (("cmd = 'rosnode'")
+                   (string-append "cmd = '"
+                                  (getcwd) "/../build/devel/bin/rosnode'"))))))))
       (home-page "https://wiki.ros.org/rosnode")
-      (synopsis "Command-line tool for displaying debug information about ROS nodes")
-      (description  "Command-line tool for displaying debug information about ROS Nodes,
+      (synopsis
+       "Command-line tool for displaying debug information about ROS nodes")
+      (description
+       "Command-line tool for displaying debug information about ROS Nodes,
 including publications, subscriptions and connections.
-It also contains an experimental library for retrieving node
-information. This library is intended for internal use only.")
+It also contains an experimental library for retrieving node information.
+This library is intended for internal use only.")
       (license license:bsd-3))))
 
 
