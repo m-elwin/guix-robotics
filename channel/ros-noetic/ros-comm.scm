@@ -1,3 +1,20 @@
+;;; Guix-Robotics --- GNU Guix Channel
+;;; Copyright © 2025 Matthew Elwin <elwin@northwestern.edu>
+;;; This file is part of Guix-Robotics.
+;;;
+;;; Guix-Robotics is free software; you can redistribute it and/or modify it
+;;; under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or (at
+;;; your option) any later version.
+;;;
+;;; Guix-Robotics is distributed in the hope that it will be useful, but
+;;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
+
 (define-module (ros-noetic ros-comm)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
@@ -33,6 +50,13 @@
   #:use-module (ros-noetic roscpp-core)
   #:use-module (srfi srfi-1)
   #:use-module (contributed))
+
+;; Commentary:
+;;
+;; Packages that are part of ros_comm and also other client
+;; libraries that are external to ros_comm
+;;
+;; Code:
 
 (define-public ros-noetic-xmlrpcpp
   (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
@@ -958,19 +982,18 @@ that end users do not interact with.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm_msgs")
+               (commit commit)))
          (sha256
           (base32 "0m6qc7ddi7j4aw5dn4ly8vdc3apciwm4x5bmszi3wdm4rbb8vsv8"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'patch-tests
-                       (lambda _ (chdir "std_srvs/"))))))
+      (arguments
+       (list
+        #:package-dir "std_srvs/"))
       (home-page "https://wiki.ros.org/std_srvs")
       (synopsis "Common service definitions")
       (description "Common service definitions")
@@ -987,18 +1010,19 @@ that end users do not interact with.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/roslisp")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/roslisp")
+               (commit commit)))
          (sha256
           (base32 "14xhaibfdzi332cpxgz7iprzss012qczj7ymfnjc4236l14ih1pp"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list ros-noetic-roslang
-                    sbcl
-                    ros-noetic-rospack
-                    ros-noetic-rosgraph-msgs
-                    ros-noetic-std-srvs
-                    ros-noetic-ros-environment))
+      (propagated-inputs (list ros-noetic-roslang
+                               sbcl
+                               ros-noetic-rospack
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-std-srvs
+                               ros-noetic-ros-environment))
       (home-page "https://wiki.ros.org/roslisp")
       (synopsis "Lisp client library for ROS")
       (description "Lisp client library for ROS")
