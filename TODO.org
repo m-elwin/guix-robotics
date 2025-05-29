@@ -1,7 +1,5 @@
-* Create a custom
-keyword argument to the build phase that sets the original directory
-- This might require wrapping/overriding cmake-build.
-  Or more simply, can add a custom phase in the lwoer function (then it's not accessible to modify-phases however)
+* Continue linting and checking inputs
+start with ros_comm/ros-noetic-rosservice
 * List
 0. Native inputs, inputs, propagated inputs
 1. Native inputs: used only during build time

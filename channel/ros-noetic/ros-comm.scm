@@ -124,7 +124,7 @@ to quickly interface with ROS Topics, Services, and Parameters.")
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src-and-patch
+            (add-after 'unpack 'patch-tests
               (lambda _
                 ;; specify the full path to rosgraph so Popen can find it
                 (substitute* "test/test_rosgraph_command_offline.py"
@@ -172,14 +172,7 @@ that can be used by graphical tools.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-defusedxml ros-noetic-rosgraph))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "tools/rosmaster"))))))
+      (arguments (list #:package-dir "tools/rosmaster"))
       (home-page "https://wiki.ros.org/rosmaster")
       (synopsis "ROS Master implementation")
       (description "All ROS 1 systems must run a rosmaster to coordinate
@@ -204,14 +197,7 @@ communication.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-pyyaml ros-noetic-rosgraph))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "tools/rosparam"))))))
+      (arguments (list #:package-dir "tools/rosparam"))
       (home-page "https://wiki.ros.org/rosparam")
       (synopsis
        "The rosparam command-line tool for getting and setting ROS parameters")
@@ -240,14 +226,7 @@ rosparam can be invoked within a roslaunch file.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list ros-noetic-roscpp ros-noetic-rosgraph-msgs))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "tools/rosout"))))))
+      (arguments (list #:package-dir "tools/rosout"))
       (home-page "https://wiki.ros.org/rosout")
       (synopsis
        "System-wide logging mechanism for messages sent to the /rosout topic")
@@ -283,12 +262,12 @@ rosparam can be invoked within a roslaunch file.")
                                ros-noetic-rosparam))
       (arguments
        (list
+        #:package-dir "tools/roslaunch"
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src-and-patch
+            (add-after 'unpack 'patch-tests
               (lambda _
-                (chdir "tools/roslaunch")
                 ;; help the test find roslaunch
                 (substitute* '("test/unit/test_roslaunch_dump_params.py"
                                "test/unit/test_roslaunch_list_files.py")
@@ -331,14 +310,7 @@ be run on.")
                                ros-noetic-rosgraph-msgs
                                ros-noetic-roslib
                                ros-noetic-std-msgs))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "clients/rospy"))))))
+      (arguments (list #:package-dir "clients/rospy"))
       (home-page "https://wiki.ros.org/rospy")
       (synopsis "The Python client library for ROS")
       (description
@@ -371,14 +343,7 @@ are built on top of rospy")
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosunit))
       (propagated-inputs (list lz4 ros-noetic-cpp-common))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "utilities/roslz4"))))))
+      (arguments (list #:package-dir "utilities/roslz4"))
       (home-page "https://wiki.ros.org/roslz4")
       (synopsis "Python and C++ implementation of the LZ4 streaming format")
       (description
@@ -413,12 +378,12 @@ LZ4 compression algorithm.")
                                ros-noetic-rosunit))
       (arguments
        (list
+        #:package-dir "tools/rostest"
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src-and-patch
+            (add-after 'unpack 'patch-tests
               (lambda _
-                (chdir "tools/rostest")
                 ;; publishtest.test depends on rostopic, which is is cyclic dep
                 ;; Partially fixed in https://github.com/ros/ros_comm/pull/2002/
                 ;; But need to apply the same change to publishtest.test
@@ -460,7 +425,7 @@ It is compatibile with xUnit frameworks.")
        ((#:phases orig-phases)
         #~(modify-phases #$orig-phases
             ;; Remove the advertisetest node and its associated tests
-            (add-after 'switch-to-pkg-src-and-patch 'remove-advertisetest
+            (add-after 'patch-tests 'remove-advertisetest
               (lambda _
                 (substitute* "CMakeLists.txt"
                   (("nodes/advertisetest")
@@ -472,7 +437,9 @@ It is compatibile with xUnit frameworks.")
 propagated-input because one of it's installed scripts uses rostest.  It does not,
 however, need the advertisetest node.  The advertisetest node needs rosservice
 which depends on topic-tools, so by removing advertisetest, rostest can avoid
-depending on topic-tools, breaking a circular dependency.")))
+depending on topic-tools, breaking a circular dependency.
+You probably want ros-noetic-rostest, unless you specifically can't handle
+a dependency on rosservice.")))
 
 
 (define-public ros-noetic-rosbag-storage
@@ -509,12 +476,9 @@ depending on topic-tools, breaking a circular dependency.")))
                                ros-noetic-roscpp-traits))
       (arguments
        (list
+        #:package-dir "tools/rosbag_storage"
         #:phases
         #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "tools/rosbag_storage")))
             ;; needs a real home directory for tests to pass
             (add-before 'check 'pre-check
               (lambda _
@@ -550,14 +514,7 @@ depending on topic-tools, breaking a circular dependency.")))
       (propagated-inputs (list ros-noetic-cpp-common ros-noetic-rosconsole
                                ros-noetic-rostopic ros-noetic-roscpp
                                ros-noetic-rostime))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "tools/topic_tools"))))))
+      (arguments (list #:package-dir "tools/topic_tools"))
       (home-page "https://wiki.ros.org/topic_tools")
       (synopsis "Tools for messing with ROS topics at the meta level")
       (description
@@ -596,14 +553,7 @@ This means they can be applied to any ROS topic.")
                                ros-noetic-rospy
                                ros-noetic-std-srvs
                                ros-noetic-topic-tools))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "tools/rosbag"))))))
+      (arguments (list #:project-dir "tools/rosbag"))
       (home-page "https://wiki.ros.org/rosbag")
       (synopsis "Tools for recording and playing back to ROS topics")
       (description
@@ -611,42 +561,34 @@ This means they can be applied to any ROS topic.")
 be high performance and avoids deserialization and reserialization of messages.")
       (license license:bsd-3))))
 
-;;; minimal version of rosbag that does not depend on topic tools
-;;; This breaks a dependency cycle: rostopic depends on rosbag
-;;; which depends on topic-tools, and topic-tools depends on rostopic.
-;;; Instead, rostopic will depend on ros-noetic-rosbag-minimal
 (define-public ros-noetic-rosbag-minimal
-  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
-        (revision "0"))
-    (package
-      (name "ros-noetic-rosbag-minimal")
-      (version (git-version "1.17.4" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
-         (sha256
-          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
-         (file-name (git-file-name name version))))
-      (build-system pyproject-build-system)
-      (native-inputs (list catkin python-wheel))
-      (propagated-inputs (list
-               python-pycryptodomex
-               ros-noetic-rosbag-storage
-               python-gnupg
-               python-rospkg
-               ros-noetic-rospy))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosbag"))))))
-      (home-page "https://wiki.ros.org/rosbag")
-      (synopsis "Tools for recording and playing back to ROS topics")
-      (description "Tools for recording and playing back ROS topics to ROS bags. It is intended to
-be high performance and avoids deserialization and reserialization of messages.")
-      (license license:bsd-3))))
+  (package
+    (inherit ros-noetic-rosbag)
+    (name "ros-noetic-rosbag-minimal")
+    (build-system pyproject-build-system)
+    (native-inputs (list catkin python-wheel))
+    (propagated-inputs (list python-pycryptodomex ros-noetic-rosbag-storage
+                             python-gnupg python-rospkg ros-noetic-rospy))
+    (arguments
+     (list
+      #:phases
+      #~(modify-phases %standard-phases
+          ;; go to the directory for the ros package
+          ;; (pyproject-build-system does not support
+          ;; the #:project-dir keyword)
+          (add-after 'unpack 'switch-to-pkg-src
+            (lambda _
+              (chdir "tools/rosbag"))))))
+    (synopsis "Minimal version of rosbag, with just the python part")
+    (description
+     "Minimal version of rosbag that does not depend on topic-tools.
+Used to break a dependency cycle: rostopic depends on rosbag
+depends on topic-tools; topic-tools depends on rostopic.
+Instead, rostopic will depend on ros-noetic-rosbag-minimal since it only
+uses the python part of rosbag (which does not depend on topic-tools).
+You should mostly use ros-noetic-rosbag unless you specifically need to
+avoid depending on topic-tools and can use a python-only version.")
+    (license license:bsd-3)))
 
 
 (define-public ros-noetic-rosmsg
@@ -658,33 +600,39 @@ be high performance and avoids deserialization and reserialization of messages."
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-std-msgs
-                           ros-noetic-std-srvs
+      (native-inputs (list ros-noetic-std-msgs ros-noetic-std-srvs
                            ros-noetic-diagnostic-msgs
                            ros-noetic-rostest-minimal))
-      (propagated-inputs (list ros-noetic-genmsg
-                    ros-noetic-genpy
-                    python-rospkg
-                    ros-noetic-rosbag-minimal
-                    ros-noetic-roslib))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _
-                                   (chdir "tools/rosmsg")
-                                   (substitute* '("test/test_rosmsg_command_line.py")
-                                     (("Popen\\(\\['rosmsg") (string-append "Popen(['" (getcwd) "/../build/devel/bin/rosmsg"))
-                                     (("Popen\\(\\['rossrv") (string-append "Popen(['" (getcwd) "/../build/devel/bin/rossrv"))))))))
+      (propagated-inputs (list ros-noetic-genmsg ros-noetic-genpy
+                               python-rospkg ros-noetic-rosbag-minimal
+                               ros-noetic-roslib))
+      (arguments
+       (list
+        #:package-dir "tools/rosmsg"
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src
+              (lambda _
+                (substitute* '("test/test_rosmsg_command_line.py")
+                  (("Popen\\(\\['rosmsg")
+                   (string-append "Popen(['"
+                                  (getcwd) "/../build/devel/bin/rosmsg"))
+                  (("Popen\\(\\['rossrv")
+                   (string-append "Popen(['"
+                                  (getcwd) "/../build/devel/bin/rossrv"))))))))
       (home-page "https://wiki.ros.org/rosmsg")
-      (synopsis "The rosmsg and rossrv command-line tools for displaying message/service type information")
-      (description "The rosmsg and rossrv command-line tools. rosmsg displays information about message types.
+      (synopsis
+       "The rosmsg and rossrv command-line tools for displaying message/service type information")
+      (description
+       "The rosmsg and rossrv command-line tools. rosmsg displays information about message types.
 rossrv displays information about serfvice types.")
       (license license:bsd-3))))
 
