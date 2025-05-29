@@ -619,7 +619,7 @@ avoid depending on topic-tools and can use a python-only version.")
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
+            (add-after 'unpack 'patch-tests
               (lambda _
                 (substitute* '("test/test_rosmsg_command_line.py")
                   (("Popen\\(\\['rosmsg")
@@ -693,7 +693,7 @@ internal-use only.")
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src-and-patch-tests
+            (add-after 'unpack 'patch-tests
               (lambda _
                 (substitute* '("test/test_rostopic.py"
                                "test/test_rostopic_command_line_offline.py"
@@ -734,11 +734,7 @@ examples of how to implement dynamic subscription and publication behaviors in R
       (native-inputs (list ros-noetic-rostest))
       (propagated-inputs (list ros-noetic-rosgraph
                     ros-noetic-rostopic))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosnode"))))))
+      (arguments (list #:package-dir "tools/rosnode"))
       (home-page "https://wiki.ros.org/rosnode")
       (synopsis "Command-line tool for displaying debug information about ROS nodes")
       (description  "Command-line tool for displaying debug information about ROS Nodes,
@@ -780,7 +776,7 @@ information. This library is intended for internal use only.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
+                               (add-after 'unpack 'patch-tests
                                  (lambda _ (chdir "utilities/roswtf"))))))
       (home-page "https://wiki.ros.org/roswtf")
       (synopsis "A tool for diagnosing issues with the ROS system")
@@ -811,7 +807,7 @@ Think of it as a FAQ implemented in code.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
+                               (add-after 'unpack 'patch-tests
                                  (lambda _ (chdir "utilities/message_filters"))))))
       (home-page "https://wiki.ros.org/message_filters")
       (synopsis "A set of message filters for ROS messages")
@@ -860,7 +856,7 @@ Think of it as a FAQ implemented in code.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
+                               (add-after 'unpack 'patch-tests
                                  (lambda _ (chdir "ros_comm"))))))
       (home-page "https://wiki.ros.org/ros_comm")
       (synopsis "ROS communications-related packages")
@@ -888,7 +884,7 @@ client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnod
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
+                     (add-after 'unpack 'patch-tests
                        (lambda _ (chdir "rosgraph_msgs/"))))))
       (home-page "https://wiki.ros.org/rosgraph_msgs")
       (synopsis "Messages relating to the ROS Computation Graph")
@@ -916,7 +912,7 @@ that end users do not interact with.")
       (arguments (list
                   #:phases #~(modify-phases %standard-phases
                                ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
+                     (add-after 'unpack 'patch-tests
                        (lambda _ (chdir "std_srvs/"))))))
       (home-page "https://wiki.ros.org/std_srvs")
       (synopsis "Common service definitions")
