@@ -1,5 +1,3 @@
-* Continue linting and checking inputs
-start with ros_comm/ros-noetic-rosservice
 * List
 0. Native inputs, inputs, propagated inputs
 1. Native inputs: used only during build time

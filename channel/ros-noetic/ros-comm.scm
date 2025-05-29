@@ -645,27 +645,26 @@ rossrv displays information about serfvice types.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-genpy
-                    ros-noetic-rosgraph
-                    ros-noetic-roslib
-                    ros-noetic-rospy
-                    ros-noetic-rosmsg))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "tools/rosservice"))))))
+      (propagated-inputs (list ros-noetic-genpy ros-noetic-rosgraph
+                               ros-noetic-roslib ros-noetic-rospy
+                               ros-noetic-rosmsg))
+      (arguments
+       (list
+        #:package-dir "tools/rosservice"))
       (home-page "https://wiki.ros.org/rosservice")
-      (synopsis "The rosservice command-line tool for listing and querying ROS services")
-      (description "The rosservice command-line tool for listing and querying ROS services.
+      (synopsis
+       "The rosservice command-line tool for listing and querying ROS services")
+      (description
+       "The rosservice command-line tool for listing and querying ROS services.
 Also contains a Python library for tetrieving information about
-Services and dynamically invoking them. The Python library is experimental and is for
+Services and dynamically invoking them.  The Python library is experimental and is for
 internal-use only.")
       (license license:bsd-3))))
 
