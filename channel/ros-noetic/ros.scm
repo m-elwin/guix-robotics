@@ -43,23 +43,25 @@
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list pkg-config ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime))
-      (native-search-paths (list ros-root-search-path))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "core/rosbuild"))))))
+      (native-search-paths
+       (list ros-root-search-path))
+      (arguments
+       (list
+        #:package-dir "core/rosbuild"))
       (home-page "https://wiki.ros.org/rosbuild")
-      (synopsis "Scripts for managing CMake-based build system for ROS.")
-      (description "This is the build-tool that existied before catkin, not sure why it's still in noetic.")
+      (synopsis "Scripts for managing CMake-based build system for ROS")
+      (description
+       "This is the build-tool that existed before catkin,
+it is still needed for roslaunch for some reason.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-roslang
