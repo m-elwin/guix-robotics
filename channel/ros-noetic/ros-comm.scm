@@ -553,12 +553,15 @@ This means they can be applied to any ROS topic.")
                                ros-noetic-rospy
                                ros-noetic-std-srvs
                                ros-noetic-topic-tools))
-      (arguments (list #:project-dir "tools/rosbag"))
+      (arguments
+       (list
+        #:package-dir "tools/rosbag"))
       (home-page "https://wiki.ros.org/rosbag")
       (synopsis "Tools for recording and playing back to ROS topics")
       (description
-       "Tools for recording and playing back ROS topics to ROS bags. It is intended to
-be high performance and avoids deserialization and reserialization of messages.")
+       "Tools for recording and playing back ROS topics to ROS bags.
+It is intended to be high performance and avoids deserialization
+and reserialization of messages.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosbag-minimal
@@ -767,8 +770,9 @@ This library is intended for internal use only.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
@@ -777,24 +781,66 @@ This library is intended for internal use only.")
                            ros-noetic-cmake-modules
                            ros-noetic-rosbag
                            ros-noetic-roslang
-                           ros-noetic-std-srvs))
+                           ros-noetic-std-srvs
+                           ros-noetic-rosgraph
+                           ros-noetic-roslaunch
+                           ros-noetic-roslib
+                           ros-noetic-rosnode
+                           ros-noetic-rosservice
+                           ros-noetic-rosbag-storage
+                           ros-noetic-roslz4
+                           ros-noetic-rosconsole
+                           ros-noetic-roscpp
+                           ros-noetic-rosgraph-msgs
+                           ros-noetic-rosmaster
+                           ros-noetic-rosmsg
+                           ros-noetic-rosout
+                           ros-noetic-rosparam
+                           ros-noetic-rospy
+                           ros-noetic-rostopic
+                           ros-noetic-topic-tools
+                           ros-noetic-xmlrpcpp
+                           ros-noetic-std-srvs
+                           ros-noetic-cpp-common
+                           ros-noetic-roscpp-serialization
+                           ros-noetic-roscpp-traits
+                           ros-noetic-rostime
+                           ros-noetic-rosbuild
+                           ros-noetic-rosclean
+                           ros-noetic-rosunit
+                           ros-noetic-rospack
+                           ros-noetic-std-msgs
+                           ros-noetic-message-runtime
+                           ros-noetic-message-generation
+                           ros-noetic-gencpp
+                           ros-noetic-genlisp
+                           ros-noetic-genpy
+                           ros-noetic-genmsg))
       (inputs (list python-distro))
-      (propagated-inputs
+      (propagated-inputs (list ros-noetic-rosbuild
+                               ros-noetic-rosgraph
+                               ros-noetic-roslaunch
+                               ros-noetic-roslib
+                               ros-noetic-rosnode
+                               ros-noetic-rosservice))
+      (arguments
        (list
-        ros-noetic-rosbuild
-        ros-noetic-rosgraph
-        ros-noetic-roslaunch
-        ros-noetic-roslib
-        ros-noetic-rosnode
-        ros-noetic-rosservice))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'patch-tests
-                                 (lambda _ (chdir "utilities/roswtf"))))))
+        #:package-dir "utilities/roswtf"
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'patch-tests
+              (lambda _
+                (substitute* '("test/check_roswtf_command_line_online.py"
+                               "test/test_roswtf_command_line_offline.py")
+                  (("self._check_output\\(output\\[0\\]\\)")
+                   "print(f'!!!\\n {output} \\n!!!')
+        self._check_output(output[0])")
+                  (("cmd = 'roswtf'")
+                   (string-append "cmd = '"
+                                  (getcwd) "/../build/devel/bin/roswtf'"))))))))
       (home-page "https://wiki.ros.org/roswtf")
-      (synopsis "A tool for diagnosing issues with the ROS system")
-      (description  "A tool for diagnosing issues with the ROS system.
+      (synopsis "Diagnose issues with the ROS system")
+      (description "A tool for diagnosing issues with the ROS system.
 Think of it as a FAQ implemented in code.")
       (license license:bsd-3))))
 

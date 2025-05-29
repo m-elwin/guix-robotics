@@ -32,15 +32,21 @@
 (define* (ros-wrap #:key outputs #:allow-other-keys)
   "Set's ROS Environment variables for each ROS-related program.
 See http://wiki.ros.org/ROS/EnvironmentVariables.
-Also creates an opt/ros/ directory with noetic symlinking back"
+Also creates an opt/ros/ directory with noetic symlinking back."
   (for-each (lambda (file)
                ;wrap all binaries with the proper ROS env variables
               (display (string-append "ROS Wrapping " file))
               (newline)
               (wrap-program file
-                `("ROS_DISTRO" "" =
-                  ,(list "noetic"))
-                `("ROS_MASTER_URI" "" =
+                ;; the distro for catkin is noetic
+                `("ROS_DISTRO" = ,(list "noetic"))
+                ;; override the os to be guix.
+                ;; Note that guix can be used ontop of other os's
+                ;; so this follows a pattern with similar environments
+                ;; such as conda, which is detected by checking
+                ;; ROS_OS_OVERRIDE for "conda" (see rospkg/os_detect.py)
+                `("ROS_OS_OVERRIDE" = ,(list "guix::"))
+                `("ROS_MASTER_URI" =
                   ,(list "${ROS_MASTER_URI:=http://localhost:11311}"))
                 `("CMAKE_PREFIX_PATH" prefix
                   ,(list "${GUIX_ROS_CMAKE_PREFIX_PATH}"))
@@ -60,6 +66,7 @@ Also creates an opt/ros/ directory with noetic symlinking back"
   ;; Must be a writeable dir for some ROS integration tests
   (setenv "ROS_LOG_DIR" "/tmp")
   (setenv "ROS_HOME" "/tmp")
+  (setenv "ROS_OS_OVERRIDE" "guix::")
   (apply (assoc-ref cmake-build:%standard-phases
                     'check) args)
   (apply catkin-test-results args))
