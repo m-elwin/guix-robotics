@@ -677,46 +677,42 @@ internal-use only.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest-minimal))
-      (propagated-inputs
-       (list ros-noetic-genpy
-             ros-noetic-rospy
-             ros-noetic-rosbag-minimal))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src-and-patch-tests
-                                 (lambda _
-                                   (chdir "tools/rostopic")
-                                   (substitute* '("test_nodes/talker.py"
-                                                  "test/test_rostopic.py"
-                                                  "test/test_rostopic_command_line_offline.py"
-                                                  "test/check_rostopic_command_line_online.py")
-                                     (("#!/usr/bin/env python") "#!/usr/bin/env python3"))
-                                   (substitute* '("test/test_rostopic.py"
-                                                  "test/test_rostopic_command_line_offline.py"
-                                                  "test/check_rostopic_command_line_online.py"
-                                                  )
-                                     (("cmd = 'rostopic'")
-                                      (string-append "cmd = '"
-                                                     (getcwd) "/../build/devel/bin/rostopic'")))
-                                   (substitute* "test/test_rostopic_command_line_offline.py"
-                                     (("%\\(cmd, c\\)") "%('rostopic', c)"))))
-                               (add-before 'check 'set-home
-                                 ; rostest tests require a home directory to be set
-                                 (lambda _ (setenv "HOME" "/tmp"))))))
+      (propagated-inputs (list ros-noetic-genpy ros-noetic-rospy
+                               ros-noetic-rosbag-minimal))
+      (arguments
+       (list
+        #:package-dir "tools/rostopic"
+        #:phases
+        #~(modify-phases %standard-phases
+            ;; go to the directory for the ros package
+            (add-after 'unpack 'switch-to-pkg-src-and-patch-tests
+              (lambda _
+                (substitute* '("test/test_rostopic.py"
+                               "test/test_rostopic_command_line_offline.py"
+                               "test/check_rostopic_command_line_online.py")
+                  (("cmd = 'rostopic'")
+                   (string-append "cmd = '"
+                                  (getcwd) "/../build/devel/bin/rostopic'")))
+                (substitute* "test/test_rostopic_command_line_offline.py"
+                  (("%\\(cmd, c\\)")
+                   "%('rostopic', c)")))))))
       (home-page "https://wiki.ros.org/rostopic")
-      (synopsis "The rostopic command-line tool for displaying debug information about ROS topics")
-      (description "The rostopic command-line tool for displaying
+      (synopsis
+       "Command-line tool for displaying debug information about ROS topics")
+      (description
+       "The rostopic command-line tool for displaying
 debug information about ROS Topics, including publishers, subscribers,
-publishing rate,and ROS Messages. It also contains an experimental Python library
-for getting information about and interacting with topics dynamically. This library is for internal-use only as the code API may change, though it does provide
+publishing rate, and ROS Messages.  It also contains an experimental Python library
+for getting information about and interacting with topics dynamically.
+This library is for internal-use only as the code API may change, though it does provide
 examples of how to implement dynamic subscription and publication behaviors in ROS.")
       (license license:bsd-3))))
 
@@ -744,9 +740,10 @@ examples of how to implement dynamic subscription and publication behaviors in R
                                (add-after 'unpack 'switch-to-pkg-src
                                  (lambda _ (chdir "tools/rosnode"))))))
       (home-page "https://wiki.ros.org/rosnode")
-      (synopsis "The rosnode command-line tool for displaying debug information about ROS nodes")
-      (description  "A command-line tool for displaying debug information about ROS Nodes,
-including publications, subscriptions and connections. It also contains an experimental library for retrieving node
+      (synopsis "Command-line tool for displaying debug information about ROS nodes")
+      (description  "Command-line tool for displaying debug information about ROS Nodes,
+including publications, subscriptions and connections.
+It also contains an experimental library for retrieving node
 information. This library is intended for internal use only.")
       (license license:bsd-3))))
 
