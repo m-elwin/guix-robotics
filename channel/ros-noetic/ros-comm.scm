@@ -54,12 +54,7 @@
       (propagated-inputs (list ros-noetic-rostime))
       (arguments
        (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "utilities/xmlrpcpp"))))))
+        #:package-dir "utilities/xmlrpcpp"))
       (home-page "https://wiki.ros.org/xmlrpcpp")
       (synopsis "C++ implementation of the XML-RPC protocol")
       (description

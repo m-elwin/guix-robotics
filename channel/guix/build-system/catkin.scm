@@ -62,15 +62,17 @@
 (define* (lower-catkin name
                        #:key (catkin? #t)
                        (test-target "run_tests")
+                       (package-dir ".")
                        #:allow-other-keys #:rest arguments)
   "Lower into a bag. Uses the cmake lower function but adjusts arguments.
 CATKIN? Include catkin as an input. Set to #f so we can use the rest of this with the catkin package.
-test-target (defaults to run_tests) the test target to pass to make."
+TEST-TARGET (defaults to run_tests) the test target to pass to make.
+PACKAGE-DIR - if set, specifies a subdirectory of the source code to cd into prior to building."
   (define lower
     (build-system-lower cmake-build-system))
   "Return a bag for NAME. catkin? is #f to not include catkin as an input, such as when building the catkin package itself"
   (define private-keywords
-    '(#:catkin?))
+    '(#:catkin? #:package-dir))
   (apply lower name
          (substitute-keyword-arguments (strip-keyword-arguments
                                         private-keywords
@@ -96,7 +98,11 @@ test-target (defaults to run_tests) the test target to pass to make."
                       (guix build utils)) orig-modules))
            ((#:imported-modules orig-imported-modules
              '())
-            (append %catkin-build-system-modules orig-imported-modules)))))
+            (append %catkin-build-system-modules orig-imported-modules))
+           ((#:phases orig-phases '%standard-phases)
+            #~(modify-phases #$orig-phases
+                (add-after 'unpack 'chdir
+                  (lambda _ (chdir #$package-dir))))))))
 
 (define-public catkin-build-system
   (build-system (name "catkin-build-system")
