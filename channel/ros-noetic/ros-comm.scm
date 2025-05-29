@@ -882,44 +882,44 @@ messages at a later time, based on the conditions that filter needs met.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list
-                          ros-noetic-roscpp
-                          ros-noetic-rospy
-                          ros-noetic-rosgraph-msgs
-                          ros-noetic-std-srvs
-                          ros-noetic-ros
-                          ros-noetic-rosbag
-                          ros-noetic-rosconsole
-                          ros-noetic-rosgraph
-                          ros-noetic-roslaunch
-                          ros-noetic-roslisp
-                          ros-noetic-rosmaster
-                          ros-noetic-rosmsg
-                          ros-noetic-rosnode
-                          ros-noetic-rosout
-                          ros-noetic-rosparam
-                          ros-noetic-rosservice
-                          ros-noetic-rostest
-                          ros-noetic-rostopic
-                          ros-noetic-topic-tools
-                          ros-noetic-message-filters
-                          ros-noetic-roswtf
-                          ros-noetic-xmlrpcpp))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'patch-tests
-                                 (lambda _ (chdir "ros_comm"))))))
+      (propagated-inputs (list ros-noetic-roscpp
+                               ros-noetic-rospy
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-std-srvs
+                               ros-noetic-ros
+                               ros-noetic-rosbag
+                               ros-noetic-rosconsole
+                               ros-noetic-rosgraph
+                               ros-noetic-roslaunch
+                               ros-noetic-roslisp
+                               ros-noetic-rosmaster
+                               ros-noetic-rosmsg
+                               ros-noetic-rosnode
+                               ros-noetic-rosout
+                               ros-noetic-rosparam
+                               ros-noetic-rosservice
+                               ros-noetic-rostest
+                               ros-noetic-rostopic
+                               ros-noetic-topic-tools
+                               ros-noetic-message-filters
+                               ros-noetic-roswtf
+                               ros-noetic-xmlrpcpp))
+      (arguments
+       (list
+        #:package-dir "ros_comm"))
       (home-page "https://wiki.ros.org/ros_comm")
       (synopsis "ROS communications-related packages")
-      (description "ROS communications-related packages, including core
-client libraries (roscpp, rospy) and graph introspection tools (rostopic, rosnode, rosservice, rosparam).")
+      (description
+       "ROS communications-related packages, including core
+client libraries (roscpp, rospy) and graph introspection tools
+(rostopic, rosnode, rosservice, rosparam).")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosgraph-msgs
