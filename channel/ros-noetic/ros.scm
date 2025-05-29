@@ -135,22 +135,24 @@ it is still needed for roslaunch for some reason.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-rosbuild ros-noetic-rosmake))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "core/mk"))))))
+      (arguments
+       (list
+        #:package-dir "core/mk"))
       (home-page "https://wiki.ros.org/mk")
-      (synopsis "A collection of .mk include files for building ROS architectural elements")
-      (description "Most package authors should use cmake .mk, which calls CMake for the build of the package.
-    The other files in this package are intended for use in exotic situations that mostly arise when importing 3rdparty code.")
+      (synopsis "Some .mk include files for building ROS architecture")
+      (description
+       "Most package authors should use cmake .mk,
+which calls CMake for the build of the package.
+The other files in this package are intended for use in exotic situations
+that mostly arise when importing 3rdparty code.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-roslib
