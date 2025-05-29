@@ -853,25 +853,23 @@ Think of it as a FAQ implemented in code.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
          (sha256
           (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-rostest
-                           ros-noetic-rosunit))
-      (inputs (list boost
-                    ros-noetic-rosconsole
-                    ros-noetic-roscpp))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'patch-tests
-                                 (lambda _ (chdir "utilities/message_filters"))))))
+      (native-inputs (list ros-noetic-rostest ros-noetic-rosunit))
+      (propagated-inputs (list boost ros-noetic-rosconsole ros-noetic-roscpp))
+      (arguments
+       (list
+        #:package-dir "utilities/message_filters"))
       (home-page "https://wiki.ros.org/message_filters")
-      (synopsis "A set of message filters for ROS messages")
-      (description  "A set of message filters which take in messages and may output those messages at a later time, based on the conditions that filter needs met.")
+      (synopsis "Filters for ROS messages")
+      (description
+       "Filters which take in messages and may output those
+messages at a later time, based on the conditions that filter needs met.")
       (license license:bsd-3))))
 
 
