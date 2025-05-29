@@ -164,20 +164,19 @@ that mostly arise when importing 3rdparty code.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list boost ros-noetic-rosmake))
-      (propagated-inputs
-       (list ros-noetic-rospack ros-noetic-ros-environment python-rospkg))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "core/roslib"))))))
+      (propagated-inputs (list ros-noetic-rospack ros-noetic-ros-environment
+                               python-rospkg))
+      (arguments
+       (list
+        #:package-dir "core/roslib"))
       (home-page "https://wiki.ros.org/roslib")
       (synopsis "Base dependencies and support libraries for ROS")
       (description "Contains many of the common data structures and tools that
