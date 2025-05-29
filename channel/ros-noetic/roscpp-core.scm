@@ -53,14 +53,7 @@
       (build-system catkin-build-system)
       (inputs (list console-bridge))
       (propagated-inputs (list boost))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "cpp_common"))))))
+      (arguments (list #:package-dir "cpp_common"))
       (home-page "https://github.com/ros/roscpp_core")
       (synopsis
        "C++ code for doing things that are not necessarily ROS related")
@@ -88,14 +81,7 @@ backtraces.  This package is part of roscpp.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list boost ros-noetic-cpp-common))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "rostime"))))))
+      (arguments (list #:package-dir "rostime"))
       (home-page "http://wiki.ros.org/roscpp/Overview/Time")
       (synopsis
        "Time and Duration implementation for C++ libraries, including roscpp")
@@ -122,14 +108,7 @@ This package is a part of roscpp.")
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-cpp-common ros-noetic-rostime
                                ros-noetic-roscpp-traits))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "roscpp_serialization"))))))
+      (arguments (list #:package-dir "roscpp_serialization"))
       (home-page "https://github.com/ros/roscpp_core")
       (synopsis "Serialization for ROS")
       (description
@@ -155,14 +134,7 @@ https://www.ros.org/wiki/roscpp/Overview/MessageSerializationAndAdaptingTypes")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-cpp-common ros-noetic-rostime))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "roscpp_traits"))))))
+      (arguments (list #:package-dir "roscpp_traits"))
       (home-page "http://wiki.ros.org/roscpp_traits")
       (synopsis "Message traits for ROS")
       (description "Message traits as defined in
@@ -188,14 +160,7 @@ http://www.ros.org/wiki/roscpp/Overview/MessagesTraits.")
       (propagated-inputs (list ros-noetic-cpp-common
                                ros-noetic-roscpp-serialization
                                ros-noetic-roscpp-traits ros-noetic-rostime))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "roscpp_core"))))))
+      (arguments (list #:package-dir "roscpp_core"))
       (home-page "http://wiki.ros.org/roscpp")
       (synopsis "Metpackage with libraries for roscpp messages")
       (description
