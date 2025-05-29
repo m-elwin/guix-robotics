@@ -192,18 +192,17 @@ are shared across ROS client library implementations")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-rospack))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "tools/rosbash"))))))
+      (arguments
+       (list
+        #:package-dir "tools/rosbash"))
       (home-page "https://wiki.ros.org/rosbash")
       (synopsis "Assorted shell commands for using ros with bash")
       (description "Assorted shell commands for using ros with bash.")
