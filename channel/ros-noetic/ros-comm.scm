@@ -92,14 +92,7 @@ on SourceForge in order to support roscpp's threading model.
                                ros-noetic-rostime
                                ros-noetic-std-msgs
                                ros-noetic-xmlrpcpp))
-      (arguments
-       (list
-        #:phases
-        #~(modify-phases %standard-phases
-            ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src
-              (lambda _
-                (chdir "clients/roscpp"))))))
+      (arguments (list #:package-dir "clients/roscpp"))
       (home-page "https://wiki.ros.org/roscpp")
       (synopsis "The C++ implementation of ROS")
       (description
@@ -127,12 +120,12 @@ to quickly interface with ROS Topics, Services, and Parameters.")
       (propagated-inputs (list python-netifaces python-rospkg python-pyyaml))
       (arguments
        (list
+        #:package-dir "tools/rosgraph"
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
             (add-after 'unpack 'switch-to-pkg-src-and-patch
               (lambda _
-                (chdir "tools/rosgraph")
                 ;; specify the full path to rosgraph so Popen can find it
                 (substitute* "test/test_rosgraph_command_offline.py"
                   (("cmd = 'rosgraph'")

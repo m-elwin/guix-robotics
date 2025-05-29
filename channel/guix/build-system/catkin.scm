@@ -101,8 +101,12 @@ PACKAGE-DIR - if set, specifies a subdirectory of the source code to cd into pri
             (append %catkin-build-system-modules orig-imported-modules))
            ((#:phases orig-phases '%standard-phases)
             #~(modify-phases #$orig-phases
-                (add-after 'unpack 'chdir
-                  (lambda _ (chdir #$package-dir))))))))
+                (replace 'unpack
+                  ;; we want to change directory after 'unpack and
+                  ;; have this treated as part of the 'unpack phase
+                  (lambda args
+                    (apply (assoc-ref #$orig-phases 'unpack) args)
+                    (chdir #$package-dir))))))))
 
 (define-public catkin-build-system
   (build-system (name "catkin-build-system")
