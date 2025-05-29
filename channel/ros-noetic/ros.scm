@@ -73,21 +73,21 @@ it is still needed for roslaunch for some reason.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list pkg-config ros-noetic-message-generation))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "core/roslang"))))))
+      (arguments
+       (list
+        #:package-dir "core/roslang"))
       (home-page "https://wiki.ros.org/roslang")
       (synopsis "Common package that all client libraries depend on")
-      (description "Mainly used to find client libraries (via 'rospack depends-on1 roslang').")
+      (description "Mainly used to find client libraries
+(via 'rospack depends-on1 roslang').")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosmake
@@ -109,12 +109,12 @@ it is still needed for roslaunch for some reason.")
       (propagated-inputs (list python-rospkg))
       (arguments
        (list
+        #:package-dir "tools/rosmake"
         #:phases
         #~(modify-phases %standard-phases
             ;; go to the directory for the ros package
-            (add-after 'unpack 'switch-to-pkg-src-and-patch
+            (add-after 'unpack 'patch-tests
               (lambda _
-                (chdir "tools/rosmake")
                 ;; specify the full path to rosmake so Popen can find it
                 (substitute* "test/test_rosmake_commandline.py"
                   (("'rosmake',")
