@@ -931,19 +931,18 @@ client libraries (roscpp, rospy) and graph introspection tools
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros_comm_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm_msgs")
+               (commit commit)))
          (sha256
           (base32 "0m6qc7ddi7j4aw5dn4ly8vdc3apciwm4x5bmszi3wdm4rbb8vsv8"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'patch-tests
-                       (lambda _ (chdir "rosgraph_msgs/"))))))
+      (arguments
+       (list
+        #:package-dir "rosgraph_msgs/"))
       (home-page "https://wiki.ros.org/rosgraph_msgs")
       (synopsis "Messages relating to the ROS Computation Graph")
       (description "These are generally considered to be low-level messages
