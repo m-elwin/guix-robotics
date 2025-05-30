@@ -332,25 +332,27 @@ unit tests, whereas rostest handles integration tests.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list
-                          catkin
-                          ros-noetic-mk
-                          ros-noetic-rosbuild
-                          ros-noetic-roslang
-                          ros-noetic-roslib
-                          ros-noetic-rosbash
-                          ros-noetic-rosboost-cfg
-                          ros-noetic-rosclean
-                          ros-noetic-roscreate
-                          ros-noetic-rosmake
-                          ros-noetic-rosunit))
-      (arguments (list #:package-dir "ros"))
+      (propagated-inputs (list catkin
+                               ros-noetic-mk
+                               ros-noetic-rosbuild
+                               ros-noetic-roslang
+                               ros-noetic-roslib
+                               ros-noetic-rosbash
+                               ros-noetic-rosboost-cfg
+                               ros-noetic-rosclean
+                               ros-noetic-roscreate
+                               ros-noetic-rosmake
+                               ros-noetic-rosunit))
+      (arguments
+       (list
+        #:package-dir "ros"))
       (home-page "https://wiki.ros.org/ros")
       (synopsis "ROS Packaging System")
       (description "ROS Packaging System")
