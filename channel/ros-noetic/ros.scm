@@ -279,17 +279,21 @@ determining cflgags/iflags etc. of boost on your system")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-roslib python-rospkg))
-      (arguments (list #:package-dir "tools/roscreate"))
+      (arguments
+       (list
+        #:package-dir "tools/roscreate"))
       (home-page "https://wiki.ros.org/roscreate")
       (synopsis "Tool taht assists in creating ROS filesystem resources")
-      (description "It provides roscreate-pkg, which creates a new package
+      (description
+       "It provides roscreate-pkg, which creates a new package
 directory, including the appropriate build and manifest files.")
       (license license:bsd-3))))
 
@@ -302,18 +306,17 @@ directory, including the appropriate build and manifest files.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-roslib))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "tools/rosunit"))))))
+      (arguments
+       (list
+        #:package-dir "tools/rosunit"))
       (home-page "https://wiki.ros.org/rosunit")
       (synopsis "Unit-testing package for ROS")
       (description "Lower-level library for rostest that handles
@@ -347,11 +350,7 @@ unit tests, whereas rostest handles integration tests.")
                           ros-noetic-roscreate
                           ros-noetic-rosmake
                           ros-noetic-rosunit))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "ros"))))))
+      (arguments (list #:package-dir "ros"))
       (home-page "https://wiki.ros.org/ros")
       (synopsis "ROS Packaging System")
       (description "ROS Packaging System")
