@@ -392,28 +392,26 @@ unit tests, whereas rostest handles integration tests.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/pluginlib")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/pluginlib")
+               (commit commit)))
          (sha256
           (base32 "133bxdlw4ggsicyzql82hmvfji8lpd60qj2cqrvci3bfc1nr2j7z"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (inputs (list tinyxml2
-                    ros-noetic-cmake-modules
-                    boost))
-      (propagated-inputs (list ros-noetic-class-loader
-                               ros-noetic-rosconsole
-                               ros-noetic-roslib
-                               ))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                               (add-after 'unpack 'switch-to-pkg-src
-                                 (lambda _ (chdir "pluginlib"))))))
+      (native-inputs (list ros-noetic-cmake-modules))
+      (propagated-inputs (list boost ros-noetic-class-loader
+                               ros-noetic-rosconsole ros-noetic-roslib
+                               tinyxml2))
+      (arguments
+       (list
+        #:package-dir "pluginlib"))
       (home-page "https://wiki.ros.org/pluginlib")
-      (synopsis "Tools for writing and dynamically loading plugins using the ROS build infrastructure")
-      (description "These tools require plugin providers to register their plugins in the package.xml of their package.")
-  (license license:bsd-3))))
+      (synopsis
+       "Write and dynamically load plugins using the ROS build infrastructure")
+      (description "These tools require plugin providers to register
+their plugins in the package.xml of their package.")
+      (license license:bsd-3))))
 
 
 (define-public ros-noetic-rosconsole-bridge
