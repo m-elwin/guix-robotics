@@ -367,20 +367,20 @@ unit tests, whereas rostest handles integration tests.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/rosconsole")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/rosconsole")
+               (commit commit)))
          (sha256
           (base32 "0dgxs7x9f8gbigvnbnkn2j066fzlz38avk28av90214bc0ny27yv"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosunit))
-      (inputs (list apr
-                    boost
-                    ros-noetic-rosbuild))
-      (propagated-inputs (list log4cxx-noetic ros-noetic-cpp-common ros-noetic-rostime))
+      (inputs (list ros-noetic-rosbuild))
+      (propagated-inputs (list boost log4cxx-noetic ros-noetic-cpp-common
+                               ros-noetic-rostime))
       (home-page "https://wiki.ros.org/rosconsole")
       (synopsis "ROS console output library")
-      (description "ROS console output library. ")
+      (description "ROS console output library.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-pluginlib
