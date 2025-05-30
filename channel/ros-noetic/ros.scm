@@ -10,6 +10,7 @@
   #:use-module (guix utils)
   #:use-module (gnu packages apr)
   #:use-module (gnu packages base)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
   #:use-module (gnu packages compression)
@@ -245,23 +246,25 @@ determining cflgags/iflags etc. of boost on your system")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/ros")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/ros")
+               (commit commit)))
          (sha256
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (inputs (list bash-minimal))
       (propagated-inputs (list python-rospkg))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "tools/rosclean")))
-                     (add-after 'wrap 'wrap-script
-                       (lambda _
-                         (wrap-program (string-append #$output "/bin/rosclean")
-                           `("PATH" ":" prefix
-                             ,(list (string-append #$coreutils "/bin")))))))))
+      (arguments
+       (list
+        #:package-dir "tools/rosclean"
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'wrap 'wrap-script
+              (lambda _
+                (wrap-program (string-append #$output "/bin/rosclean")
+                  `("PATH" ":" prefix
+                    ,(list (string-append #$coreutils "/bin")))))))))
       (home-page "https://wiki.ros.org/rosclean")
       (synopsis "Cleanup file system resources (e.g. log files)")
       (description "Cleanup file system resources (e.g. log files).")
@@ -283,14 +286,11 @@ determining cflgags/iflags etc. of boost on your system")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-roslib python-rospkg))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "tools/roscreate"))))))
+      (arguments (list #:package-dir "tools/roscreate"))
       (home-page "https://wiki.ros.org/roscreate")
       (synopsis "Tool taht assists in creating ROS filesystem resources")
-      (description "It provides roscreate-pkg, which creates a new package directory, including the appropriate build and manifest files.")
+      (description "It provides roscreate-pkg, which creates a new package
+directory, including the appropriate build and manifest files.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rosunit
