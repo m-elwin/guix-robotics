@@ -190,18 +190,19 @@ throughout the system.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
-      (propagated-inputs (list
-               ros-noetic-message-runtime
-               ros-noetic-geometry-msgs
-               ros-noetic-std-msgs))
-      (arguments (list #:package-dir "shape_msgs"))
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-geometry-msgs ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "shape_msgs"))
       (home-page "https://wiki.ros.org/shape_msgs")
       (synopsis "Messages for defining shapes")
       (description "Messages for defining shapes such as simple solid object
@@ -228,11 +229,7 @@ primitives (cube, sphere, etc.), planes, and meshes.")
                ros-noetic-message-runtime
                ros-noetic-sensor-msgs
                ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "stereo_msgs"))))))
+      (arguments (list #:package-dir "stereo_msgs"))
       (home-page "https://wiki.ros.org/stereo_msgs")
       (synopsis "Messages specific to stereo processing, such as disparity images")
       (description "Messages specific to stereo processing, such as disparity images.")
