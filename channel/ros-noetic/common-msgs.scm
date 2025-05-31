@@ -103,19 +103,23 @@ changed unless there is a very important reason.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
-      (arguments (list #:package-dir "geometry_msgs"))
+      (arguments
+       (list
+        #:package-dir "geometry_msgs"))
       (home-page "https://wiki.ros.org/geometry_msgs")
       (synopsis "Messages for common geometric primitives")
-      (description "Provides messages for common geometric primitives
-such as points, vectors, and poses. These primitives are designed
+      (description
+       "Provides messages for common geometric primitives
+such as points, vectors, and poses.  These primitives are designed
 to provide a common data type and facilitate interoperability
 throughout the system.")
       (license license:bsd-3))))
@@ -141,11 +145,7 @@ throughout the system.")
                ros-noetic-message-runtime
                ros-noetic-geometry-msgs
                ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "nav_msgs"))))))
+      (arguments (list #:project-dir "nav_msgs"))
       (home-page "https://wiki.ros.org/nav_msgs")
       (synopsis "Messages for the navigation stack")
       (description "Messages for the navigation stack.")
