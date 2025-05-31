@@ -24,8 +24,8 @@
 ;  #:use-module (gnu packages xml)
 ;  #:use-module (contributed)
   #:use-module (ros-noetic core)
-;  #:use-module (ros-noetic ros)
-;  #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-comm)
 ;  #:use-module (ros-noetic bootstrap))
   )
 
@@ -133,19 +133,20 @@ throughout the system.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
-      (propagated-inputs (list
-               ros-noetic-actionlib-msgs
-               ros-noetic-message-runtime
-               ros-noetic-geometry-msgs
-               ros-noetic-std-msgs))
-      (arguments (list #:project-dir "nav_msgs"))
+      (propagated-inputs (list ros-noetic-actionlib-msgs
+                               ros-noetic-message-runtime
+                               ros-noetic-geometry-msgs ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "nav_msgs"))
       (home-page "https://wiki.ros.org/nav_msgs")
       (synopsis "Messages for the navigation stack")
       (description "Messages for the navigation stack.")
@@ -160,28 +161,24 @@ throughout the system.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation
-                           ros-noetic-rosbag
+      (native-inputs (list ros-noetic-message-generation ros-noetic-rosbag
                            ros-noetic-rosunit))
-      (propagated-inputs (list
-               ros-noetic-message-runtime
-               ros-noetic-geometry-msgs
-               ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "sensor_msgs"))))))
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-geometry-msgs ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "sensor_msgs"))
       (home-page "https://wiki.ros.org/sensor_msgs")
       (synopsis "Messages for commonly used sensors")
-      (description "Messages for commonly used sensors including cameras and scanning
-laser rangefinders.")
+      (description "Messages for commonly used sensors
+ including cameras and scanning laser rangefinders.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-shape-msgs
@@ -204,11 +201,7 @@ laser rangefinders.")
                ros-noetic-message-runtime
                ros-noetic-geometry-msgs
                ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "shape_msgs"))))))
+      (arguments (list #:package-dir "shape_msgs"))
       (home-page "https://wiki.ros.org/shape_msgs")
       (synopsis "Messages for defining shapes")
       (description "Messages for defining shapes such as simple solid object
