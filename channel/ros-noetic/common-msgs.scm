@@ -278,21 +278,24 @@ These messages are also the building blocks of most of the control_msgs actions.
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
-      (propagated-inputs (list
-               ros-noetic-message-runtime
-               ros-noetic-geometry-msgs
-               ros-noetic-std-msgs))
-      (arguments (list #:package-dir "visualization_msgs"))
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-geometry-msgs ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "visualization_msgs"))
       (home-page "https://wiki.ros.org/visualization_msgs")
-      (synopsis "Messages for visualization data, used by packages such as rviz")
-      (description "visualization_msgs is a set of messages used by
+      (synopsis
+       "Messages for visualization data, used by packages such as rviz")
+      (description
+       "visualization_msgs is a set of messages used by
 higher level packages, such as rviz, that deal in visualization-specific data.
 
 The main messages in visualization_msgs is visualization_msgs/Marker.
