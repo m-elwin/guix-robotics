@@ -247,22 +247,24 @@ primitives (cube, sphere, etc.), planes, and meshes.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
-      (propagated-inputs (list
-               ros-noetic-message-runtime
-               ros-noetic-geometry-msgs
-               ros-noetic-std-msgs
-               ros-noetic-rosbag-migration-rule))
-      (arguments (list #:package-dir "trajectory_msgs"))
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-geometry-msgs ros-noetic-std-msgs
+                               ros-noetic-rosbag-migration-rule))
+      (arguments
+       (list
+        #:package-dir "trajectory_msgs"))
       (home-page "https://wiki.ros.org/trajectory_msgs")
       (synopsis "Messages for defining robot trajectories")
-      (description "Messages for defining robot trajectories.
+      (description
+       "Messages for defining robot trajectories.
 These messages are also the building blocks of most of the control_msgs actions.")
       (license license:bsd-3))))
 
@@ -287,11 +289,7 @@ These messages are also the building blocks of most of the control_msgs actions.
                ros-noetic-message-runtime
                ros-noetic-geometry-msgs
                ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "visualization_msgs"))))))
+      (arguments (list #:package-dir "visualization_msgs"))
       (home-page "https://wiki.ros.org/visualization_msgs")
       (synopsis "Messages for visualization data, used by packages such as rviz")
       (description "visualization_msgs is a set of messages used by
