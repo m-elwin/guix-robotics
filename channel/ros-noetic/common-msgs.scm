@@ -1,34 +1,33 @@
 (define-module (ros-noetic common-msgs)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
+;  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-  #:use-module (guix search-paths)
-  #:use-module (guix gexp)
-  #:use-module (guix utils)
-  #:use-module (gnu packages apr)
-  #:use-module (gnu packages base)
-  #:use-module (gnu packages boost)
-  #:use-module (gnu packages check)
-  #:use-module (gnu packages compression)
-  #:use-module (gnu packages cmake)
-  #:use-module (gnu packages cpp)
-  #:use-module (gnu packages commencement)
-  #:use-module (gnu packages gnupg)
-  #:use-module (gnu packages lisp)
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python)
-  #:use-module (gnu packages python-crypto)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (gnu packages shells)
-  #:use-module (gnu packages tls)
-  #:use-module (gnu packages xml)
-  #:use-module (contributed)
+;  #:use-module (guix search-paths)
+;  #:use-module (guix gexp)
+;  #:use-module (guix utils)
+;  #:use-module (gnu packages base)
+;  #:use-module (gnu packages check)
+;  #:use-module (gnu packages compression)
+;  #:use-module (gnu packages cmake)
+;  #:use-module (gnu packages cpp)
+;  #:use-module (gnu packages commencement)
+;  #:use-module (gnu packages gnupg)
+;  #:use-module (gnu packages lisp)
+;  #:use-module (gnu packages pkg-config)
+;  #:use-module (gnu packages python)
+;  #:use-module (gnu packages python-crypto)
+;  #:use-module (gnu packages python-xyz)
+;  #:use-module (gnu packages shells)
+;  #:use-module (gnu packages tls)
+;  #:use-module (gnu packages xml)
+;  #:use-module (contributed)
   #:use-module (ros-noetic core)
-  #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic ros-comm)
-  #:use-module (ros-noetic bootstrap))
+;  #:use-module (ros-noetic ros)
+;  #:use-module (ros-noetic ros-comm)
+;  #:use-module (ros-noetic bootstrap))
+  )
 
 (define-public ros-noetic-actionlib-msgs
   (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
@@ -39,22 +38,24 @@
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "actionlib_msgs"))))))
+      (native-inputs (list ros-noetic-message-generation ))
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "actionlib_msgs"))
       (home-page "https://wiki.ros.org/actionlib_msgs")
-      (synopsis "Common messages to interact with an action server and action client")
-      (description "Common messages to interact with an action server and action client.")
+      (synopsis
+       "Common messages to interact with an action server and action client")
+      (description
+       "Common messages to interact with an action server and action client.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-diagnostic-msgs
@@ -66,25 +67,27 @@
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
-      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-message-generation ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "diagnostic_msgs"))))))
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "diagnostic_msgs"))
       (home-page "https://wiki.ros.org/diagnostic_msgs")
-      (synopsis "Standardized interface for diagnostic and runtime monitoring in ROS")
-      (description "Holds the diagnostic messages which provide the
+      (synopsis
+       "Standardized interface for diagnostic and runtime monitoring in ROS")
+      (description
+       "Holds the diagnostic messages which provide the
 standardized interface for the diagnostic and runtime monitoring
 systems in ROS. These messages are currently used by
-the http://wiki.ros.org/diagnostics Stack, which provides libraries for simple ways to set and access
+the http://wiki.ros.org/diagnostics Stack,
+which provides libraries for simple ways to set and access
 the messages, as well as automated ways to process the diagnostic data.
 
 These messages are used for long term logging and will not be
@@ -106,13 +109,9 @@ changed unless there is a very important reason.")
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation ros-noetic-std-msgs))
+      (native-inputs (list ros-noetic-message-generation))
       (propagated-inputs (list ros-noetic-message-runtime ros-noetic-std-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "geometry_msgs"))))))
+      (arguments (list #:package-dir "geometry_msgs"))
       (home-page "https://wiki.ros.org/geometry_msgs")
       (synopsis "Messages for common geometric primitives")
       (description "Provides messages for common geometric primitives
