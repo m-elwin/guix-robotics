@@ -991,7 +991,7 @@ that end users do not interact with.")
 ;; technically not part of ros-comm, but it is the lisp client library
 ;; (analagous to roscpp and rospy)
 (define-public ros-noetic-roslisp
-  (let ((commit "bf35424b9be97417.46237145b7c5c2b33783b5e")
+  (let ((commit "bf35424b9be97417236237145b7c5c2b33783b5e")
         (revision "0"))
     (package
       (name "ros-noetic-roslisp")
