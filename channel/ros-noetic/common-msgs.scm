@@ -1,33 +1,34 @@
+;;; Guix-Robotics --- GNU Guix Channel
+;;; Copyright © 2025 Matthew Elwin <elwin@northwestern.edu>
+;;; This file is part of Guix-Robotics.
+;;;
+;;; Guix-Robotics is free software; you can redistribute it and/or modify it
+;;; under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or (at
+;;; your option) any later version.
+;;;
+;;; Guix-Robotics is distributed in the hope that it will be useful, but
+;;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
+
+;; Commentary:
+;;
+;; Packages that are part of ros-common-msgs
+;;
+;; Code:
+
 (define-module (ros-noetic common-msgs)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
-;  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-;  #:use-module (guix search-paths)
-;  #:use-module (guix gexp)
-;  #:use-module (guix utils)
-;  #:use-module (gnu packages base)
-;  #:use-module (gnu packages check)
-;  #:use-module (gnu packages compression)
-;  #:use-module (gnu packages cmake)
-;  #:use-module (gnu packages cpp)
-;  #:use-module (gnu packages commencement)
-;  #:use-module (gnu packages gnupg)
-;  #:use-module (gnu packages lisp)
-;  #:use-module (gnu packages pkg-config)
-;  #:use-module (gnu packages python)
-;  #:use-module (gnu packages python-crypto)
-;  #:use-module (gnu packages python-xyz)
-;  #:use-module (gnu packages shells)
-;  #:use-module (gnu packages tls)
-;  #:use-module (gnu packages xml)
-;  #:use-module (contributed)
   #:use-module (ros-noetic core)
   #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic ros-comm)
-;  #:use-module (ros-noetic bootstrap))
-  )
+  #:use-module (ros-noetic ros-comm))
 
 (define-public ros-noetic-actionlib-msgs
   (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
@@ -314,32 +315,30 @@ for more information.")
       (source
        (origin
          (method git-fetch)
-         (uri (git-reference (url "https://github.com/ros/common_msgs")
-                             (commit commit)))
+         (uri (git-reference
+               (url "https://github.com/ros/common_msgs")
+               (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation))
-      (propagated-inputs
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-actionlib-msgs
+                               ros-noetic-geometry-msgs
+                               ros-noetic-nav-msgs
+                               ros-noetic-sensor-msgs
+                               ros-noetic-shape-msgs
+                               ros-noetic-stereo-msgs
+                               ros-noetic-trajectory-msgs
+                               ros-noetic-visualization-msgs))
+      (arguments
        (list
-        ros-noetic-message-runtime
-        ros-noetic-actionlib-msgs
-        ros-noetic-geometry-msgs
-        ros-noetic-nav-msgs
-        ros-noetic-sensor-msgs
-        ros-noetic-shape-msgs
-        ros-noetic-stereo-msgs
-        ros-noetic-trajectory-msgs
-        ros-noetic-visualization-msgs))
-      (arguments (list
-                  #:phases #~(modify-phases %standard-phases
-                               ;; go to the directory for the ros package
-                     (add-after 'unpack 'switch-to-pkg-src
-                       (lambda _ (chdir "common_msgs"))))))
+        #:package-dir "common_msgs"))
       (home-page "https://wiki.ros.org/common_msgs")
       (synopsis "Messages that are widely used by other ROS packages")
-      (description "Messages that are widely used by other ROS packages.
+      (description
+       "Messages that are widely used by other ROS packages.
 These includes messages for actions (actionlib_msgs),
 diagnostics (diagnostic_msgs), geometric primitives (geometry_msgs),
 robot navigation (nav_msgs), and common sensors (sensor_msgs)
