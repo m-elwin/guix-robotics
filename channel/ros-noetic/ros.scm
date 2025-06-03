@@ -26,10 +26,11 @@
   #:use-module (gnu packages boost)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages xml)
-  #:use-module (contributed)
   #:use-module (ros-noetic core)
+  #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic roscpp-core)
-  #:use-module (ros-noetic bootstrap))
+  #:use-module (ros-noetic system)
+  )
 
 ;; Commentary:
 ;;

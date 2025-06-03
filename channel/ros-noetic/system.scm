@@ -1,4 +1,21 @@
-(define-module (contributed)
+;;; Guix-Robotics --- GNU Guix Channel
+;;; Copyright © 2025 Matthew Elwin <elwin@northwestern.edu>
+;;; This file is part of Guix-Robotics.
+;;;
+;;; Guix-Robotics is free software; you can redistribute it and/or modify it
+;;; under the terms of the GNU General Public License as published by
+;;; the Free Software Foundation; either version 3 of the License, or (at
+;;; your option) any later version.
+;;;
+;;; Guix-Robotics is distributed in the hope that it will be useful, but
+;;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
+
+(define-module (ros-noetic system)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
@@ -18,7 +35,16 @@
   #:use-module (gnu packages python-build)
   #:use-module (gnu packages version-control)
   )
-;; Items that are contributed to gnu guix and pending review
+;; Commentary:
+;;
+;; System dependencies that are not (yet) in upstream-guix
+;; or older-versions kept around for ROS Noetic.
+;;
+;; Older versions used for ROS noetic will have a
+;; package-name-version form and a package-name-noetic symbol
+;; for use when developing ROS noetic packages
+;;
+;; Code:
 
 (define-public log4cxx-0.11
   (package
@@ -35,10 +61,10 @@
 (define-public log4cxx-noetic log4cxx-0.11)
 
 ;;; Fix nose (which is not maintained) for python3.11
-(define-public python-nose-noetic
+(define-public python-nose-1.3.7-noetic
   (package
     (inherit python-nose)
-    (name "python-nose-noetic")
+    (version "1.3.7-noetic")
     (source
      (origin
        (inherit (package-source python-nose))
@@ -53,3 +79,5 @@
              "tuple(getattr(inspect.getfullargspec("
              func-arg
              "), attr) for attr in ['args', 'varargs', 'varkw', 'defaults'])"))))))))
+
+(define-public python-nose-noetic python-nose-1.3.7-noetic)

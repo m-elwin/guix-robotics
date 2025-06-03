@@ -80,3 +80,52 @@
        "A metapackage to aggregate the packages required to
 use publish / subscribe, services, launch files, and other core ROS concepts")
       (license license:bsd-3))))
+
+(define-public ros-noetic-dev-tools
+  (let ((commit "482da3e297f47a2e06f54d54c16de7e3cb7ec0f4")
+        (revision "0"))
+    (package
+      (name "ros-noetic-ros-core")
+      (version (git-version "1.5.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/metapackages")
+               (commit commit)))
+         (sha256
+          (base32 "0asbsc1r566i1ijmd5gbgx6pxsznki6ajryc4al2mnn7vn61rn6l"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-class-loader
+                               ros-noetic-cmake-modules
+                               ros-noetic-common-msgs
+                               ros-noetic-gencpp
+                               ros-noetic-geneus
+                               ros-noetic-genlisp
+                               ros-noetic-genmsg
+                               ros-noetic-gennodejs
+                               ros-noetic-genpy
+                               ros-noetic-message-generation
+                               ros-noetic-message-runtime
+                               ros-noetic-pluginlib
+                               ros-noetic-ros
+                               ros-noetic-ros-comm
+                               ros-noetic-rosbag-migration-rule
+                               ros-noetic-rosconsole
+                               ros-noetic-rosconsole-bridge
+                               ros-noetic-roscpp-core
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-roslisp
+                               ros-noetic-rospack
+                               ros-noetic-std-msgs
+                               ros-noetic-std-srvs))
+      (arguments
+       (list
+        #:package-dir "ros_core"))
+      (home-page "http://wiki.ros.org/ros_core")
+      (synopsis "Aggregates the packages required to use core ROS concepts")
+      (description
+       "A metapackage to aggregate the packages required to
+use publish / subscribe, services, launch files, and other core ROS concepts")
+      (license license:bsd-3))))
