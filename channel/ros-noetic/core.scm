@@ -101,7 +101,9 @@
                       (search-input-file inputs "/bin/python3")
                       " CACHE STRING \"Use GUIX python by default\")
 "
-                      "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)")))
+                      "find_package(PythonInterp ${PYTHON_VERSION} REQUIRED)"))
+                    ;; don't use the debian-layout for python packages ever
+                    (("\\$\\{enable_setuptools_deb_layout\\}") "OFF"))
                   ;; don't use lsb
                   (substitute* "cmake/all.cmake"
                     (("platform/lsb")
