@@ -1,22 +1,14 @@
-* List
-0. Native inputs, inputs, propagated inputs
-1. Native inputs: used only during build time
+* TODO
+Catkin can't find generated message files
+* For README
+- Discussion of inputs
+1. Native inputs: used only during build or test time
 2. Inputs, used during build time and during runtime, but not by dependencies
 3. Propagated-inputs: used by dependencies during runtime (should be minimized)
    - Examples:
      If python library A uses another python library B, B should be propagated input from A
      If C++ library A uses C++ library B: If users of A also need B, then B is propagated. If they don't it's an input
 -> Working on implementing this module by module.
-So far
-[x] core
-[x] contributed
-[x] bootstrap
-[x] roscpp-core
-[ ] metapackages
-[ ] ros-comm
-[ ] ros
-[ ] common-msgs
-- Note: lint and style every package. Check inputs, then build the package.
 
 
 - Test if the following
