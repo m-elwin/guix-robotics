@@ -49,37 +49,13 @@
           (base32 "060kbaa8dpsdqfchk1hj188sghmcfgfmp86zccjbqirr10farrh1"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-actionlib-msgs ros-noetic-message-generation ros-noetic-rosnode ros-noetic-rostest ros-noetic-rosunit ros-noetic-std-msgs))
+      (native-inputs (list ros-noetic-actionlib-msgs
+                           ros-noetic-message-generation
+                           ros-noetic-rosnode
+                           ros-noetic-rostest
+                           ros-noetic-rosunit
+                           ros-noetic-std-msgs))
       (propagated-inputs (list boost ros-noetic-actionlib-msgs ros-noetic-message-runtime ros-noetic-rospy ros-noetic-roscpp))
-      (arguments
-       (list
-        #:package-dir "actionlib"))
-      (home-page "https://wiki.ros.org/actionlib")
-      (synopsis "Standardized interface for preemptible tasks")
-      (description "The actionlib stack provides a standardized interface for
-interfacing with preemptable tasks.  Examples of this include moving
-the base to a target location, performing a laser scan and returning
-the resulting point cloud, detecting the handle of a door, etc.")
-      (license license:bsd-3))))
-
-(define-public ros-noetic-actionlib
-  (let ((commit "ce5635930d4083090ee1e6c4c3248daa3fb3de62")
-        (revision "0"))
-    (package
-      (name "ros-noetic-actionlib")
-      (version (git-version "1.14.3" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference
-               (url "https://github.com/ros/actionlib")
-               (commit commit)))
-         (sha256
-          (base32 "060kbaa8dpsdqfchk1hj188sghmcfgfmp86zccjbqirr10farrh1"))
-         (file-name (git-file-name name version))))
-      (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation ros-noetic-rosnode ros-noetic-rostest ros-noetic-rosunit ros-noetic-std-msgs))
-      (propagated-inputs (list boost ros-noetic-message-runtime ros-noetic-rospy ros-noetic-roscpp))
       (arguments
        (list
         #:package-dir "actionlib"))
