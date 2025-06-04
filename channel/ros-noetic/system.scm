@@ -16,37 +16,22 @@
 ;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (ros-noetic system)
-  #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (guix build-system cmake)
-  #:use-module (guix build-system pyproject)
-  #:use-module (guix build-system python)
-  #:use-module (guix git-download)
-  #:use-module (guix search-paths)
-  #:use-module (guix gexp)
-  #:use-module (gnu packages apr)
-  #:use-module (gnu packages bash)
   #:use-module (gnu packages check)
-  #:use-module (gnu packages compression)
-  #:use-module (gnu packages logging)
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (gnu packages python-build)
-  #:use-module (gnu packages version-control)
-  )
+  #:use-module (gnu packages logging))
 ;; Commentary:
 ;;
 ;; System dependencies that are not (yet) in upstream-guix
 ;; or older-versions kept around for ROS Noetic.
 ;;
 ;; Older versions used for ROS noetic will have a
-;; package-name-version form and a package-name-noetic symbol
-;; for use when developing ROS noetic packages
+;; package-name-noetic symbol for use with other
+;; ROS noetic packages
 ;;
 ;; Code:
 
-(define-public log4cxx-0.11
+(define-public log4cxx-noetic
   (package
     (inherit log4cxx)
     (version "0.11.0")
@@ -58,10 +43,8 @@
        (sha256
         (base32 "14xkb34svkgn08gz7qbama3idlk2a4q5y7ansccvkrf4wdg705n3"))))))
 
-(define-public log4cxx-noetic log4cxx-0.11)
-
 ;;; Fix nose (which is not maintained) for python3.11
-(define-public python-nose-1.3.7-noetic
+(define-public python-nose-noetic
   (package
     (inherit python-nose)
     (version "1.3.7-noetic")
@@ -70,14 +53,14 @@
        (inherit (package-source python-nose))
        (modules '((guix build utils)))
        (snippet
-        '(substitute* '("nose/util.py" "nose/plugins/manager.py")
-           ;; Convert the inspect.getargspec(...) into inspect.getfullargspec(...)
-           ;; getfullargspec returns a named tuple and getargspec returns a tuple
-           ;; so we convert the return value from a named-tuple into a tuple
+        '(substitute*
+          '("nose/util.py" "nose/plugins/manager.py")
+          ;; Convert the inspect.getargspec(...) into inspect.getfullargspec(...)
+          ;; getfullargspec returns a named tuple and getargspec returns a tuple
+          ;; so we convert the return value of getfullargspec from a
+          ;; named-tuple into a tuple
            (("inspect.getargspec\\((.*)\\)" _ func-arg)
             (string-append
              "tuple(getattr(inspect.getfullargspec("
              func-arg
              "), attr) for attr in ['args', 'varargs', 'varkw', 'defaults'])"))))))))
-
-(define-public python-nose-noetic python-nose-1.3.7-noetic)
