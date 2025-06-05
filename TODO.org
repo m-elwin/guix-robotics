@@ -1,3 +1,11 @@
+* IMPLEMENT the ros_comm tests.
+Some are additinoal unit tests
+some might be itnegratino tests that we want to make a script
+this will give more certianty that this works
+
+rosbag downloads test data. Need to create a separate origin and use this as an input
+and patch so the data is not downloaded.
+
 * For README
 - Discussion of inputs
 1. Native inputs: used only during build or test time
@@ -17,16 +25,6 @@
   3. On an ubuntu system with ROS 2 installed without pure mode.
 Note: catkin itself can be compiled but can't be used in non container mode, because
 the downloaded ersion is not patched for guix
-
-* Tests
-Some packages build but fail their tests
-[ ] ros-noetic-roslaunch
-    - This issue likely effects everything that uses rostest, since the log directory can't be opened in the build env
-[ ] ros-noetic-rosgraph
-- Tests use Popen, which does not respect the path.
-  - get the "TEST_PATH" from the environment and set in in guix
-test_offline
-  - tries to log, but logger is not setup
 
 
 * Other

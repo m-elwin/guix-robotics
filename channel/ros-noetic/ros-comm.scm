@@ -1016,3 +1016,36 @@ that end users do not interact with.")
       (synopsis "Lisp client library for ROS")
       (description "Lisp client library for ROS")
       (license license:bsd-3))))
+
+;;; Integration tests for ros_comm
+
+(define-public ros-noetic-test-rosbag
+  (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
+        (revision "0"))
+    (package
+      (name "ros-noetic-test-rosbag")
+      (version (git-version "1.17.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/ros_comm")
+               (commit commit)))
+         (sha256
+          (base32 "0zs4qgn4l0p0y07i4fblk1i5vjwnqyxdx04303as7vnsbvqy9hcx"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list
+                      ros-noetic-rosbag
+                      ros-noetic-rosbag-migration-rule
+                      ros-noetic-rostest
+                      ros-noetic-message-generation))
+      (arguments
+       (list
+        #:package-dir "test/test_rosbag"))
+      (home-page "https://wiki.ros.org/rosbag")
+      (synopsis "Tests for rosbag")
+      (description "Tests for rosbag.")
+      (license license:bsd-3))))
+
+; 118 tests, 32 err 11 fail

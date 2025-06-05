@@ -64,8 +64,10 @@ Also creates an opt/ros/ directory with noetic symlinking back."
 (define (check-with-results . args)
   "Run the check then run catkin-test-results so check fails if tests did"
   ;; Must be a writeable dir for some ROS integration tests
-  (setenv "ROS_LOG_DIR" "/tmp")
-  (setenv "ROS_HOME" "/tmp")
+  ;; Parent directory should have normal permissions due to rosunit
+  (mkdir "/tmp/guix-ros-tmp")
+  (setenv "ROS_LOG_DIR" "/tmp/guix-ros-tmp")
+  (setenv "ROS_HOME" "/tmp/guix-ros-tmp")
   (setenv "ROS_OS_OVERRIDE" "guix::")
   (apply (assoc-ref cmake-build:%standard-phases
                     'check) args)
