@@ -24,7 +24,8 @@
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic core)
   #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic ros-comm))
+  #:use-module (ros-noetic ros-comm)
+  #:use-module (gnu packages wxwidgets))
 
 ;;; Commentary:
 ;;;
@@ -55,14 +56,42 @@
                            ros-noetic-rostest
                            ros-noetic-rosunit
                            ros-noetic-std-msgs))
-      (propagated-inputs (list boost ros-noetic-actionlib-msgs ros-noetic-message-runtime ros-noetic-rospy ros-noetic-roscpp))
+      (propagated-inputs (list boost ros-noetic-actionlib-msgs
+                               ros-noetic-message-runtime ros-noetic-rospy
+                               ros-noetic-roscpp))
       (arguments
        (list
         #:package-dir "actionlib"))
       (home-page "https://wiki.ros.org/actionlib")
       (synopsis "Standardized interface for preemptible tasks")
-      (description "The actionlib stack provides a standardized interface for
+      (description
+       "The actionlib stack provides a standardized interface for
 interfacing with preemptable tasks.  Examples of this include moving
 the base to a target location, performing a laser scan and returning
 the resulting point cloud, detecting the handle of a door, etc.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-actionlib-tools
+  (let ((commit "ce5635930d4083090ee1e6c4c3248daa3fb3de62")
+        (revision "0"))
+    (package
+      (name "ros-noetic-actionlib-tools")
+      (version (git-version "1.14.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/actionlib")
+               (commit commit)))
+         (sha256
+          (base32 "060kbaa8dpsdqfchk1hj188sghmcfgfmp86zccjbqirr10farrh1"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-rospy ros-noetic-rostopic ros-noetic-roslib ros-noetic-actionlib ros-noetic-actionlib-msgs  python-wxpython))
+      (arguments
+       (list
+        #:package-dir "actionlib_tools"))
+      (home-page "https://wiki.ros.org/actionlib")
+      (synopsis "GUI tools for actionlib")
+      (description "GUI tools for actionlib.")
       (license license:bsd-3))))

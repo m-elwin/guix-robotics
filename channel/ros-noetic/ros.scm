@@ -208,6 +208,7 @@ are shared across ROS client library implementations")
           (base32 "035w9l1d2z5f5bvry8mgdakg60j67sc27npgn0k4f773588q2p37"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (inputs (list coreutils findutils))
       (propagated-inputs (list ros-noetic-rospack))
       (arguments
        (list
