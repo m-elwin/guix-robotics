@@ -100,3 +100,33 @@ the resulting point cloud, detecting the handle of a door, etc.")
       (synopsis "GUI tools for actionlib")
       (description "GUI tools for actionlib.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-bond
+  (let ((commit "5e299fbfc512b60434b20f2b828b44ae25697e46")
+        (revision "0"))
+    (package
+      (name "ros-noetic-bond")
+      (version (git-version "1.8.7" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/bond_core")
+               (commit commit)))
+         (sha256
+          (base32 "007mzlbjxsbxc0y542bz4ry4r9m4yzgx3fsp7s8pchhdrbk1g77i"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-message-generation))
+      (propagated-inputs (list ros-noetic-message-runtime
+                               ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "bond"))
+      (home-page "https://wiki.ros.org/bond")
+      (synopsis "Allow two processes to know when the other has terminated")
+      (description "A bond allows two processes, A and B, to know when the other has
+terminated, either cleanly or by crashing.  The bond remains
+connected until it is either broken explicitly or until a
+heartbeat times out.")
+      (license license:bsd-3))))
