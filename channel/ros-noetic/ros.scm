@@ -212,7 +212,19 @@ are shared across ROS client library implementations")
       (propagated-inputs (list ros-noetic-rospack))
       (arguments
        (list
-        #:package-dir "tools/rosbash"))
+        #:package-dir "tools/rosbash"
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'wrap 'wrap-script
+              (lambda _
+                (use-modules (guix build utils))
+                (for-each (lambda (file)
+                            (display (string-append "Wrapping " file "~%"))
+                            (wrap-program file
+                              `("PATH" prefix
+                                ,(list (string-append #$coreutils "/bin")
+                                       (string-append #$findutils "/bin")))))
+                          (find-files (string-append #$output "/bin") "^ros*")))))))
       (home-page "https://wiki.ros.org/rosbash")
       (synopsis "Assorted shell commands for using ros with bash")
       (description "Assorted shell commands for using ros with bash.")
