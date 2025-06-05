@@ -21,10 +21,10 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (ros-noetic common-msgs)
-  #:use-module (ros-noetic core)
   #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic roscpp-core)
-  #:use-module (ros-noetic ros-comm))
+  #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic roscpp-core))
 
 ;;; Commentary:
 ;;

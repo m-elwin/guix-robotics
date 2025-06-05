@@ -35,9 +35,9 @@
   #:use-module (gnu packages tls)
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
-  #:use-module (ros-noetic core)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic roscpp-core)
   #:use-module (srfi srfi-1))
 ;; Commentary:

@@ -26,9 +26,9 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix git-download)
-  #:use-module (ros-noetic core)
   #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic ros-comm))
+  #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic ros-core))
 
 (define-public ros-noetic-actionlib-msgs
   (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
