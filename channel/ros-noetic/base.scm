@@ -87,7 +87,12 @@ the resulting point cloud, detecting the handle of a door, etc.")
           (base32 "060kbaa8dpsdqfchk1hj188sghmcfgfmp86zccjbqirr10farrh1"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-rospy ros-noetic-rostopic ros-noetic-roslib ros-noetic-actionlib ros-noetic-actionlib-msgs  python-wxpython))
+      (propagated-inputs (list ros-noetic-rospy
+                               ros-noetic-rostopic
+                               ros-noetic-roslib
+                               ros-noetic-actionlib
+                               ros-noetic-actionlib-msgs
+                               python-wxpython))
       (arguments
        (list
         #:package-dir "actionlib_tools"))
