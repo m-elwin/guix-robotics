@@ -1019,6 +1019,11 @@ that end users do not interact with.")
 
 ;;; Integration tests for ros_comm
 
+;;; TODO: this test downloads a lot of test data
+;;; Need to
+;;; 1. Create a separate origin for the data
+;;; 2. Use the origin as an input
+;;; 3. CHange the tests to use data from the origin
 (define-public ros-noetic-test-rosbag
   (let ((commit "25d371664e34ec9d26ee331434de9a38c412c890")
         (revision "0"))
