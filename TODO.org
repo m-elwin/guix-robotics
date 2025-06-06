@@ -9,6 +9,8 @@ Listing them here for eventual inclusion as having them will increase robustness
   - Need to make separate (origin) for each of the test data and I think these can be used directly as inputs
 - bond-core/test_bond
   - separate tests for bonds
+- nodelet_core/test_nodelet
+- nodelet_core/test_nodelet_topic_tools
 * For README
 ** Discussion of inputs
 1. Native inputs: used only during build or test time.
