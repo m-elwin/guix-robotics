@@ -21,6 +21,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system catkin)
   #:use-module (gnu packages boost)
+  #:use-module (gnu packages linux)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core))
 
@@ -80,6 +81,7 @@ heartbeat times out.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules))
+      (inputs (list `(,util-linux "lib")))
       (propagated-inputs (list
                           boost
                           ros-noetic-bond
