@@ -20,8 +20,11 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (ros-noetic bond-core)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic nodelet-core)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic roscpp-core))
@@ -79,4 +82,35 @@
       (description
        "A metapackage to aggregate the packages required to
 use publish / subscribe, services, launch files, and other core ROS concepts")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-ros-base
+  (let ((commit "482da3e297f47a2e06f54d54c16de7e3cb7ec0f4")
+        (revision "0"))
+    (package
+      (name "ros-noetic-ros-base")
+      (version (git-version "1.5.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/metapackages")
+               (commit commit)))
+         (sha256
+          (base32 "0asbsc1r566i1ijmd5gbgx6pxsznki6ajryc4al2mnn7vn61rn6l"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-ros-core ros-noetic-actionlib
+                               ros-noetic-bond-core
+                               ros-noetic-dynamic-reconfigure
+                               ros-noetic-nodelet-core))
+      (arguments
+       (list
+        #:package-dir "ros_base"))
+      (home-page "http://wiki.ros.org/ros_base")
+      (synopsis
+       "Metapackage that extends ros_core and includes basic non-robot tools")
+      (description
+       "Metapackage that extends ros_core and includes other basic non-robot tools like
+actionlib, dynamic reconfigure, nodelets, and pluginlib.")
       (license license:bsd-3))))
