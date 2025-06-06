@@ -21,6 +21,7 @@
   #:use-module (guix git-download)
   #:use-module (guix build-system catkin)
   #:use-module (gnu packages boost)
+  #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core))
 
 ;;; Commentary:
@@ -78,7 +79,12 @@ heartbeat times out.")
           (base32 "007mzlbjxsbxc0y542bz4ry4r9m4yzgx3fsp7s8pchhdrbk1g77i"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list boost))
+      (native-inputs (list ros-noetic-cmake-modules))
+      (propagated-inputs (list
+                          boost
+                          ros-noetic-bond
+                          ros-noetic-roscpp
+                          ros-noetic-smclib))
       (arguments
        (list
         #:package-dir "bondcpp"))
