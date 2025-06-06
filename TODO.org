@@ -1,57 +1,69 @@
-* IMPLEMENT the ros_comm tests.
-Some are additinoal unit tests
-some might be itnegratino tests that we want to make a script
-this will give more certianty that this works
-
-rosbag downloads test data. Need to create a separate origin and use this as an input
-and patch so the data is not downloaded.
-
+* Additional Test Packages
+There are some ROS packages that only contain tests.
+Listing them here for eventual inclusion as having them will increase robustness
+- ros_comm/test has additional tests for each tool
+  - Some of the tests are run during the check phase
+  - Some of the tests are installed as "integration tests" to be manually run
+  - Should add all the test packages, and create a metapackage for the tests that runs all the integration tests
+- ros_comm/test/test_rosbag downloads data from the internet during its test
+  - Need to make separate (origin) for each of the test data and I think these can be used directly as inputs
+- bond-core/test_bond
+  - separate tests for bonds
 * For README
-- Discussion of inputs
-1. Native inputs: used only during build or test time
+** Discussion of inputs
+1. Native inputs: used only during build or test time.
+   - ROS <test_depend> only is a native-input
+   - ROS <build_depend> only is a native input
 2. Inputs, used during build time and during runtime, but not by dependencies
-3. Propagated-inputs: used by dependencies during runtime (should be minimized)
-   - Examples:
-     If python library A uses another python library B, B should be propagated input from A
-     If C++ library A uses C++ library B: If users of A also need B, then B is propagated. If they don't it's an input
--> Working on implementing this module by module.
+   - Appropriate when an executable uses C++ library A or when a library B uses a C++ library A
+     and users of B do not need A's headers (essentially check that the public header files of B do not include A headers)
+3. Propagated-inputs: used by dependencies during runtime
+   - If Python module A imports Python module B, then B is a propagated input of A
+   - If C++ library A uses C++ library B and A.h includes B.h
+** Modes of Usage
+1. There will be a guix-pack relocatable tarball that can be used anywhere
+   - Can this also include the guix daemon?
+2. Users should install guix to get the most out of the package
+   - Link to guix website, ubuntu users can =apt install guix=, =guix pull=, wait a long time.
+3. Can be used in different modes
+   =guix install= (Not recommended) installs and makes ready at your shell
+   =guix shell= (without pure or container) layers these on top (like the default virtual env)
+      - Good for quickly using utilities, but can get messy and mix with system
+   =guix shell --pure= Integrated with system but uses only guix paths
+      - Some packages can be messed up if the search the filesystem in known locations
+      - ROS packages distributed through this channel will be modified to find the guix versions first
+   =guix shell --container= Run in a container. Add =--networking= for network access and =--nested= to use guix from within
+      - The most isolation, current working directory is the only part mounted in container
+   =guix shell --contaner --preserve-fhs=
+      - Run in a container emulating the standard FHS system. Useful for using packages that have not been patched to guix's filesystem layout
+** Modes of Development
+*** Compiling ROS using guix tools
+- All of ROS can be compiled using the regular instructions in a guix container with a preserved root fhs
+  (with development pre-requisites which are all part of guix/the channel)
+- The catkin distributed with this channel can be used to compile everything (except catkin itself) in a workspace in a -C or --pure without the
+  root filesystem being preserved.
+  - It is important to remove catkin, as otherwise the build will start using the unpatched catkin
+  - Not all programs will run due to them needing patches, unless in a container with root fhs preserved
+- Rosdep will not work with guix. It's available but there are no rosdep rules for guix.
+*** The guix way
+- If you want to modify a package that is already provided you can (inherit) and then apply patches
+- Both the inherited and original version can coexist on the same system and the particular version needed can be chosen per-shell
+- Generally, workspaces are not needed if you do the development using guix, but can be used particularly in "preserve-root-fs mode"
+  - Most ROS packages don't search the filesystem outside of the ROS devel/install space so most "should" run in a regular --pure guix shell without patches
 
 
-- Test if the following
-  guix shell -D ros-noetic-ros-core to allow building a catkin workspace
-  1. In container mode, when emulating the root FHS
-  1. In container mode, without emulating the root fhs
-  2. In pure mode
-  3. On an ubuntu system with ROS 2 installed without pure mode.
-Note: catkin itself can be compiled but can't be used in non container mode, because
-the downloaded ersion is not patched for guix
+* Longer-Term
+0. Not all packages have been tested in mixed, --pure and --container shell environments
 
-
-* Other
-
-0. Some packages are not working as expected. Likely due to mix ups with proper dependencies.
-
-1. ros-noetic-pluginlib tests are failing. Likely related to paths with rospack.
-   - need to get these paths working better
-   - do a guix shell -D ros-noetic-pluginlib to get the dev environment
-
-2. Documentation: ros has it's own documentation system, could
+1. Documentation: ros has it's own documentation system, could
    export that as a :doc part of split packages for each ROS package
 
-3. Cleanup:
-   Make a better package structure:
-   ros-noetic/
-
-   Then there will be 1 .scm file per repo that
-   has many packages so the .scm files will
-   map onto meta packages or packages that
-   stand on their own. It would help keep track of ros meta packages
-
-4. Can we change the prefix?
+2. Can we change the prefix to install into /gnu/store/packagedir/opt/ros?
       CMAKE_INSTALL_PREFIX is only part of it. The problem is the prefix for python packages
-      cannot be changed (easily) in guix as far as I know since it messes with GUIX_PATH
-      - so far there are no naming conflicts so have not needed to put everything under a separate sub-directory
+      cannot be changed (easily) in guix as far as I know since it messes with GUIX_PATH.
+      So far having everything organized in the default manner has not been an issue.
+3. Should we use the version of python that is used with noetic?
+   - There are a very few python incompatibilities that are relatively easy to patch, but using the proper python version would remove that
+   - There are however, advantages to not needing to maintain a separate older python version.
+   - So long as the patches required are limited and straightforward, I favor patching to the guix version of python
 5. Add more packages.
-
-* Notes
-1. when using catkin_make_isolated within something that is not a container it is necessary to specify -DPYTHON_EXECUTABLE=$(which python) so that the guix python is found
