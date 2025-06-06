@@ -47,11 +47,11 @@
           (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-rospy
-                               ros-noetic-diagnostic-msgs))
-      (arguments (list
+      (propagated-inputs (list ros-noetic-rospy ros-noetic-diagnostic-msgs))
+      (arguments
+       (list
         #:package-dir "rosdiagnostic"))
-      (home-page "http://github.com/ros/diagnsotic")
+      (home-page "https://github.com/ros/diagnostics/tree/1.12.1")
       (synopsis "Print aggregated diagnostic contents to the command line")
       (description "Print aggregated diagnostic contents to the command line.")
       (license license:bsd-3))))
