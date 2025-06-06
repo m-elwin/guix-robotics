@@ -148,3 +148,31 @@ into the source code to support that state machine.
 This package contains the libraries that a compiled state machine
 depends on, but it does not contain the compiler itself.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-bond-core
+  (let ((commit "5e299fbfc512b60434b20f2b828b44ae25697e46")
+        (revision "0"))
+    (package
+      (name "ros-noetic-bond-core")
+      (version (git-version "1.8.7" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/bond_core")
+               (commit commit)))
+         (sha256
+          (base32 "007mzlbjxsbxc0y542bz4ry4r9m4yzgx3fsp7s8pchhdrbk1g77i"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-bond ros-noetic-bondcpp
+                               ros-noetic-bondpy ros-noetic-smclib))
+      (arguments
+       (list
+        #:package-dir "bond_core"))
+      (home-page "http://wiki.ros.org/bond_core")
+      (synopsis "Metapackage for ROS bonds")
+      (description "Metapackage for ROS bonds, which allow
+processes to determine when another process terminates.
+Includes libraries for using bonds from python and C++.")
+      (license license:bsd-3))))
