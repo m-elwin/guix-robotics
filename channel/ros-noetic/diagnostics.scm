@@ -20,6 +20,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
   #:use-module (guix build-system catkin))
 
@@ -54,4 +55,59 @@
       (home-page "https://github.com/ros/diagnostics/tree/1.12.1")
       (synopsis "Print aggregated diagnostic contents to the command line")
       (description "Print aggregated diagnostic contents to the command line.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-diagnostic-updater
+  (let ((commit "43557d53cd1073d01affc1ad5dd10a3eb9cd8782")
+        (revision "0"))
+    (package
+      (name "ros-noetic-diagnostic-updater")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "http://github.com/ros/diagnostics")
+               (commit commit)))
+         (sha256
+          (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-roscpp
+                               ros-noetic-diagnostic-msgs
+                               ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "diagnostic_updater"))
+      (home-page "http://wiki.ros.org/diagnostic_updater")
+      (synopsis "Tools for easily updating diagnostics")
+      (description "Tools for easily updating diagnostics.
+Commonly used in device drivers to keep track of the status
+of output topics, device status, etc.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-diagnostic-common-diagnostics
+  (let ((commit "43557d53cd1073d01affc1ad5dd10a3eb9cd8782")
+        (revision "0"))
+    (package
+      (name "ros-noetic-diagnostic-common-diagnostics")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "http://github.com/ros/diagnostics")
+               (commit commit)))
+         (sha256
+          (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-rospy ros-noetic-diagnostic-msgs))
+      (arguments
+       (list
+        #:package-dir "diagnostic_common_diagnostics"))
+      (home-page "http://wiki.ros.org/diagnostic_common_diagnostics")
+      (synopsis "Common Diagnostics")
+      (description "Common Diagnostics for ROS.")
       (license license:bsd-3))))
