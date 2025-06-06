@@ -146,3 +146,29 @@ for instantiating nodelets.")
       (synopsis "Common nodelet tools")
       (description "Common nodelet tools like mux, demux, and throttle.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-nodelet-core
+  (let ((commit "ed2a4e13298e45fc6b8b60fbd3d06c4e65f6d434")
+        (revision "0"))
+    (package
+      (name "ros-noetic-nodelet-core")
+      (version (git-version "1.11.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/nodelet_core")
+               (commit commit)))
+         (sha256
+          (base32 "1ki6rdz3p5v3xa4rw15r9mgkzxnkd21pdcag5mb5rvkq86j1r9cn"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-nodelet
+                               ros-noetic-nodelet-topic-tools))
+      (arguments
+       (list
+        #:package-dir "nodelet_core"))
+      (home-page "https://wiki.ros.org/nodelet_core")
+      (synopsis "Nodelet Core Metapackage")
+      (description "Nodelet Core Metapackage")
+      (license license:bsd-3))))
