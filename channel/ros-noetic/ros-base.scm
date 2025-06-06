@@ -103,3 +103,33 @@ the resulting point cloud, detecting the handle of a door, etc.")
       (license license:bsd-3))))
 
 
+(define-public ros-noetic-dynamic-reconfigure
+  (let ((commit "a70f872d7a84cd50202e096771c36e04564876d5")
+        (revision "0"))
+    (package
+      (name "ros-noetic-dynamic-reconfigure")
+      (version (git-version "1.7.6" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/dynamic_reconfigure")
+               (commit commit)))
+         (sha256
+          (base32 "06yk4j9z7kxkd0ax2b2d3argr3qfcwz6yyfd6cwky444y5vkpiay"))
+         (file-name (git-file-name name version))))
+      (native-inputs (list ros-noetic-message-generation ros-noetic-rostest))
+      (propagated-inputs (list boost
+                               ros-noetic-cpp-common
+                               ros-noetic-roscpp
+                               ros-noetic-std-msgs
+                               ros-noetic-rosservice
+                               ros-noetic-roslib
+                               ros-noetic-rospy
+                               ros-noetic-message-runtime))
+      (build-system catkin-build-system)
+      (home-page "https://wiki.ros.org/dynamic_reconfigure")
+      (synopsis "Update ROS parameters at runtime")
+      (description "Tools to update ROS parameters at runtime
+without needing to restart a node.")
+      (license license:bsd-3))))

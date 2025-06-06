@@ -23,12 +23,11 @@
   #:use-module (gnu packages boost)
   #:use-module (gnu packages linux)
   #:use-module (ros-noetic bond-core)
-  #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
-  #:use-module (ros-noetic roscpp-core)
-  #:use-module (gnu packages wxwidgets))
+  #:use-module (ros-noetic roscpp-core))
 
 ;;; Commentary:
 ;;;
@@ -36,41 +35,8 @@
 ;;; Packages that are part of nodelet-core
 ;;; They should all be generally from the same git commit
 ;;;
-;;; Also contains dynamic-reconfigure which is part of ros_base and
-;;; is needed by nodelet-topic-tools
-;;;
 ;;; Code:
 
-(define-public ros-noetic-dynamic-reconfigure
-  (let ((commit "a70f872d7a84cd50202e096771c36e04564876d5")
-        (revision "0"))
-    (package
-      (name "ros-noetic-dynamic-reconfigure")
-      (version (git-version "1.7.6" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference
-               (url "https://github.com/ros/dynamic_reconfigure")
-               (commit commit)))
-         (sha256
-          (base32 "06yk4j9z7kxkd0ax2b2d3argr3qfcwz6yyfd6cwky444y5vkpiay"))
-         (file-name (git-file-name name version))))
-      (native-inputs (list ros-noetic-message-generation ros-noetic-rostest))
-      (propagated-inputs (list boost
-                               ros-noetic-cpp-common
-                               ros-noetic-roscpp
-                               ros-noetic-std-msgs
-                               ros-noetic-rosservice
-                               ros-noetic-roslib
-                               ros-noetic-rospy
-                               ros-noetic-message-runtime))
-      (build-system catkin-build-system)
-      (home-page "https://wiki.ros.org/dynamic_reconfigure")
-      (synopsis "Update ROS parameters at runtime")
-      (description "Tools to update ROS parameters at runtime
-without needing to restart a node.")
-      (license license:bsd-3))))
 
 (define-public ros-noetic-nodelet
   (let ((commit "ed2a4e13298e45fc6b8b60fbd3d06c4e65f6d434")
