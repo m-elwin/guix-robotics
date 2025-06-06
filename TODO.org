@@ -22,6 +22,12 @@ Listing them here for eventual inclusion as having them will increase robustness
 3. Propagated-inputs: used by dependencies during runtime
    - If Python module A imports Python module B, then B is a propagated input of A
    - If C++ library A uses C++ library B and A.h includes B.h
+4. Generally: If a ROS package provides anything python related, than it's dependencies should make it a propagated input
+   (unless said package only contains nodes and no python modules or libraries)
+   Packages that provide messages should have
+   1. A native-input on message-generation
+   2. A propagated-input on message-runtime
+   3. A propagated-input for each message package that it's messages use
 ** Modes of Usage
 1. There will be a guix-pack relocatable tarball that can be used anywhere
    - Can this also include the guix daemon?
