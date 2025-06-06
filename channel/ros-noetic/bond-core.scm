@@ -81,12 +81,9 @@ heartbeat times out.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules))
-      (inputs (list `(,util-linux "lib")))
-      (propagated-inputs (list
-                          boost
-                          ros-noetic-bond
-                          ros-noetic-roscpp
-                          ros-noetic-smclib))
+      (inputs (list `("util-linux:lib" ,util-linux "lib")))
+      (propagated-inputs (list boost ros-noetic-bond ros-noetic-roscpp
+                               ros-noetic-smclib))
       (arguments
        (list
         #:package-dir "bondcpp"))
@@ -94,6 +91,33 @@ heartbeat times out.")
       (synopsis "C++ implementation of bond")
       (description "C++ implementation of bond, a mechanism for checking when
 another process has terminated.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-bondpy
+  (let ((commit "5e299fbfc512b60434b20f2b828b44ae25697e46")
+        (revision "0"))
+    (package
+      (name "ros-noetic-bondpy")
+      (version (git-version "1.8.7" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/bond_core")
+               (commit commit)))
+         (sha256
+          (base32 "007mzlbjxsbxc0y542bz4ry4r9m4yzgx3fsp7s8pchhdrbk1g77i"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-rospy ros-noetic-smclib))
+      (arguments
+       (list
+        #:package-dir "bondpy"))
+      (home-page "https://wiki.ros.org/bondpy")
+      (synopsis "Python implementation of bond")
+      (description
+       "Python implementation of bond,
+a mechanism for checking when another process has terminated.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-smclib
