@@ -27,7 +27,7 @@
 ;;; Commentary:
 ;;;
 ;;;
-;;; Packages that are part of the diagnostics metapacakge
+;;; Packages that are part of the diagnostics metapackage
 ;;;
 ;;; Code:
 
@@ -103,7 +103,10 @@ of output topics, device status, etc.")
           (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-rospy ros-noetic-diagnostic-msgs))
+      (propagated-inputs (list ros-noetic-rospy
+                               ros-noetic-diagnostic-msgs
+                               ros-noetic-diagnostic-updater
+                               python-psutil))
       (arguments
        (list
         #:package-dir "diagnostic_common_diagnostics"))

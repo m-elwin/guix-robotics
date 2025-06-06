@@ -16,8 +16,13 @@
 ;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
 
 (define-module (ros-noetic system)
+  #:use-module ((guix licenses) #:prefix license:) ;orocos-kdl uses this
+  #:use-module (guix build-system cmake)
   #:use-module (guix download)
+  #:use-module (guix gexp) ;orocos-kdl -uses this
+  #:use-module (guix git-download) ; orocos-kdl uses this
   #:use-module (guix packages)
+  #:use-module (gnu packages algebra) ; orocos-kdl uses this
   #:use-module (gnu packages check)
   #:use-module (gnu packages logging))
 ;; Commentary:
@@ -64,3 +69,34 @@
              "tuple(getattr(inspect.getfullargspec("
              func-arg
              "), attr) for attr in ['args', 'varargs', 'varkw', 'defaults'])"))))))))
+
+(define-public orocos-kdl
+  (let ((commit "db25b7e480e068df068232064f2443b8d52a83c7")
+        (revision "0"))
+    (package
+      (name "orocos-kdl")
+      (version (git-version "1.5.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/orocos/orocos_kinematics_dynamics")
+               (commit commit)))
+         (sha256
+          (base32 "1y8288hfxpn8b7cl18jsyj38j1px201vjkb770b43x9gfhm3yl41"))
+         (file-name (git-file-name name version))))
+      (build-system cmake-build-system)
+      (native-inputs (list cppunit))
+      (propagated-inputs (list eigen))
+      (arguments
+       (list
+        #:configure-flags '(list "-DENABLE_TESTS=ON")
+        #:test-target "check"
+        #:phases #~(modify-phases %standard-phases
+                       (add-after 'unpack 'chdir
+                         (lambda _ (chdir "orocos_kdl"))))))
+      (home-page "https://docs.orocos.org/kdl/overview.html")
+      (synopsis "Open Robot Control Software's Kinematics and Dynamics Library")
+      (description "Library for computing kinematics and dynamics for kinematic chains.
+A serial robot arm is one type of kinematic chain.")
+      (license license:lgpl2.1+))))
