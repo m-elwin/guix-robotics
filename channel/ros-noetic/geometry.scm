@@ -57,7 +57,33 @@
       (arguments
        (list
         #:package-dir "eigen_conversions"))
-      (home-page "https://github.com/ros/diagnostics/tree/1.12.1")
-      (synopsis "Print aggregated diagnostic contents to the command line")
-      (description "Print aggregated diagnostic contents to the command line.")
+      (home-page "https://wiki.ros.org/eigen_conversions")
+      (synopsis "Conversions functions for eigen and KDL")
+      (description "Convert between Eigen and KDL and
+Eigen and geometry_msgs.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-kdl-conversions
+  (let ((commit "faeeae78261896159072ca08270491e7f4aed3e5")
+        (revision "0"))
+    (package
+      (name "ros-noetic-kdl-conversions")
+      (version (git-version "1.13.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry")
+               (commit commit)))
+         (sha256
+          (base32 "13m50fp9ylm9m05p2iisqmhwyhqpqsay62li6brj81gms1ljdgdv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list orocos-kdl ros-noetic-geometry-msgs))
+      (arguments
+       (list
+        #:package-dir "kdl_conversions"))
+      (home-page "https://wiki.ros.org/kdl_conversions")
+      (synopsis "Conversions between KDL and geometry_msgs")
+      (description "Conversions between KDL and geometry_msgs.")
       (license license:bsd-3))))
