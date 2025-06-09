@@ -56,9 +56,10 @@
           (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation))
+      ;; This package has message_generation as a runtime dependency
       (propagated-inputs (list ros-noetic-actionlib-msgs
-                               ros-noetic-geometry-msgs))
+                               ros-noetic-geometry-msgs
+                               ros-noetic-message-generation))
       (arguments
        (list
         #:package-dir "tf2_msgs"))
