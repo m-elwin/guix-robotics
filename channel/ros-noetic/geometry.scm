@@ -17,14 +17,16 @@
 
 (define-module (ros-noetic geometry)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages graphviz)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic ros-comm)
-  #:use-module (ros-noetic system)
-  #:use-module (guix build-system catkin))
+  #:use-module (ros-noetic system))
 
 ;;; Commentary:
 ;;;
@@ -107,7 +109,19 @@ Eigen and geometry_msgs.")
           (base32 "13m50fp9ylm9m05p2iisqmhwyhqpqsay62li6brj81gms1ljdgdv"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list orocos-kdl ros-noetic-geometry-msgs))
+      (native-inputs (list ros-noetic-message-generation
+                           ros-noetic-rostest
+                           ros-noetic-rosunit))
+      (inputs (list ros-noetic-angles graphviz))
+      (propagated-inputs (list ros-noetic-geometry-msgs
+                               ros-noetic-message-filters
+                               ros-noetic-message-runtime
+                               ros-noetic-rosconsole
+                               ros-noetic-roscpp
+                               ros-noetic-rostime
+                               ros-noetic-sensor-msgs
+                               ros-noetic-std-msgs
+                               ros-noetic-roswtf))
       (arguments
        (list
         #:package-dir "tf"))
