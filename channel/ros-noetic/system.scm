@@ -19,11 +19,13 @@
   #:use-module ((guix licenses) #:prefix license:) ;orocos-kdl uses this
   #:use-module (guix build-system cmake)
   #:use-module (guix download)
+  #:use-module (guix utils)
   #:use-module (guix gexp) ;orocos-kdl -uses this
   #:use-module (guix git-download) ; orocos-kdl uses this
   #:use-module (guix packages)
   #:use-module (gnu packages algebra) ; orocos-kdl uses this
   #:use-module (gnu packages check)
+  #:use-module (gnu packages gcc)
   #:use-module (gnu packages logging)
   #:use-module (gnu packages python) ;orocos-kdl uses this
   #:use-module (gnu packages python-xyz) ;orocos-kdl uses this
@@ -121,11 +123,23 @@ A serial robot arm is one type of kinematic chain.")
          (file-name (git-file-name name version))
          (modules '((guix build utils)))
          (snippet
-          '(substitute* "python_orocos_kdl/CMakeLists.txt"
-             ;; Use the system pybind11 instead of the bundled version
-             (("add_subdirectory\\(pybind11\\)") "find_package(pybind11)")
-             ;; change debian-specific python install directory
-             (("dist-packages") "site-packages")))))
+          '(begin
+             (substitute* "python_orocos_kdl/CMakeLists.txt"
+               ;; Use the system pybind11 instead of the bundled version
+               (("add_subdirectory\\(pybind11\\)") "find_package(pybind11)")
+               ;; change debian-specific python install directory
+               (("dist-packages") "site-packages"))
+             ;;; ROS 1 uses some dynamic attributes, which are
+             ;;; disabled by default in pybind11. No harm in enabling them
+             ;;; See "https://github.com/ros2/geometry2/issues/624
+             ;;; and https://pybind11.readthedocs.io/en/stable/classes.html#dynamic-attributes
+             ;;; Note: there is some difficulty compiling older versions of KDL for guix
+             ;;; so it seems better to make this small tweak that enables backwards compatibility
+             (substitute* "python_orocos_kdl/PyKDL/frames.cpp"
+               (("m, \"Vector\"") "m, \"Vector\", py::dynamic_attr()")
+               (("m, \"Frame\"") "m, \"Frame\", py::dynamic_attr()")
+               (("m, \"Twist\"") "m, \"Twist\", py::dynamic_attr()")
+               (("m, \"Wrench\"") "m, \"Wrench\", py::dynamic_attr()"))))))
       (build-system cmake-build-system)
       (native-inputs (list python pybind11 python-psutil))
       (inputs (list orocos-kdl))
