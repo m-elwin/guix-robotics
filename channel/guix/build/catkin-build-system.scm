@@ -20,6 +20,11 @@
   #:use-module ((guix build python-build-system)
                 #:prefix py-build:)
   #:use-module (guix build utils)
+  #:use-module (ice-9 match)
+  #:use-module (ice-9 rdelim)
+  #:use-module (ice-9 regex)
+  #:use-module (srfi srfi-1)
+  #:use-module (srfi srfi-26)
   #:export (%standard-phases))
 
 ;; Commentary:
@@ -28,6 +33,41 @@
 ;; Mostly follows the template and reuses cmake-build-system
 ;;
 ;; Code:
+
+
+;;; Modified from guix/build/python-build-system wrap
+;;; Changed to wrap python executables in /lib because
+;;; ROS installs python executables into /lib
+(define* (wrap-lib-bin #:key inputs outputs #:allow-other-keys)
+  (define (list-of-files dir)
+    (find-files dir (lambda (file stat)
+                      (and (eq? 'regular (stat:type stat))
+                           (not (wrapped-program? file))))))
+
+  (define bindirs
+    (append-map (match-lambda
+                  ((_ . dir)
+                   (list (string-append dir "/bin")
+                         (string-append dir "/sbin")
+                         (string-append dir "/lib"))))
+                outputs))
+
+  ;; Do not require "bash" to be present in the package inputs
+  ;; even when there is nothing to wrap.
+  ;; Also, calculate (sh) only once to prevent some I/O.
+  (define %sh (delay (search-input-file inputs "bin/bash")))
+  (define (sh) (force %sh))
+
+  (let* ((var `("GUIX_PYTHONPATH" prefix
+                ,(search-path-as-string->list
+                  (or (getenv "GUIX_PYTHONPATH") "")))))
+    (for-each (lambda (dir)
+                (let ((files (list-of-files dir)))
+                  (for-each (cut wrap-program <> #:sh (sh) var)
+                            files)))
+              bindirs)))
+
+
 
 (define* (ros-wrap #:key outputs #:allow-other-keys)
   "Set's ROS Environment variables for each ROS-related program.
@@ -73,6 +113,9 @@ Also creates an opt/ros/ directory with noetic symlinking back."
                     'check) args)
   (apply catkin-test-results args))
 
+
+
+
 (define %standard-phases
   (modify-phases cmake-build:%standard-phases
     (add-after 'unpack 'ensure-no-mtimes-pre-1980
@@ -91,8 +134,7 @@ Also creates an opt/ros/ directory with noetic symlinking back."
       (assoc-ref py-build:%standard-phases
                  'add-install-to-path))
     (add-after 'add-install-to-path 'wrap
-      (assoc-ref py-build:%standard-phases
-                 'wrap))
+      wrap-lib-bin)
     (add-after 'wrap 'ros-wrap
       ros-wrap)
     (replace 'check
