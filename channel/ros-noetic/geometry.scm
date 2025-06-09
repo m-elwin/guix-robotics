@@ -193,3 +193,39 @@ by joint limits, this package is what you need.  The code in
 this package is stable and well tested.  There are no plans for
 major changes in the near future.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-tf-conversions
+  (let ((commit "faeeae78261896159072ca08270491e7f4aed3e5")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf-conversions")
+      (version (git-version "1.13.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry")
+               (commit commit)))
+         (sha256
+          (base32 "13m50fp9ylm9m05p2iisqmhwyhqpqsay62li6brj81gms1ljdgdv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list orocos-kdl python-orocos-kdl
+                               ros-noetic-geometry-msgs ros-noetic-tf
+                               ros-noetic-kdl-conversions))
+      (arguments
+       (list
+        #:package-dir "tf_conversions"))
+      (home-page "https://wiki.ros.org/tf_conversions")
+      (synopsis "Conversions functions for common tf datatypes")
+      (description
+       "Conversion functions to convert
+common tf datatypes (point, vector, pose, etc) into semantically
+identical datatypes used by other libraries.  The conversion functions
+make it easier for users of the transform library (tf) to work with
+the datatype of their choice.  Currently this package has support for
+the Kinematics and Dynamics Library (KDL) and the Eigen matrix
+library.  This package is stable, and will get integrated into tf in
+the next major release cycle (see roadmap).")
+      (license license:bsd-3))))
