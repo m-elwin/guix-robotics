@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages algebra)
+  #:use-module (gnu packages game-development)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
 ;  #:use-module (ros-noetic ros)
@@ -131,3 +132,32 @@ Enables easy conversion from geometry_msgs Transform and Point types to
 the types specified by the Eigen matrix algebra library.")
       (license license:bsd-3))))
 
+
+(define-public ros-noetic-tf2-bullet
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf2-bullet")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cmake-modules))
+      (propagated-inputs (list bullet ros-noetic-tf2 ros-noetic-geometry-msgs))
+      (arguments
+       (list
+        #:package-dir "tf2_bullet"))
+      (home-page "https://wiki.ros.org/tf2_bullet")
+      (synopsis "Convert between geometry_msgs and bullet data types")
+      (description
+       "Templated conversions as specified in tf/convert.h.
+Enables easy conversion from geometry_msgs Transform and Point types to
+the types specified by the Bullet engine API see http://bulletphysics.org.")
+      (license license:bsd-3))))
