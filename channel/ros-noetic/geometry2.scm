@@ -257,7 +257,7 @@ the types specified by the Bullet engine API see http://bulletphysics.org.")
                            ros-noetic-rostest ros-noetic-ros-environment))
       (propagated-inputs (list orocos-kdl eigen
                                ros-noetic-tf2 ros-noetic-geometry-msgs
-                               tf2_ros))
+                               ros-noetic-tf2-ros))
       (arguments
        (list
         #:package-dir "tf2_kdl"))

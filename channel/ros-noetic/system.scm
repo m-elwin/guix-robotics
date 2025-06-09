@@ -24,7 +24,10 @@
   #:use-module (guix packages)
   #:use-module (gnu packages algebra) ; orocos-kdl uses this
   #:use-module (gnu packages check)
-  #:use-module (gnu packages logging))
+  #:use-module (gnu packages logging)
+  #:use-module (gnu packages python) ;orocos-kdl uses this
+  #:use-module (gnu packages python-xyz) ;orocos-kdl uses this
+  )
 ;; Commentary:
 ;;
 ;; System dependencies that are not (yet) in upstream-guix
@@ -99,4 +102,41 @@
       (synopsis "Open Robot Control Software's Kinematics and Dynamics Library")
       (description "Library for computing kinematics and dynamics for kinematic chains.
 A serial robot arm is one type of kinematic chain.")
+      (license license:lgpl2.1+))))
+
+(define-public python-orocos-kdl
+  (let ((commit "db25b7e480e068df068232064f2443b8d52a83c7")
+        (revision "0"))
+    (package
+      (name "python-orocos-kdl")
+      (version (git-version "1.5.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/orocos/orocos_kinematics_dynamics")
+               (commit commit)))
+         (sha256
+          (base32 "1y8288hfxpn8b7cl18jsyj38j1px201vjkb770b43x9gfhm3yl41"))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         (snippet
+          '(substitute* "python_orocos_kdl/CMakeLists.txt"
+             (("add_subdirectory\\(pybind11\\)") "find_package(pybind11)")))))
+      (build-system cmake-build-system)
+      (native-inputs (list python pybind11 python-psutil))
+      (inputs (list orocos-kdl))
+      (arguments
+       (list
+        #:phases #~(modify-phases %standard-phases
+                       (add-after 'unpack 'chdir
+                         (lambda _ (chdir "python_orocos_kdl")))
+                       (replace 'check 
+                         (lambda _
+                           (setenv "PYTHONPATH" "./")
+                           (invoke "python3" "../python_orocos_kdl/tests/PyKDLtest.py"))))))
+      (home-page "https://docs.orocos.org/kdl/overview.html")
+      (synopsis "Python Bindings for Open Robot Control Software's Kinematics and Dynamics Library")
+      (description "Library for computing kinematics and dynamics for kinematic chains.
+A serial robot arm is one type of kinematic chain. These are the python bindings.")
       (license license:lgpl2.1+))))
