@@ -20,6 +20,9 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system catkin)
+  #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic ros-base)
+  #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core))
 
 ;;; Commentary:
@@ -86,4 +89,44 @@ At its core, SMACH is a ROS-independent Python library to build
 hierarchical state machines.  SMACH is a new library that takes advantage of
 very old concepts in order to quickly create robust robot behavior with
 maintainable and modular code.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-smach-ros
+  (let ((commit "816b22a406cff5386689540e5d1277023b2b640f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-smach-ros")
+      (version (git-version "2.5.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/executive_smach")
+               (commit commit)))
+         (sha256
+          (base32 "1sl0n38ivdz863n831g1a9z09jby8yqdsnfgbcwpf36xajqnh8xv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-rospy
+                               ros-noetic-rostopic
+                               ros-noetic-std-msgs
+                               ros-noetic-std-srvs
+                               ros-noetic-actionlib
+                               ros-noetic-actionlib-msgs
+                               ros-noetic-smach
+                               ros-noetic-smach-msgs))
+      (arguments
+       (list
+        #:package-dir "smach_ros"))
+      (home-page "https://wiki.ros.org/smach_ros")
+      (synopsis "Extensions for SMACH to integrate it with ROS")
+      (description
+       "Contains extensions for the SMACH library to
+integrate it tightly with ROS.  For example, SMACH-ROS can call
+ROS services, listen to ROS topics, and integrate
+with actionlib both as a client, and a provider of action servers.
+SMACH is a new library that takes advantage of very old concepts
+in order to quickly create robust robot behavior with maintainable
+and modular code.")
       (license license:bsd-3))))
