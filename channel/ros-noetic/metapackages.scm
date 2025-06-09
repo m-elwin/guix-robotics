@@ -141,7 +141,7 @@ actionlib, dynamic reconfigure, nodelets, and pluginlib.")
                                ros-noetic-executive-smach
                                ros-noetic-filters
                                ros-noetic-geometry
-;                               ros-noetic-joint-state-publisher
+                               ros-noetic-joint-state-publisher
 ;                              ros-noetic-kdl-parser
 ;                              ros-noetic-robot-state-publisher
 ;                              ros-noetic-urdf
