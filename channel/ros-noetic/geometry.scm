@@ -229,3 +229,40 @@ the Kinematics and Dynamics Library (KDL) and the Eigen matrix
 library.  This package is stable, and will get integrated into tf in
 the next major release cycle (see roadmap).")
       (license license:bsd-3))))
+
+(define-public ros-noetic-geometry
+  (let ((commit "faeeae78261896159072ca08270491e7f4aed3e5")
+        (revision "0"))
+    (package
+      (name "ros-noetic-geometry")
+      (version (git-version "1.13.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry")
+               (commit commit)))
+         (sha256
+          (base32 "13m50fp9ylm9m05p2iisqmhwyhqpqsay62li6brj81gms1ljdgdv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-angles ros-noetic-eigen-conversions
+                               ros-noetic-kdl-conversions ros-noetic-tf
+                               ros-noetic-tf-conversions))
+      (arguments
+       (list
+        #:package-dir "geometry"))
+      (home-page "https://wiki.ros.org/geometry")
+      (synopsis "Metapackage for geometry library suite")
+      (description
+       "Migration: Since ROS Hydro, tf has been \"deprecated\"
+in favor of tf2.  tf2 is an iteration on tf providing generally
+the same feature set more efficiently.  As well as adding a few
+new features.  As tf2 is a major change the tf API has been
+maintained in its current form.  Since tf2 has a superset of the tf
+features with a subset of the dependencies the tf implementation has
+been removed and replaced with calls to tf2 under the hood.
+This will mean that all users will be compatible with tf2.
+It is recommended for new work to use tf2 directly as it has a cleaner interface.
+However tf will continue to be supported for through at least J Turtle.")
+      (license license:bsd-3))))
