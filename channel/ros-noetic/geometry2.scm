@@ -20,6 +20,7 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages algebra)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
 ;  #:use-module (ros-noetic ros)
@@ -85,15 +86,15 @@
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (inputs (list console-bridge))
-      (propagated-inputs (list ros-noetic-geometry-msgs
-                               ros-noetic-rostime
+      (propagated-inputs (list ros-noetic-geometry-msgs ros-noetic-rostime
                                ros-noetic-tf2-msgs))
       (arguments
        (list
         #:package-dir "tf2"))
       (home-page "https://wiki.ros.org/tf2")
       (synopsis "Second generation ROS transform library")
-      (description "Second generation of the transform library, which lets
+      (description
+       "Second generation of the transform library, which lets
 the user keep track of multiple coordinate frames over time. tf2
 maintains the relationship between coordinate frames in a tree
 structure buffered in time, and lets the user transform points,
@@ -118,13 +119,14 @@ point in time.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules))
-      (propagated-inputs (list eigen ros-noetic-tf2))
+      (propagated-inputs (list eigen ros-noetic-tf2 ros-noetic-geometry-msgs))
       (arguments
        (list
         #:package-dir "tf2_eigen"))
       (home-page "https://wiki.ros.org/tf2_eigen")
       (synopsis "Convert between geometry_msgs and eigen data types")
-      (description "Templated conversions as specified in tf/convert.h.
+      (description
+       "Templated conversions as specified in tf/convert.h.
 Enables easy conversion from geometry_msgs Transform and Point types to
 the types specified by the Eigen matrix algebra library.")
       (license license:bsd-3))))
