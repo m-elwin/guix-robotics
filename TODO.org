@@ -2,7 +2,7 @@
 - [-]  Robotics metapackage
   - [-] Diagnostics metapackage
     - [ ] diagnostic-aggragator
-    - [ ] diagnostic-analysis
+    - [X] diagnostic-analysis
     - [X] diagnostic-common-diagnostics
     - [ ] diagnostics
     - [X] diagnostic-updater

@@ -24,6 +24,7 @@
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
+  #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
   #:use-module (guix build-system catkin))
@@ -121,4 +122,34 @@ of output topics, device status, etc.")
       (home-page "http://wiki.ros.org/diagnostic_common_diagnostics")
       (synopsis "Common Diagnostics")
       (description "Common Diagnostics for ROS.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-diagnostic-analysis
+  (let ((commit "43557d53cd1073d01affc1ad5dd10a3eb9cd8782")
+        (revision "0"))
+    (package
+      (name "ros-noetic-diagnostic-analysis")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/diagnostics")
+               (commit commit)))
+         (sha256
+          (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-diagnostic-msgs ros-noetic-rosbag
+                               ros-noetic-roslib))
+      (arguments
+       (list
+        #:package-dir "diagnostic_analysis"))
+      (home-page "http://wiki.ros.org/diagnostic_analysis")
+      (synopsis "Convert diagnostic logs into CSV files")
+      (description
+       "Convert a log of diagnostics data
+into a series of CSV files.  Robot logs are recorded with rosbag, and
+can be processed offline using the scripts in this package")
       (license license:bsd-3))))
