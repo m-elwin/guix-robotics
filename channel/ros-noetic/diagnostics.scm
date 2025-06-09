@@ -22,6 +22,7 @@
   #:use-module (gnu packages disk)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages python-xyz)
+  #:use-module (ros-noetic bond-core)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
   #:use-module (ros-noetic ros)
@@ -152,4 +153,39 @@ of output topics, device status, etc.")
        "Convert a log of diagnostics data
 into a series of CSV files.  Robot logs are recorded with rosbag, and
 can be processed offline using the scripts in this package")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-diagnostic-aggregator
+  (let ((commit "43557d53cd1073d01affc1ad5dd10a3eb9cd8782")
+        (revision "0"))
+    (package
+      (name "ros-noetic-diagnostic-aggregator")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/diagnostics")
+               (commit commit)))
+         (sha256
+          (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-diagnostic-msgs
+                               ros-noetic-pluginlib
+                               ros-noetic-roscpp
+                               ros-noetic-rospy
+                               ros-noetic-xmlrpcpp
+                               ros-noetic-bondcpp
+                               ros-noetic-bondpy))
+      (arguments
+       (list
+        #:package-dir "diagnostic_aggregator"))
+      (home-page "http://wiki.ros.org/diagnostic_aggregator")
+      (synopsis "Aggregate and perform basic analysis on robot diagnostics")
+      (description
+       "Aggregates and performs basic analysis on the diagnostics of a robot.
+This package consists of the base node, or aggregator, and several
+analyzers to collect and process diagnostics data.")
       (license license:bsd-3))))
