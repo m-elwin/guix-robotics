@@ -223,3 +223,32 @@ self_test::TestRunner calls the tests that have been defined in order, and
 combines the results into a diagnostic_msgs::DiagnosticsArray.
 A detailed example can be found in selftest_example.cpp.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-diagnostics
+  (let ((commit "43557d53cd1073d01affc1ad5dd10a3eb9cd8782")
+        (revision "0"))
+    (package
+      (name "ros-noetic-diagnostics")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/diagnostics")
+               (commit commit)))
+         (sha256
+          (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-diagnostic-aggregator
+                               ros-noetic-diagnostic-analysis
+                               ros-noetic-diagnostic-common-diagnostics
+                               ros-noetic-diagnostic-updater
+                               ros-noetic-self-test))
+      (arguments
+       (list
+        #:package-dir "diagnostics"))
+      (home-page "http://wiki.ros.org/diagnostics")
+      (synopsis "Metapackage for robot diagnostics")
+      (description "Metapackage for robot diagnostics")
+      (license license:bsd-3))))

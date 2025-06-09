@@ -1,14 +1,5 @@
 * Packaging Currenly
 - [-]  Robotics metapackage
-  - [-] Diagnostics metapackage
-    - [X] diagnostic-aggragator
-    - [X] diagnostic-analysis
-    - [X] diagnostic-common-diagnostics
-    - [ ] diagnostics
-    - [X] diagnostic-updater
-    - [X] rosdiagnostic
-    - [X] self_test
-    - [ ] test_diagnostic-aggregator
 * Additional Test Packages
 There are some ROS packages that only contain tests.
 Listing them here for eventual inclusion as having them will increase robustness
@@ -23,6 +14,7 @@ Listing them here for eventual inclusion as having them will increase robustness
 - nodelet_core/test_nodelet
 - nodelet_core/test_nodelet_topic_tools
 - geometry2/test_tf2
+- diagnostics/test_diagnostic-aggregator
 * For README
 ** Discussion of inputs
 1. Native inputs: used only during build or test time.
