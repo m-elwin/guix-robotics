@@ -334,3 +334,32 @@ such as Vector, Point, Pose, Transform, Quaternion, etc.")
       (synopsis "Convert sensor_msgs with tf")
       (description "Convert sensor_msgs such as PointCloud2 with tf types.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-tf2-tools
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf2-tools")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-tf2 ros-noetic-tf2-msgs
+                               ros-noetic-tf2-ros))
+      (arguments
+       (list
+        #:package-dir "tf2_tools"))
+      (home-page "https://wiki.ros.org/tf2_tools")
+      (synopsis "Tools for working with tf2")
+      (description
+       "Tools for working with transforms, as implemented by tf2.
+Allows echoing frames and creating an graphical view of the frame
+relationships")
+      (license license:bsd-3))))
