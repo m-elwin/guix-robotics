@@ -26,9 +26,9 @@
   #:use-module (ros-noetic common-msgs)
 ;  #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-core)
-  #:use-module (ros-noetic roscpp-core))
-;  #:use-module (ros-noetic ros-comm)
-;  #:use-module (ros-noetic system))
+  #:use-module (ros-noetic roscpp-core)
+  #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic system))
 
 ;;; Commentary:
 ;;;
@@ -103,6 +103,73 @@ vectors, etc between any two coordinate frames at any desired
 point in time.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-tf2-py
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf2-py")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-tf2 ros-noetic-rospy))
+      (arguments
+       (list
+        #:package-dir "tf2_py"))
+      (home-page "https://wiki.ros.org/tf2_py")
+      (synopsis "Convert tf2 and geometry_msgs to PyObjects")
+      (description "Convert tf2 and geometry_msgs to PyObjects and
+bind tf2 functionality to python.  This is an implementation
+package, users generally should use tf2_ros.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-tf2-ros
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf2-ros")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cmake-modules ros-noetic-rostest))
+      (inputs (list ros-noetic-xmlrpcpp))
+      (propagated-inputs
+       (list ros-noetic-actionlib
+             ros-noetic-actionlib-msgs
+             ros-noetic-geometry-msgs
+             ros-noetic-message-filters
+             ros-noetic-roscpp
+             ros-noetic-rosgraph
+             ros-noetic-rospy
+             ros-noetic-std-msgs
+             ros-noetic-tf2
+             ros-noetic-tf2-msgs
+             ros-noetic-tf2-py))
+
+      (arguments
+       (list
+        #:package-dir "tf2_ros"))
+      (home-page "https://wiki.ros.org/tf2_ros")
+      (synopsis "ROS bindings for the tf2 library")
+      (description
+       "ROS bindings for the tf2 library, including python and C++.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-tf2-eigen
   (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
         (revision "0"))
@@ -160,4 +227,36 @@ the types specified by the Eigen matrix algebra library.")
        "Templated conversions as specified in tf/convert.h.
 Enables easy conversion from geometry_msgs Transform and Point types to
 the types specified by the Bullet engine API see http://bulletphysics.org.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-tf2-kdl
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf2-kdl")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cmake-modules
+                           ros-noetic-rostest ros-noetic-ros-environment))
+      (propagated-inputs (list orocos-kdl eigen
+                               ros-noetic-tf2 ros-noetic-geometry-msgs
+                               tf2_ros))
+      (arguments
+       (list
+        #:package-dir "tf2_kdl"))
+      (home-page "https://wiki.ros.org/tf2_kdl")
+      (synopsis "Convert between geometry_msgs and KDL data types")
+      (description
+       "Templated conversions as specified in tf/convert.h.
+Enables easy conversion from geometry_msgs Transform and Point types to
+the types specified by Orocos KDL.")
       (license license:bsd-3))))
