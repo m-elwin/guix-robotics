@@ -25,6 +25,7 @@
   #:use-module (gnu packages bash)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages python)
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic ros-core)
@@ -210,6 +211,11 @@ are shared across ROS client library implementations")
       (build-system catkin-build-system)
       (inputs (list coreutils findutils))
       (propagated-inputs (list ros-noetic-rospack))
+      ;;; rosrun can be 
+      ;;; setup the python search path.
+      (native-search-paths
+       (list
+        (guix-pythonpath-search-path (package-version python))))
       (arguments
        (list
         #:package-dir "tools/rosbash"
