@@ -19,7 +19,10 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages boost)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
   #:use-module (guix build-system catkin))
 
@@ -58,4 +61,32 @@
       (description "Base messages and actions useful for controlling
 robots.  It provides representations for controller setpoints and joint
 and cartesian trajectories.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-filters
+  (let ((commit "126188027067f6822c39003dcc2aa86002d27f9f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-filters")
+      (version (git-version "1.9.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/filters")
+               (commit commit)))
+         (sha256
+          (base32 "1468prq2hq6xnn463h91zbw26y8sqab1vigzzskzd1kmipafxhah"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-roslib ros-noetic-rosconsole
+                               ros-noetic-roscpp ros-noetic-pluginlib boost))
+      (home-page "http://wiki.ros.org/filters")
+      (synopsis "Standardized interface for processing data in sequence")
+      (description
+       "This library provides a standardized interface for
+processing data as a sequence of filters.  This package contains a base
+class upon which to build specific implementations as well as an interface
+which dynamically loads filters based on runtime parameters.")
       (license license:bsd-3))))
