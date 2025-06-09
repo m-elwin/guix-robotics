@@ -130,3 +130,31 @@ SMACH is a new library that takes advantage of very old concepts
 in order to quickly create robust robot behavior with maintainable
 and modular code.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-executive-smach
+  (let ((commit "816b22a406cff5386689540e5d1277023b2b640f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-executive-smach")
+      (version (git-version "2.5.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/executive_smach")
+               (commit commit)))
+         (sha256
+          (base32 "1sl0n38ivdz863n831g1a9z09jby8yqdsnfgbcwpf36xajqnh8xv"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-smach ros-noetic-smach-ros
+                               ros-noetic-smach-msgs))
+      (arguments
+       (list
+        #:package-dir "executive_smach"))
+      (home-page "https://wiki.ros.org/executive_smach")
+      (synopsis "Metapackage for SMACH")
+      (description
+       "Metapackage for SMACH, a ROS system and python library
+for creating complex robot behaviors with easy-to-maintain code")
+      (license license:bsd-3))))
