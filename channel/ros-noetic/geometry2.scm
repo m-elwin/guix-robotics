@@ -363,3 +363,38 @@ such as Vector, Point, Pose, Transform, Quaternion, etc.")
 Allows echoing frames and creating an graphical view of the frame
 relationships")
       (license license:bsd-3))))
+
+(define-public ros-noetic-geometry2
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-geometry2")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-tf2
+                               ros-noetic-tf2-bullet
+                               ros-noetic-tf2-eigen
+                               ros-noetic-tf2-geometry-msgs
+                               ros-noetic-tf2-kdl
+                               ros-noetic-tf2-msgs
+                               ros-noetic-tf2-py
+                               ros-noetic-tf2-ros
+                               ros-noetic-tf2-sensor-msgs
+                               ros-noetic-tf2-tools))
+      (arguments
+       (list
+        #:package-dir "geometry2"))
+      (home-page "https://wiki.ros.org/geometry2")
+      (synopsis "Metapackage for 2nd generation  ROS transform library, tf2")
+      (description
+       "Metapackage for 2nd generation  ROS transform library, tf2.")
+      (license license:bsd-3))))
