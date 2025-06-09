@@ -271,3 +271,34 @@ the types specified by the Bullet engine API see http://bulletphysics.org.")
 Enables easy conversion from geometry_msgs Transform and Point types to
 the types specified by Orocos KDL.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-tf2-geometry-msgs
+  (let ((commit "40ce3df158c80cc4ac5edc5b1c22fe833d0cbc4c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-tf2-geometry-msgs")
+      (version (git-version "0.7.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry2")
+               (commit commit)))
+         (sha256
+          (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest ros-noetic-ros-environment))
+      (propagated-inputs (list orocos-kdl python-orocos-kdl ros-noetic-tf2
+                               ros-noetic-geometry-msgs ros-noetic-tf2-ros))
+      (arguments
+       (list
+        #:package-dir "tf2_geometry_msgs"))
+      (home-page "https://wiki.ros.org/tf2_geometry_msgs")
+      (synopsis "Convert between various geometry_msgs data types")
+      (description
+       "This library is an implementation of the templated conversion
+ interface specified in tf/convert.h.  It offers conversion and
+transform convenience functions between various geometry_msgs data types,
+such as Vector, Point, Pose, Transform, Quaternion, etc.")
+      (license license:bsd-3))))
