@@ -189,3 +189,37 @@ can be processed offline using the scripts in this package")
 This package consists of the base node, or aggregator, and several
 analyzers to collect and process diagnostics data.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-self-test
+  (let ((commit "43557d53cd1073d01affc1ad5dd10a3eb9cd8782")
+        (revision "0"))
+    (package
+      (name "ros-noetic-self-test")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/diagnostics")
+               (commit commit)))
+         (sha256
+          (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-diagnostic-msgs
+                               ros-noetic-diagnostic-updater ros-noetic-roscpp))
+      (arguments
+       (list
+        #:package-dir "self_test"))
+      (home-page "http://wiki.ros.org/self_test")
+      (synopsis
+       "Used to sequence a set of tests to run in order to test a device")
+      (description
+       "Contains the self_test::TestRunner class that can be used
+to sequence a set of tests to be run in order to test a device.
+It advertises a self_test service.  When the service is called, the
+self_test::TestRunner calls the tests that have been defined in order, and
+combines the results into a diagnostic_msgs::DiagnosticsArray.
+A detailed example can be found in selftest_example.cpp.")
+      (license license:bsd-3))))

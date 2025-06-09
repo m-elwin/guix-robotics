@@ -1,13 +1,13 @@
 * Packaging Currenly
 - [-]  Robotics metapackage
   - [-] Diagnostics metapackage
-    - [ ] diagnostic-aggragator
+    - [X] diagnostic-aggragator
     - [X] diagnostic-analysis
     - [X] diagnostic-common-diagnostics
     - [ ] diagnostics
     - [X] diagnostic-updater
     - [X] rosdiagnostic
-    - [ ] self_test
+    - [X] self_test
     - [ ] test_diagnostic-aggregator
 * Additional Test Packages
 There are some ROS packages that only contain tests.
