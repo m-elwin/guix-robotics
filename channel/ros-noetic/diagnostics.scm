@@ -19,7 +19,11 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages disk)
+  #:use-module (gnu packages linux)
+  #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic geometry)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
   #:use-module (guix build-system catkin))
@@ -67,7 +71,7 @@
        (origin
          (method git-fetch)
          (uri (git-reference
-               (url "http://github.com/ros/diagnostics")
+               (url "https://github.com/ros/diagnostics")
                (commit commit)))
          (sha256
           (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
@@ -97,16 +101,20 @@ of output topics, device status, etc.")
        (origin
          (method git-fetch)
          (uri (git-reference
-               (url "http://github.com/ros/diagnostics")
+               (url "https://github.com/ros/diagnostics")
                (commit commit)))
          (sha256
           (base32 "1iy1aaxy67gk0wzisi0qq36n9f6cscn5cwriwk6vbg871dlasx53"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
       (propagated-inputs (list ros-noetic-rospy
                                ros-noetic-diagnostic-msgs
                                ros-noetic-diagnostic-updater
-                               python-psutil))
+                               python-psutil
+                               lm-sensors
+                               hddtemp
+                               ros-noetic-tf))
       (arguments
        (list
         #:package-dir "diagnostic_common_diagnostics"))
