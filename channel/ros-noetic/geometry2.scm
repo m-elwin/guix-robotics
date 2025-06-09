@@ -24,7 +24,7 @@
   #:use-module (gnu packages game-development)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
-;  #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic ros-comm)
@@ -144,23 +144,31 @@ package, users generally should use tf2_ros.")
                (commit commit)))
          (sha256
           (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         (snippet
+          ;; spin_for_a_second assumes messages will be received within one second.
+          ;; there needs to be some type of timeout, but one second is not enough
+          ;; Package authors had determined if it didn't arrive in one second the
+          ;; test should fail, I am doubling that.
+          '(substitute* '("tf2_ros/test/time_reset_test.cpp"
+                          "tf2_ros/test/message_filter_test.cpp")
+             (("spin_for_a_second();")
+              "spin_for_a_second(); spin_for_a_second();")))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules ros-noetic-rostest))
       (inputs (list ros-noetic-xmlrpcpp))
-      (propagated-inputs
-       (list ros-noetic-actionlib
-             ros-noetic-actionlib-msgs
-             ros-noetic-geometry-msgs
-             ros-noetic-message-filters
-             ros-noetic-roscpp
-             ros-noetic-rosgraph
-             ros-noetic-rospy
-             ros-noetic-std-msgs
-             ros-noetic-tf2
-             ros-noetic-tf2-msgs
-             ros-noetic-tf2-py))
-
+      (propagated-inputs (list ros-noetic-actionlib
+                               ros-noetic-actionlib-msgs
+                               ros-noetic-geometry-msgs
+                               ros-noetic-message-filters
+                               ros-noetic-roscpp
+                               ros-noetic-rosgraph
+                               ros-noetic-rospy
+                               ros-noetic-std-msgs
+                               ros-noetic-tf2
+                               ros-noetic-tf2-msgs
+                               ros-noetic-tf2-py))
       (arguments
        (list
         #:package-dir "tf2_ros"))
