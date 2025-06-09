@@ -253,10 +253,13 @@ the types specified by the Bullet engine API see http://bulletphysics.org.")
           (base32 "18pwww192qrgfxzv1azlg6rlhf4rvsgx97x64ghpbiq1v3p3jypl"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-cmake-modules
-                           ros-noetic-rostest ros-noetic-ros-environment))
-      (propagated-inputs (list orocos-kdl python-orocos-kdl eigen
-                               ros-noetic-tf2 ros-noetic-geometry-msgs
+      (native-inputs (list ros-noetic-cmake-modules ros-noetic-rostest
+                           ros-noetic-ros-environment))
+      (propagated-inputs (list orocos-kdl
+                               python-orocos-kdl
+                               eigen
+                               ros-noetic-tf2
+                               ros-noetic-geometry-msgs
                                ros-noetic-tf2-ros))
       (arguments
        (list
