@@ -122,7 +122,10 @@ A serial robot arm is one type of kinematic chain.")
          (modules '((guix build utils)))
          (snippet
           '(substitute* "python_orocos_kdl/CMakeLists.txt"
-             (("add_subdirectory\\(pybind11\\)") "find_package(pybind11)")))))
+             ;; Use the system pybind11 instead of the bundled version
+             (("add_subdirectory\\(pybind11\\)") "find_package(pybind11)")
+             ;; change debian-specific python install directory
+             (("dist-packages") "site-packages")))))
       (build-system cmake-build-system)
       (native-inputs (list python pybind11 python-psutil))
       (inputs (list orocos-kdl))
@@ -131,7 +134,7 @@ A serial robot arm is one type of kinematic chain.")
         #:phases #~(modify-phases %standard-phases
                        (add-after 'unpack 'chdir
                          (lambda _ (chdir "python_orocos_kdl")))
-                       (replace 'check 
+                       (replace 'check
                          (lambda _
                            (setenv "PYTHONPATH" "./")
                            (invoke "python3" "../python_orocos_kdl/tests/PyKDLtest.py"))))))

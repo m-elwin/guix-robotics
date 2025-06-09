@@ -255,7 +255,7 @@ the types specified by the Bullet engine API see http://bulletphysics.org.")
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules
                            ros-noetic-rostest ros-noetic-ros-environment))
-      (propagated-inputs (list orocos-kdl eigen
+      (propagated-inputs (list orocos-kdl python-orocos-kdl eigen
                                ros-noetic-tf2 ros-noetic-geometry-msgs
                                ros-noetic-tf2-ros))
       (arguments
