@@ -19,9 +19,12 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
+  #:use-module (guix gexp)
   #:use-module (guix git-download)
+  #:use-module (gnu packages bash)
   #:use-module (gnu packages graphviz)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic roscpp-core)
@@ -107,12 +110,17 @@ Eigen and geometry_msgs.")
                (commit commit)))
          (sha256
           (base32 "13m50fp9ylm9m05p2iisqmhwyhqpqsay62li6brj81gms1ljdgdv"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         (snippet
+          ;; use yaml.safe_load to avoid a syntax error and increase safety
+          '(substitute* '("tf/src/tf/listener.py")
+             (("yaml.load")
+              "yaml.safe_load")))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-message-generation
-                           ros-noetic-rostest
+      (native-inputs (list ros-noetic-message-generation ros-noetic-rostest
                            ros-noetic-rosunit))
-      (inputs (list ros-noetic-angles graphviz))
+      (inputs (list bash-minimal ros-noetic-angles graphviz))
       (propagated-inputs (list ros-noetic-geometry-msgs
                                ros-noetic-message-filters
                                ros-noetic-message-runtime
@@ -121,13 +129,22 @@ Eigen and geometry_msgs.")
                                ros-noetic-rostime
                                ros-noetic-sensor-msgs
                                ros-noetic-std-msgs
-                               ros-noetic-roswtf))
+                               ros-noetic-roswtf
+                               ros-noetic-tf2-ros))
       (arguments
        (list
-        #:package-dir "tf"))
+        #:package-dir "tf"
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'wrap 'wrap-script
+              (lambda _
+                (wrap-program (string-append #$output "/bin/view_frames")
+                  `("PATH" prefix
+                    ,(list (string-append #$graphviz "/bin")))))))))
       (home-page "https://wiki.ros.org/tf")
       (synopsis "Tracks coordinate frames over time")
-      (description "tf is a package that lets the user keep track of multiple coordinate
+      (description
+       "tf is a package that lets the user keep track of multiple coordinate
 frames over time. tf maintains the relationship between coordinate
 frames in a tree structure buffered in time, and lets the user
 transform points, vectors, etc between any two coordinate frames at
