@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages qt)
   #:use-module (ros-noetic ros)
   #:use-module (guix build-system catkin))
 
@@ -47,6 +48,7 @@
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild))
+      (propagated-inputs (list python-pyside-2 python-pyqt5-sip))
       (home-page "https://wiki.ros.org/python_qt_binding")
       (synopsis
        "Python bindings for Qt from either pyside or pyqt")
