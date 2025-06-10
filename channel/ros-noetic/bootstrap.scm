@@ -33,12 +33,15 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages certs)
   #:use-module (gnu packages check)
-  #:use-module (gnu packages time))
+  #:use-module (gnu packages time)
+  #:use-module (gnu packages xml))
 
 ;; Commentary:
 ;;
 ;; "Bootstrap" dependencies needed to build ROS noetic from source
 ;; See https://wiki.ros.org/noetic/Installation/Source#Installing_bootstrap_dependencies <Accessed 5/23/2025>
+;; These are system dependencies that would depend on ROS dep and are essentially ROS-specific even if
+;; they were adopted and maintained as system dependencies on debian.
 ;;
 ;; Code:
 
@@ -226,4 +229,56 @@ These files are used to download source code archives for ROS distributions.")
       (home-page "http://wiki.ros.org/rosdep")
       (synopsis "Package manager abstraction tool for ROS")
       (description "Package manager abstraction tool for ROS.")
+      (license license:bsd-3))))
+
+(define-public urdfdom-headers
+  (let ((commit "00c1c9c231e46b2300d04073ad696521758fa45c")
+        (revision "0"))
+    (package
+      (name "urdfdom-headers")
+      (version (git-version "1.0.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/urdfdom_headers")
+               (commit commit)))
+         (sha256
+          (base32 "0vk34r9v75fy0z6xafkwhqf7qg5ncd8rd33454yna6jl94pcdqcx"))
+         (file-name (git-file-name name version))))
+      (build-system cmake-build-system)
+      (arguments
+       (list
+        #:tests? #f)) ;there are no tests
+      (propagated-inputs (list tinyxml))
+      (home-page "https://wiki.ros.org/urdfdom_headers")
+      (synopsis "Header files for urdfdom")
+      (description "Header files urdfdom")
+      (license license:bsd-3))))
+
+(define-public urdfdom
+  (let ((commit "0da4b20675cdbe14b532d484a1c17df85b4e1584")
+        (revision "0"))
+    (package
+      (name "urdfdom")
+      (version (git-version "1.0.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/urdfdom")
+               (commit commit)))
+         (sha256
+          (base32 "0wambq06d7dvja25zcv4agc055q9rmf3xkrnxy8lsf4nic7ra2rr"))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         (snippet '(substitute* "CMakeLists.txt"
+                     (("console_bridge 0.3")
+                      "console_bridge")))))
+      (build-system cmake-build-system)
+      (inputs (list console-bridge))
+      (propagated-inputs (list tinyxml urdfdom-headers))
+      (home-page "https://wiki.ros.org/urdfdom")
+      (synopsis "Parsing for URDF files")
+      (description "Parse URDF files.")
       (license license:bsd-3))))
