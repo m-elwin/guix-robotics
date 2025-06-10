@@ -146,8 +146,7 @@ actionlib, dynamic reconfigure, nodelets, and pluginlib.")
                                ros-noetic-robot-state-publisher
                                ros-noetic-urdf
                                ros-noetic-urdf-parser-plugin
-                                        ;                              ros-noetic-xacro
-                               ))
+                               ros-noetic-xacro))
       (arguments
        (list
         #:package-dir "robot"))

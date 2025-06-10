@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
+  #:use-module (guix gexp)
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
@@ -354,15 +355,26 @@ or C++ source code for errors and standards compliance.")
                (url "https://github.com/ros/xacro")
                (commit commit)))
          (sha256
-          (base32 "0vqyyblawdf0qw4r6ccq5fsi2hm19ik6bvyy8s86qbq5q1pc0ycr"))
+          (base32 "0jfzadf46qi88ms3h5d7xwvravnraajbrn8qyfl690crjz7f245x"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-rostest))
+      (native-inputs (list ros-noetic-rostest ros-noetic-roslint))
       (propagated-inputs (list ros-noetic-roslaunch))
+      (arguments
+       (list
+        #:phases
+        #~(modify-phases %standard-phases
+            (add-after 'unpack 'patch-tests
+              (lambda _
+                ;; specify the full path to xacro so Popen can find it
+                (substitute* "test/test_xacro.py"
+                  (("call\\(\\['xacro'")
+                   (string-append "call(['"
+                                  (getcwd) "/../build/devel/bin/xacro'"))))))))
       (home-page "https://wiki.ros.org/xacro")
       (synopsis "XML macro language")
       (description
        "XML macro language. With xacro, you can construct shorter
 and more readable XML files by using macros that expand to larger
-XML expressions. Useful for creating URDFs.")
+XML expressions.  Useful for creating URDFs.")
       (license license:bsd-3))))
