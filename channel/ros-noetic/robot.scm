@@ -195,13 +195,22 @@ which dynamically loads filters based on runtime parameters.")
           (base32 "0kwmg01h82qxg0l4sz31llihi94iaivgzmgpgs7rypli26931smj"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (arguments (list #:package-dir "urdf"))
-      (native-inputs (list ros-noetic-urdf-parser-plugin))
-      (propagated-inputs (list urdfdom urdfdom-headers ros-noetic-rosconsole-bridge
-                               ros-noetic-roscpp ros-noetic-pluginlib tinyxml tinyxml2))
+      (arguments
+       (list
+        #:package-dir "urdf"))
+      (native-inputs (list ros-noetic-cmake-modules
+                           ros-noetic-urdf-parser-plugin ros-noetic-rostest))
+      (propagated-inputs (list urdfdom
+                               urdfdom-headers
+                               ros-noetic-rosconsole-bridge
+                               ros-noetic-roscpp
+                               ros-noetic-pluginlib
+                               tinyxml
+                               tinyxml2))
       (home-page "https://wiki.ros.org/urdf")
       (synopsis "C++ URDF parser")
-      (description "This package contains a C++ parser for the Unified Robot Description
+      (description
+       "This package contains a C++ parser for the Unified Robot Description
 Format (URDF), which is an XML format for representing a robot model.
 The code API of the parser has been through our review process and will remain
 backwards compatible in future releases.")
