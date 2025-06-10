@@ -20,6 +20,8 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
+  #:use-module (gnu packages check)
+  #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
@@ -150,7 +152,28 @@ which dynamically loads filters based on runtime parameters.")
        "GUI tool for setting and publishing joint state values for a URDF")
       (license license:bsd-3))))
 
-
+(define-public ros-noetic-urdfdom-py
+  (let ((commit "3bcb9051e3bc6ebb8bff0bf8dd2c2281522b05d9")
+        (revision "0"))
+    (package
+      (name "ros-noetic-urdfdom-py")
+      (version (git-version "0.4.6" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/urdf_parser_py")
+               (commit commit)))
+         (sha256
+          (base32 "19gr7im61c8nc0as4n5ipdqrvp49rf7kyz6ny87yi3iai2418kwa"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-mock))
+      (propagated-inputs (list ros-noetic-rospy python-pyyaml))
+      (home-page "https://wiki.ros.org/urdfdom_py")
+      (synopsis "Python URDF parser")
+      (description "Python URDF Parser")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-kdl-parser
   (let ((commit "74d4ee3bc6938de8ae40a700997baef06114ea1b")
