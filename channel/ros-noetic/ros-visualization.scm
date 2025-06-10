@@ -50,9 +50,9 @@
       (native-inputs (list ros-noetic-rosbuild))
       (propagated-inputs (list python-pyside-2 python-pyqt5-sip))
       (home-page "https://wiki.ros.org/python_qt_binding")
-      (synopsis
-       "Python bindings for Qt from either pyside or pyqt")
-      (description "This stack provides Python bindings for Qt.
+      (synopsis "Python bindings for Qt from either pyside or pyqt")
+      (description
+       "This stack provides Python bindings for Qt.
 There are two providers: pyside and pyqt.  PySide is released under
 the LGPL.  PyQt is released under the GPL.
 
