@@ -1,0 +1,45 @@
+* Reproducible Robotics Software
+The goal of this repository is to create [[https://reproducible-builds.org/docs/definition/][reproducible builds]] for robotics projects.
+The method is to use [[https://guix.gnu.org][Guix]] a declarative package manager focused on [[https://guix.gnu.org/en/blog/2024/adventures-on-the-quest-for-long-term-reproducible-deployment/][Reproducible software deployment]].
+
+The first test is a distribution of ROS Noetic, which went end-of-life in May 2025.
+- Currently all packages required for the [[https://www.ros.org/reps/rep-0142.html#robot-metapackage][robot metapackage]] are included.
+
+* Getting Started
+1. [[https://guix.gnu.org/manual/en/html_node/Installation.html][Install Guix]] (Note: for Ubuntu users: =sudo apt install guix=
+2. Add this repository as a [[https://guix.gnu.org/manual/en/html_node/Channels.html][guix channel]] (a supplemental source of package definitions)
+   #+NAME: ~/.config/guix/channels.scm
+   #+BEGIN_SRC scheme
+     (cons (channel
+            (name 'guix-robotics)
+            (url "https://github.com/m-elwin/guix-robotics")
+            (branch "main"))
+           %default-channels)
+   #+END_SRC
+3. Run =guix pull= to bring in the latest package definition.
+   This step can take a while, especially the first time, but it is worth it.
+4. You can now launch a [[https://guix.gnu.org/manual/en/html_node/Invoking-guix-shell.html][guix shell]] to run the ROS commands:
+   =guix shell --pure ros-noetic-robot=
+   - This brings in all =ros= packages in the channel.
+   - You can also specify additional packages in the guix distribution
+     (e.g., =coreutils= will let you use basic command line utilities)
+4. If you want to develop ROS packages the best way is to make it a guix package
+   - This eliminates the need for workspaces and catkin
+   - There are some tricks, but most normal ROS packages can be straightforward from the examples in the channel (see e.g., =ros-noetic-joint-state-publisher=).
+5. These [[https://www.futurile.net/resources/guix/][Guix Tutorials]] are a good starting point for getting started with Guix.
+
+* Further Possibilities
+There are many possibilities for how integrated you want the ROS packages to be with your system:
+1. You can install packages with =guix install=.
+   - They will then be available in your usual environment, but they might mix with your system and fail
+2. You can use a =guix shell= without the =--pure= to overlay packages in the shell on top of your environment
+   - Again, the mixing of paths can cause problems, particularly if you have another ROS distribution
+3. You can use =guix shell -C= to run everything in a container: this is a higher-level of isolation
+   - By default, the current directory is mounted in the container
+   - Use =--networking= to provide network access
+   - Use =--emulate-fhs= to make the filesystem inside the container conform to the FHS standard.
+
+* Resources
+1. [[https://guix.gnu.org/manual/][Guix Manual]]
+2. [[https://guix.gnu.org/cookbook/en/guix-cookbook.html][Guix Cookbook]]
+3. [[https://www.futurile.net/resources/guix/][Guix Tutorials]]
