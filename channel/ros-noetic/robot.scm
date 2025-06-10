@@ -24,6 +24,7 @@
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic ros-visualization)
   #:use-module (guix build-system catkin))
 
 ;;; Commentary:
@@ -89,4 +90,62 @@ and cartesian trajectories.")
 processing data as a sequence of filters.  This package contains a base
 class upon which to build specific implementations as well as an interface
 which dynamically loads filters based on runtime parameters.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-joint-state-publisher
+  (let ((commit "ccb4446b9092e7f6d7956d7058d17745df7f8475")
+        (revision "0"))
+    (package
+      (name "ros-noetic-joint-state-publisher")
+      (version (git-version "1.15.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/joint_state_publisher")
+               (commit commit)))
+         (sha256
+          (base32 "0i1ilshhxk5mvmzl9f4nrvf2cirxy52j1snv10d80ypgq91lh91m"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-rospy ros-noetic-sensor-msgs))
+      (arguments
+       (list
+        #:package-dir "joint_state_publisher"))
+      (home-page "https://wiki.ros.org/joint_state_publisher")
+      (synopsis
+       "Set and publish joint state values for a given URDF")
+      (description
+       "A tool for setting and publishing joint state values for a URDF")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-joint-state-publisher-gui
+  (let ((commit "ccb4446b9092e7f6d7956d7058d17745df7f8475")
+        (revision "0"))
+    (package
+      (name "ros-noetic-joint-state-publisher-gui")
+      (version (git-version "1.15.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/joint_state_publisher")
+               (commit commit)))
+         (sha256
+          (base32 "0i1ilshhxk5mvmzl9f4nrvf2cirxy52j1snv10d80ypgq91lh91m"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-rospy
+                               ros-noetic-joint-state-publisher
+                               ros-noetic-python-qt-binding))
+      (arguments
+       (list
+        #:package-dir "joint_state_publisher_gui"))
+      (home-page "https://wiki.ros.org/joint_state_publisher_gui")
+      (synopsis
+       "GUI tool for setting and publishing joint state values for a given URDF")
+      (description
+       "GUI tool for setting and publishing joint state values for a URDF")
       (license license:bsd-3))))
