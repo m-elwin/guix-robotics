@@ -22,9 +22,9 @@
   #:use-module (guix build utils)
   #:use-module (ice-9 match)
   #:use-module (ice-9 rdelim)
-  #:use-module (ice-9 regex)
   #:use-module (srfi srfi-1)
   #:use-module (srfi srfi-26)
+  #:use-module (sxml simple)
   #:export (%standard-phases))
 
 ;; Commentary:
@@ -34,22 +34,33 @@
 ;;
 ;; Code:
 
+(define (ros-package-name builddir)
+  "Get the ROS package name from the cmake cache, given the build directory"
+  (with-input-from-file (string-append builddir "/CMakeCache.txt")
+    (lambda ()
+      (let loop ()
+        (let ((line (read-line)))
+          (cond
+           ((eof-object? line) #f) ; end of file
+           ((string-prefix? "CMAKE_PROJECT_NAME" line) ; line has the project
+            (substring line (+ (string-index line #\=) 1))) ;get teh part after the =
+           (else (loop))))))))
 
 ;;; Modified from guix/build/python-build-system wrap
 ;;; Changed to wrap python executables in /lib because
-;;; ROS installs python executables into /lib
-(define* (wrap-lib-bin #:key inputs outputs #:allow-other-keys)
+;;; ROS installs python executables into /lib/packagename
+(define* (wrap-lib-bin #:key source inputs outputs #:allow-other-keys)
   (define (list-of-files dir)
     (find-files dir (lambda (file stat)
                       (and (eq? 'regular (stat:type stat))
                            (not (wrapped-program? file))))))
-
   (define bindirs
     (append-map (match-lambda
                   ((_ . dir)
                    (list (string-append dir "/bin")
                          (string-append dir "/sbin")
-                         (string-append dir "/lib"))))
+                         (string-append dir "/lib/" (ros-package-name
+                                                     (getcwd))))))
                 outputs))
 
   ;; Do not require "bash" to be present in the package inputs
