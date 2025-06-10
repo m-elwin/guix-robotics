@@ -143,9 +143,9 @@ actionlib, dynamic reconfigure, nodelets, and pluginlib.")
                                ros-noetic-geometry
                                ros-noetic-joint-state-publisher
                                ros-noetic-kdl-parser
-;                              ros-noetic-robot-state-publisher
-                              ros-noetic-urdf
-                              ros-noetic-urdf-parser-plugin
+                               ros-noetic-robot-state-publisher
+                               ros-noetic-urdf
+                               ros-noetic-urdf-parser-plugin
                                         ;                              ros-noetic-xacro
                                ))
       (arguments

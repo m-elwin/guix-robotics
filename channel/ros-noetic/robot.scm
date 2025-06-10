@@ -26,9 +26,11 @@
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic ros-visualization)
   #:use-module (ros-noetic system))
 
@@ -273,4 +275,38 @@ backwards compatible in future releases.")
 to represent the kinematic and dynamic parameters of a robot
 mechanism.  kdl_parser provides tools to construct a KDL
 tree from an XML robot representation in URDF.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-robot-state-publisher
+  (let ((commit "85ed2140a0966f492a038d47f222f593047760c3")
+        (revision "0"))
+    (package
+      (name "ros-noetic-robot-state-publisher")
+      (version (git-version "1.15.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/robot_state_publisher")
+               (commit commit)))
+         (sha256
+          (base32 "0vqyyblawdf0qw4r6ccq5fsi2hm19ik6bvyy8s86qbq5q1pc0ycr"))
+         (file-name (git-file-name name version))))
+      (native-inputs (list ros-noetic-rostest ros-noetic-rosbag))
+      (inputs (list ros-noetic-tf2-kdl ros-noetic-kdl-parser
+                    ros-noetic-rostime))
+      (propagated-inputs (list ros-noetic-roscpp ros-noetic-sensor-msgs
+                               ros-noetic-tf2-ros orocos-kdl))
+      (build-system catkin-build-system)
+      (home-page "https://wiki.ros.org/robot_state_publisher")
+      (synopsis "Publish the state of a robot to tf2")
+      (description
+       "Allows you to publish the state of a robot to
+tf2.  Once the state gets published, it is available to all
+components in the system that also use tf2.  The package takes the
+joint angles of the robot as input and publishes the 3D poses
+of the robot links, using a kinematic tree model of the robot.
+The package can both be used as a library and as a ROS node.
+This package has been well tested and the code is stable.
+No major changes are planned in the near future.")
       (license license:bsd-3))))
