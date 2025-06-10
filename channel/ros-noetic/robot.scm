@@ -22,6 +22,8 @@
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
   #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages xml)
+  #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
@@ -152,6 +154,59 @@ which dynamically loads filters based on runtime parameters.")
        "GUI tool for setting and publishing joint state values for a URDF")
       (license license:bsd-3))))
 
+(define-public ros-noetic-urdf-parser-plugin
+  (let ((commit "b3fa398ae267b577b33f5d8bd04694fd3a068d98")
+        (revision "0"))
+    (package
+      (name "ros-noetic-urdf-parser-plugin")
+      (version (git-version "1.13.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/urdf")
+               (commit commit)))
+         (sha256
+          (base32 "0kwmg01h82qxg0l4sz31llihi94iaivgzmgpgs7rypli26931smj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "urdf_parser_plugin"))
+      (propagated-inputs (list urdfdom urdfdom-headers))
+      (home-page "https://wiki.ros.org/urdf_parser_plugin")
+      (synopsis "C++ base class for URDF parsers")
+      (description "A C++ base class for URDF parsers.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-urdf
+  (let ((commit "b3fa398ae267b577b33f5d8bd04694fd3a068d98")
+        (revision "0"))
+    (package
+      (name "ros-noetic-urdf")
+      (version (git-version "1.13.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/urdf")
+               (commit commit)))
+         (sha256
+          (base32 "0kwmg01h82qxg0l4sz31llihi94iaivgzmgpgs7rypli26931smj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments (list #:package-dir "urdf"))
+      (native-inputs (list ros-noetic-urdf-parser-plugin))
+      (propagated-inputs (list urdfdom urdfdom-headers ros-noetic-rosconsole-bridge
+                               ros-noetic-roscpp ros-noetic-pluginlib tinyxml tinyxml2))
+      (home-page "https://wiki.ros.org/urdf")
+      (synopsis "C++ URDF parser")
+      (description "This package contains a C++ parser for the Unified Robot Description
+Format (URDF), which is an XML format for representing a robot model.
+The code API of the parser has been through our review process and will remain
+backwards compatible in future releases.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-urdfdom-py
   (let ((commit "3bcb9051e3bc6ebb8bff0bf8dd2c2281522b05d9")
         (revision "0"))
@@ -174,7 +229,6 @@ which dynamically loads filters based on runtime parameters.")
       (synopsis "Python URDF parser")
       (description "Python URDF Parser")
       (license license:bsd-3))))
-
 (define-public ros-noetic-kdl-parser
   (let ((commit "74d4ee3bc6938de8ae40a700997baef06114ea1b")
         (revision "0"))
@@ -191,6 +245,9 @@ which dynamically loads filters based on runtime parameters.")
           (base32 "04wmbgkfig541xn2pvni9s0dy5fz5xff8c2zc7sw1yrvinca06pz"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cmake-modules ros-noetic-roscpp ros-noetic-rostest))
+      (inputs (list ros-noetic-rosconsole))
+      (propagated-inputs (list urdfdom-headers tinyxml tinyxml2 ros-noetic-urdf orocos-kdl))
       (arguments
        (list
         #:package-dir "kdl_parser"))

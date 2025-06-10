@@ -40,8 +40,7 @@
 ;;
 ;; "Bootstrap" dependencies needed to build ROS noetic from source
 ;; See https://wiki.ros.org/noetic/Installation/Source#Installing_bootstrap_dependencies <Accessed 5/23/2025>
-;; These are system dependencies that would depend on ROS dep and are essentially ROS-specific even if
-;; they were adopted and maintained as system dependencies on debian.
+;; These are system dependencies but maintained by ROS developers, and do need catkin.
 ;;
 ;; Code:
 
