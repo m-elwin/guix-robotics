@@ -17,6 +17,7 @@
 
 (define-module (ros-noetic robot)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
@@ -29,12 +30,14 @@
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-visualization)
-  #:use-module (guix build-system catkin))
+  #:use-module (ros-noetic system))
 
 ;;; Commentary:
 ;;;
 ;;;
 ;;; Packages that are part of the robot metapacakge
+;;; or their dependencies (including joint-state-publisher
+;;; and urdf related packages.
 ;;;
 ;;; Code:
 
@@ -238,6 +241,7 @@ backwards compatible in future releases.")
       (synopsis "Python URDF parser")
       (description "Python URDF Parser")
       (license license:bsd-3))))
+
 (define-public ros-noetic-kdl-parser
   (let ((commit "74d4ee3bc6938de8ae40a700997baef06114ea1b")
         (revision "0"))
@@ -254,16 +258,18 @@ backwards compatible in future releases.")
           (base32 "04wmbgkfig541xn2pvni9s0dy5fz5xff8c2zc7sw1yrvinca06pz"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-cmake-modules ros-noetic-roscpp ros-noetic-rostest))
+      (native-inputs (list ros-noetic-cmake-modules ros-noetic-roscpp
+                           ros-noetic-rostest))
       (inputs (list ros-noetic-rosconsole))
-      (propagated-inputs (list urdfdom-headers tinyxml tinyxml2 ros-noetic-urdf orocos-kdl))
+      (propagated-inputs (list urdfdom-headers tinyxml tinyxml2
+                               ros-noetic-urdf orocos-kdl))
       (arguments
        (list
         #:package-dir "kdl_parser"))
       (home-page "https://wiki.ros.org/kdl_parser")
-      (synopsis
-       "Construct a KDL tree from a URDF")
-      (description "The Kinematics and Dynamics Library (KDL) defines a tree structure
+      (synopsis "Construct a KDL tree from a URDF")
+      (description
+       "The Kinematics and Dynamics Library (KDL) defines a tree structure
 to represent the kinematic and dynamic parameters of a robot
 mechanism.  kdl_parser provides tools to construct a KDL
 tree from an XML robot representation in URDF.")
