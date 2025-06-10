@@ -137,7 +137,14 @@
                (commit commit)))
          (sha256
           (base32 "06z6fvkfifkjv58fkr9m0hfcjn279l056agclqgy4xmsvg3f8p0j"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(substitute* "cmake/pkg-genmsg.cmake.em"
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} ")))))
       (build-system catkin-build-system)
       (home-page "https://docs.ros.org/en/api/genmsg/html/")
       (synopsis
@@ -164,7 +171,14 @@ are required to be set in any particular way.")
                (commit commit)))
          (sha256
           (base32 "1nwia7j7390x8574cw1iz4w1phv8q67w3khykfphsssbbxly3v44"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(substitute* "cmake/gencpp-extras.cmake.em"
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} ")))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-genmsg))
       (home-page "https://wiki.ros.org/gencpp")
@@ -186,7 +200,14 @@ are required to be set in any particular way.")
                (commit commit)))
          (sha256
           (base32 "0hz6jy7f9wxn9m1ni4zawmiqk87zqc0hcf652prxnlm79xri0aj6"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(substitute* "cmake/geneus-extras.cmake.em"
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} ")))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-genmsg))
       (home-page "https://github.com/jsk-ros-pkg/geneus")
@@ -208,7 +229,14 @@ are required to be set in any particular way.")
                (commit commit)))
          (sha256
           (base32 "07qx0blkfx6n8i5c5mj1yzpi9y099npw4f0rzbs5p3gjpq2gh0m2"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(substitute* "cmake/genlisp-extras.cmake.em"
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} ")))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-genmsg))
       (home-page "https://github.com/ros/genlisp")
@@ -230,7 +258,19 @@ are required to be set in any particular way.")
                (commit commit)))
          (sha256
           (base32 "0ybiih22mmcbkdcpyv6b4yfnssmc5n8ksl74ghvkjpyr55h7k6v7"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(begin
+                     (substitute* "cmake/gennodejs-extras.cmake.em"
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} "))
+                     ;;; add a shebang. It will replace all #
+                     ;;; so will look ugly, but it gets the job done
+                     (substitute* "scripts/gen_nodejs.py"
+                       (("#") "#!/usr/bin/env python3 "))))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-genmsg))
       (home-page "https://github.com/ros/genlisp")
@@ -252,7 +292,15 @@ are required to be set in any particular way.")
                (commit commit)))
          (sha256
           (base32 "06a10p3kmy6m7mvkybj8pbl4pfrl9mm0wdgxbz67jr1disa1zj88"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(substitute* '("cmake/genpy-extras.cmake.em"
+                                  "CMakeLists.txt")
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} ")))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-pyyaml python-numpy ros-noetic-genmsg))
       (home-page "https://github.com/ros/genpy")
