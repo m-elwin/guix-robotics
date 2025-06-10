@@ -22,6 +22,7 @@
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
+  #:use-module (gnu packages cpp)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
@@ -292,12 +293,12 @@ tree from an XML robot representation in URDF.")
          (sha256
           (base32 "0vqyyblawdf0qw4r6ccq5fsi2hm19ik6bvyy8s86qbq5q1pc0ycr"))
          (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest ros-noetic-rosbag))
       (inputs (list ros-noetic-tf2-kdl ros-noetic-kdl-parser
                     ros-noetic-rostime))
       (propagated-inputs (list ros-noetic-roscpp ros-noetic-sensor-msgs
                                ros-noetic-tf2-ros orocos-kdl))
-      (build-system catkin-build-system)
       (home-page "https://wiki.ros.org/robot_state_publisher")
       (synopsis "Publish the state of a robot to tf2")
       (description
@@ -309,4 +310,59 @@ of the robot links, using a kinematic tree model of the robot.
 The package can both be used as a library and as a ROS node.
 This package has been well tested and the code is stable.
 No major changes are planned in the near future.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-roslint
+  (let ((commit "d6bb658e53cac6a911c9fef149d759553133dc8f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-roslint")
+      (version (git-version "1.14.20" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/roslint")
+               (commit commit)))
+         (sha256
+          (base32 "1g9hgw3772cr5sa0lg9fxy2slbjf8i9m7f75316nlm89bzz95yij"))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; cannot access /dev/stderr in build container, use
+         ;; an alternative shell method of redirecting to stderr
+         (snippet '(substitute* "scripts/test_wrapper"
+                     (("tee /dev/stderr")
+                      "tee >(cat >&2)")))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-pylint cpplint))
+      (home-page "https://wiki.ros.org/roslint")
+      (synopsis "CMake lint commands for ROS packages")
+      (description "The lint command performs static checking of Python
+or C++ source code for errors and standards compliance.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-xacro
+  (let ((commit "d3265d04a991b4ad8b645022f06326b6fa7b9df3")
+        (revision "0"))
+    (package
+      (name "ros-noetic-xacro")
+      (version (git-version "1.14.20" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/xacro")
+               (commit commit)))
+         (sha256
+          (base32 "0vqyyblawdf0qw4r6ccq5fsi2hm19ik6bvyy8s86qbq5q1pc0ycr"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-roslaunch))
+      (home-page "https://wiki.ros.org/xacro")
+      (synopsis "XML macro language")
+      (description
+       "XML macro language. With xacro, you can construct shorter
+and more readable XML files by using macros that expand to larger
+XML expressions. Useful for creating URDFs.")
       (license license:bsd-3))))
