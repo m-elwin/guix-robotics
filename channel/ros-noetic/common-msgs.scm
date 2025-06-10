@@ -44,7 +44,14 @@
                (commit commit)))
          (sha256
           (base32 "02wqhg70a2h3fsfkavcpvk5rvfy1nai2094irvpywmc0w4wd46sm"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Let the shebang do the work for the genmsg script since it is
+         ;; going to be wrapped for guix and the wrapper is shell not python
+         ;; (Let the shebang do the work #!)
+         (snippet '(substitute* "actionlib_msgs/cmake/actionlib_msgs-extras.cmake.em"
+                     (("COMMAND \\$\\{CATKIN_ENV} \\$\\{PYTHON_EXECUTABLE\\}")
+                      "COMMAND ${CATKIN_ENV} ")))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-message-generation ))
       (propagated-inputs (list ros-noetic-message-runtime
