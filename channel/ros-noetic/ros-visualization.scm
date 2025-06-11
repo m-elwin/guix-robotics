@@ -20,7 +20,10 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages xml)
+  #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-core)
   #:use-module (guix build-system catkin))
 
 ;;; Commentary:
@@ -63,4 +66,61 @@ For PyQt,this is called \"SIP\".
 Also provided is adapter code to make the user's Python code
 independent of which binding provider was actually used which makes
 it very easy to switch between these.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-qt-gui
+  (let ((commit "02e7378a17006961638f2ab01f58da1595bbd879")
+        (revision "0"))
+    (package
+      (name "ros-noetic-qt-gui")
+      (version (git-version "0.4.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/qt_gui_core")
+               (commit commit)))
+         (sha256
+          (base32 "07sml01pbyq23xjcq521jlh16q6vrzin097bc76aw9xs1ds50c96"))
+         (file-name (git-file-name name version))))
+    (build-system catkin-build-system)
+    (propagated-inputs (list python-rospkg))
+    (arguments (list
+                #:package-dir "qt_gui"))
+    (home-page "https://wiki.ros.org/qt_gui")
+    (synopsis "Infrastructure for integrated GUIs based on Qt")
+    (description "Extensible framework with Python and C++ plugins
+(implemented in separate packages) which can contribute arbitrary widgets.
+Requires PyQt or PySide bindings.")
+    (license license:bsd-3))))
+
+(define-public ros-noetic-qt-gui-cpp
+  (let ((commit "02e7378a17006961638f2ab01f58da1595bbd879")
+        (revision "0"))
+    (package
+      (name "ros-noetic-qt-gui-cpp")
+      (version (git-version "0.4.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/qt_gui_core")
+               (commit commit)))
+         (sha256
+          (base32 "07sml01pbyq23xjcq521jlh16q6vrzin097bc76aw9xs1ds50c96"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cmake-modules
+                           ros-noetic-python-qt-binding))
+      (propagated-inputs (list ros-noetic-pluginlib
+                               ros-noetic-qt-gui
+                               qtbase-5
+                               tinyxml))
+      (arguments (list
+                  #:package-dir "qt_gui_cpp"))
+      (home-page "https://wiki.ros.org/qt_gui_cpp")
+      (synopsis "C++ bindings for qt_gui")
+      (description "Creates bindings for every
+generator available. At least one specific binding must be available
+in order to use C++ plugins.")
       (license license:bsd-3))))
