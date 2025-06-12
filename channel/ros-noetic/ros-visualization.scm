@@ -110,10 +110,10 @@ Requires PyQt or PySide bindings.")
           (base32 "07sml01pbyq23xjcq521jlh16q6vrzin097bc76aw9xs1ds50c96"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-cmake-modules
-                           ros-noetic-python-qt-binding))
+      (native-inputs (list ros-noetic-cmake-modules))
       (propagated-inputs (list ros-noetic-pluginlib
                                ros-noetic-qt-gui
+                               ros-noetic-python-qt-binding
                                qtbase-5
                                tinyxml))
       (arguments (list
@@ -123,4 +123,29 @@ Requires PyQt or PySide bindings.")
       (description "Creates bindings for every
 generator available. At least one specific binding must be available
 in order to use C++ plugins.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-qt-gui-py-common
+  (let ((commit "02e7378a17006961638f2ab01f58da1595bbd879")
+        (revision "0"))
+    (package
+      (name "ros-noetic-qt-gui-py-common")
+      (version (git-version "0.4.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/qt_gui_core")
+               (commit commit)))
+         (sha256
+          (base32 "07sml01pbyq23xjcq521jlh16q6vrzin097bc76aw9xs1ds50c96"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-rospkg))
+      (arguments
+       (list
+        #:package-dir "qt_gui_py_common"))
+      (home-page "https://wiki.ros.org/qt_gui_py_common")
+      (synopsis "Common functionality for GUI plugins written in Python")
+      (description "Common functionality for GUI plugins written in Python.")
       (license license:bsd-3))))
