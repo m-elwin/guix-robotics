@@ -88,7 +88,9 @@ but for applications that are not necessarily using ROS")
           (base32 "0m5w3fq8gwh2kb08yvdy37sxrc8s490vab5r66sv6h2x9y20lxcl"))
          (file-name (git-file-name name version))))
       (build-system pyproject-build-system)
-      (propagated-inputs (list python-pyparsing python-dateutil
+      ;; pydot 1.4.2 depends on pyparsing 2.4.7 so use this so they don't conflict
+      (propagated-inputs (list python-pyparsing-2.4.7
+                               python-dateutil
                                python-setuptools))
       (native-inputs (list python-docutils
                            python-flake8

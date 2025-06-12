@@ -162,7 +162,7 @@ It may not contain any GUI dependencies.")
   (let ((commit "482da3e297f47a2e06f54d54c16de7e3cb7ec0f4")
         (revision "0"))
     (package
-      (name "ros-noetic-robot")
+      (name "ros-noetic-viz")
       (version (git-version "1.5.0" revision commit))
       (source
        (origin
