@@ -149,3 +149,30 @@ in order to use C++ plugins.")
       (synopsis "Common functionality for GUI plugins written in Python")
       (description "Common functionality for GUI plugins written in Python.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-qt-gui-app
+  (let ((commit "02e7378a17006961638f2ab01f58da1595bbd879")
+        (revision "0"))
+    (package
+      (name "ros-noetic-qt-gui-app")
+      (version (git-version "0.4.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/qt_gui_core")
+               (commit commit)))
+         (sha256
+          (base32 "07sml01pbyq23xjcq521jlh16q6vrzin097bc76aw9xs1ds50c96"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-qt-gui))
+      (arguments
+       (list
+        #:package-dir "qt_gui_app"))
+      (home-page "https://wiki.ros.org/qt_gui_app")
+      (synopsis
+       "Provides the main() to start an interface providided by qt_gui")
+      (description
+       "Provides the main() to start an interface provided by qt_gui.")
+      (license license:bsd-3))))
