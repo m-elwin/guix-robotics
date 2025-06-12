@@ -19,6 +19,7 @@
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages graphviz)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
@@ -175,4 +176,30 @@ in order to use C++ plugins.")
        "Provides the main() to start an interface providided by qt_gui")
       (description
        "Provides the main() to start an interface provided by qt_gui.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-qt-dotgraph
+  (let ((commit "02e7378a17006961638f2ab01f58da1595bbd879")
+        (revision "0"))
+    (package
+      (name "ros-noetic-qt-dotgraph")
+      (version (git-version "0.4.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/qt_gui_core")
+               (commit commit)))
+         (sha256
+          (base32 "07sml01pbyq23xjcq521jlh16q6vrzin097bc76aw9xs1ds50c96"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-pygraphviz))
+      (propagated-inputs (list python-pydot))
+      (arguments
+       (list
+        #:package-dir "qt_dotgraph"))
+      (home-page "https://wiki.ros.org/qt_dotgraph")
+      (synopsis "Helpers to work with dot graphs")
+      (description "Helpers to work with dot graphs.")
       (license license:bsd-3))))
