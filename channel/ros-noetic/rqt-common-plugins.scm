@@ -137,15 +137,15 @@ not on the ROS core your rqt instance connects to.")
                (url "https://github.com/ros-visualization/rqt_action")
                (commit commit)))
          (sha256
-          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+          (base32 "12hv0ky5c5wd0ra2wkbwifhjhn1y8nc5m84x8hi6kcrzvdslwmdb"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-rospy
-                               ros-noetic-rqt-msg
+      (propagated-inputs (list ros-noetic-rospy ros-noetic-rqt-msg
                                ros-noetic-rqt-py-common))
       (home-page "https://wiki.ros.org/rqt_action")
-      (synopsis "Introspect all avalible ROS action (from actionlib types).")
-      (description "Introspect all avalible ROS action (from actionlib types).
+      (synopsis "Introspect all avalible ROS action (from actionlib types)")
+      (description
+       "Introspect all avalible ROS action (from actionlib types).
 By using rqt_msg, the output format is unifited with it and rqt_srv.
 Note that the actions shown by this plugin are the ones that are stored
 on your machine, not on the ROS core your rqt instance connects to.")
@@ -168,7 +168,7 @@ on your machine, not on the ROS core your rqt instance connects to.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list
-;                          ros-noetic-rqt-action
+                          ros-noetic-rqt-action
 ;                          ros-noetic-rqt-bag
 ;                          ros-noetic-rqt-bag-plugins
                           ros-noetic-rqt-console
