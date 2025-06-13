@@ -104,7 +104,7 @@
                (url "https://github.com/ros-visualization/rqt_msg")
                (commit commit)))
          (sha256
-          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+          (base32 "1zdjblby97ix4p5hri5wxh74s511xcmhx1ypn09z6nsa40gpf9jl"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-rospkg
@@ -118,7 +118,8 @@
                                ros-noetic-rqt-console))
       (home-page "https://wiki.ros.org/rqt_msg")
       (synopsis "Python GUI plugin for introspecting ROS message types")
-      (description "Python GUI plugin for introspecting ROS message types.
+      (description
+       "Python GUI plugin for introspecting ROS message types.
 Note that the msgs available through this plugin are the ones stored on your machine,
 not on the ROS core your rqt instance connects to.")
       (license license:bsd-3))))
@@ -176,7 +177,7 @@ on your machine, not on the ROS core your rqt instance connects to.")
 ;                          ros-noetic-rqt-image-view
 ;                          ros-noetic-rqt-launch
                           ros-noetic-rqt-logger-level
-;                          ros-noetic-rqt-msg
+                          ros-noetic-rqt-msg
 ;                          ros-noetic-rqt-plot
 ;                          ros-noetic-rqt-publisher
 ;                          ros-noetic-rqt-py-common
