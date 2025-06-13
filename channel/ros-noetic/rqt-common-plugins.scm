@@ -75,7 +75,7 @@
                (url "https://github.com/ros-visualization/rqt_console")
                (commit commit)))
          (sha256
-          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+          (base32 "1kv2xjnigd8m227anpp8s5vf5426b9x6hy0wvkkd2rg43psh1ncf"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list python-rospkg
@@ -85,8 +85,7 @@
                                ros-noetic-rqt-gui
                                ros-noetic-rqt-gui-py
                                ros-noetic-rqt-logger-level
-                               ros-noetic-rqt-py-common
-                               ros-noetic-rqt-console))
+                               ros-noetic-rqt-py-common))
       (home-page "https://wiki.ros.org/rqt_console")
       (synopsis "GUI plugin for filtering and displaying ROS messages")
       (description "GUI plugin for filtering and displaying ROS messages")
@@ -171,12 +170,12 @@ on your machine, not on the ROS core your rqt instance connects to.")
 ;                          ros-noetic-rqt-action
 ;                          ros-noetic-rqt-bag
 ;                          ros-noetic-rqt-bag-plugins
-;                          ros-noetic-rqt-console
+                          ros-noetic-rqt-console
 ;                          ros-noetic-rqt-dep
 ;                          ros-noetic-rqt-graph
 ;                          ros-noetic-rqt-image-view
 ;                          ros-noetic-rqt-launch
-;                          ros-noetic-rqt-logger-level
+                          ros-noetic-rqt-logger-level
 ;                          ros-noetic-rqt-msg
 ;                          ros-noetic-rqt-plot
 ;                          ros-noetic-rqt-publisher
