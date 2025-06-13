@@ -56,10 +56,8 @@
           (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-qt-gui
-                               ros-noetic-rospy
-                               python-rospkg
-                               ros-noetic-python-qt-binding))
+      (propagated-inputs (list ros-noetic-qt-gui ros-noetic-rospy
+                               python-rospkg ros-noetic-python-qt-binding))
       (arguments
        (list
         #:package-dir "rqt_gui"))
@@ -84,10 +82,8 @@
           (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-qt-gui
-                               ros-noetic-qt-gui-cpp
-                               ros-noetic-roscpp
-                               ros-noetic-nodelet))
+      (propagated-inputs (list ros-noetic-qt-gui ros-noetic-qt-gui-cpp
+                               ros-noetic-roscpp ros-noetic-nodelet))
       (arguments
        (list
         #:package-dir "rqt_gui_cpp"))
@@ -124,13 +120,73 @@
       (arguments
        (list
         #:package-dir "rqt_py_common"))
-      (home-page "https://wiki.ros.org/rqt_qt_py_common")
+      (home-page "https://wiki.ros.org/rqt_py_common")
       (synopsis "Common functionality for rqt plugins written in Python")
-      (description "Common functionality for rqt plugins written in Python.
+      (description
+       "Common functionality for rqt plugins written in Python.
 Despite no plugin is provided, this package is part of the rqt_common_plugins
 repository to keep refactoring generic functionality from these common plugins
 into this package as easy as possible.
 
 Functionality included in this package should cover generic ROS concepts and
 should not introduce any special dependencies beside ros_base.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-gui-py
+  (let ((commit "c532cc7fe06318f0277caedc4be866dada63160f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-gui-py")
+      (version (git-version "0.5.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt")
+               (commit commit)))
+         (sha256
+          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-qt-gui ros-noetic-rqt-gui
+                               ros-noetic-rospy))
+      (arguments
+       (list
+        #:package-dir "rqt_gui_py"))
+      (home-page "https://wiki.ros.org/rqt_gui_py")
+      (synopsis "Enables GUI plugins to use the ROS Python client library")
+      (description "Enables GUI plugins to use the ROS Python client library.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt
+  (let ((commit "c532cc7fe06318f0277caedc4be866dada63160f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt")
+      (version (git-version "0.5.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt")
+               (commit commit)))
+         (sha256
+          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-rqt-gui ros-noetic-rqt-gui-cpp
+                               ros-noetic-rqt-gui-py))
+      (arguments
+       (list
+        #:package-dir "rqt"))
+      (home-page "https://wiki.ros.org/rqt")
+      (synopsis "Qt-based framework for GUI development with ROS")
+      (description
+       "Qt-based framework for GUI development with ROS.
+It consists of three parts:
+rqt - provides a widget for rqt_gui which enables multiple rqt widgets to
+dock in a single window.
+rqt_common_plugins -
+ ROS backend tools that can be used at robot runtime.
+rqt_robot_plugins - Tools for interacting with robots during runtime.")
       (license license:bsd-3))))
