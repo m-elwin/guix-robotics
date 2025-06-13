@@ -27,6 +27,7 @@
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic nodelet-core)
   #:use-module (ros-noetic qt-gui-core)
   #:use-module (ros-noetic ros-visualization))
 
@@ -64,4 +65,32 @@
       (home-page "https://wiki.ros.org/rqt_gui")
       (synopsis "Main() to start an instance of ROS qt interface")
       (description "Main() to start an instance of ROS qt interface.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-gui-cpp
+  (let ((commit "c532cc7fe06318f0277caedc4be866dada63160f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-gui-cpp")
+      (version (git-version "0.5.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt")
+               (commit commit)))
+         (sha256
+          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-qt-gui
+                               ros-noetic-qt-gui-cpp
+                               ros-noetic-roscpp
+                               ros-noetic-nodelet))
+      (arguments
+       (list
+        #:package-dir "rqt_gui_cpp"))
+      (home-page "https://wiki.ros.org/rqt_gui_cpp")
+      (synopsis "Enables GUI plugins to use the ROS C++ client library")
+      (description "Enables GUI plugins to use the ROS C++ client library.")
       (license license:bsd-3))))

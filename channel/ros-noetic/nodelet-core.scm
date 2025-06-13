@@ -56,9 +56,9 @@
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules
                            ros-noetic-message-generation))
-      (inputs (list `(,util-linux "lib") ros-noetic-bondcpp
-                    ros-noetic-pluginlib))
+      (inputs (list `(,util-linux "lib") ros-noetic-pluginlib))
       (propagated-inputs (list boost
+                               ros-noetic-bondcpp
                                ros-noetic-rosconsole
                                ros-noetic-roscpp
                                ros-noetic-std-msgs
