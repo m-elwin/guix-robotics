@@ -25,6 +25,7 @@
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic nodelet-core)
@@ -93,4 +94,43 @@
       (home-page "https://wiki.ros.org/rqt_gui_cpp")
       (synopsis "Enables GUI plugins to use the ROS C++ client library")
       (description "Enables GUI plugins to use the ROS C++ client library.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-py-common
+  (let ((commit "c532cc7fe06318f0277caedc4be866dada63160f")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-py-common")
+      (version (git-version "0.5.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt")
+               (commit commit)))
+         (sha256
+          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-genmsg ros-noetic-std-msgs))
+      (propagated-inputs (list ros-noetic-genpy
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui
+                               ros-noetic-roslib
+                               ros-noetic-rospy
+                               ros-noetic-rostopic
+                               ros-noetic-actionlib
+                               ros-noetic-rosbag))
+      (arguments
+       (list
+        #:package-dir "rqt_py_common"))
+      (home-page "https://wiki.ros.org/rqt_qt_py_common")
+      (synopsis "Common functionality for rqt plugins written in Python")
+      (description "Common functionality for rqt plugins written in Python.
+Despite no plugin is provided, this package is part of the rqt_common_plugins
+repository to keep refactoring generic functionality from these common plugins
+into this package as easy as possible.
+
+Functionality included in this package should cover generic ROS concepts and
+should not introduce any special dependencies beside ros_base.")
       (license license:bsd-3))))
