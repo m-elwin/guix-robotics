@@ -151,6 +151,39 @@ Note that the actions shown by this plugin are the ones that are stored
 on your machine, not on the ROS core your rqt instance connects to.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-bag
+  (let ((commit "7c2983a9e4ae9eb1d3fa9bdfa030dc83e18da749")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-bag")
+      (version (git-version "0.5.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_bag")
+               (commit commit)))
+         (sha256
+          (base32 "01awyz5ysjyh9vibgxhkql276faddz21nsg87cl59wylcps1bjxy"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-python-qt-binding
+                               python-rospkg
+                               ros-noetic-rosbag
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-roslib
+                               ros-noetic-rosnode
+                               ros-noetic-rospy
+                               ros-noetic-rqt
+                               ros-noetic-rqt-gui-py))
+      (arguments
+       (list
+        #:package-dir "rqt_bag"))
+      (home-page "https://wiki.ros.org/rqt_bag")
+      (synopsis "GUI plugin for displaying and replaying ROS bag files")
+      (description "GUI plugin for displaying and replaying ROS bag files.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
