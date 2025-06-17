@@ -20,8 +20,10 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages gtk)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic bootstrap)
+  #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic qt-gui-core)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
@@ -228,7 +230,7 @@ on your machine, not on the ROS core your rqt instance connects to.")
   (let ((commit "7c2983a9e4ae9eb1d3fa9bdfa030dc83e18da749")
         (revision "0"))
     (package
-      (name "ros-noetic-rqt-bag")
+      (name "ros-noetic-rqt-bag-plugins")
       (version (git-version "0.5.3" revision commit))
       (source
        (origin
@@ -240,8 +242,8 @@ on your machine, not on the ROS core your rqt instance connects to.")
           (base32 "01awyz5ysjyh9vibgxhkql276faddz21nsg87cl59wylcps1bjxy"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list python-cairo
-                               python-pil
+      (propagated-inputs (list python-pycairo
+                               python-pillow
                                ros-noetic-rosbag
                                ros-noetic-roslib
                                ros-noetic-rospy
