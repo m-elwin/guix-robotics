@@ -26,7 +26,8 @@
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-core)
-  #:use-module (ros-noetic ros-visualization))
+  #:use-module (ros-noetic ros-visualization)
+  #:use-module (ros-noetic system))
 
 ;;; Commentary:
 ;;;
@@ -162,7 +163,7 @@ in order to use C++ plugins.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-pygraphviz))
-      (propagated-inputs (list python-pydot))
+      (propagated-inputs (list python-pydot-noetic))
       (arguments
        (list
         #:package-dir "qt_dotgraph"))

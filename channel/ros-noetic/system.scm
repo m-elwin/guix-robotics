@@ -18,6 +18,8 @@
 (define-module (ros-noetic system)
   #:use-module ((guix licenses) #:prefix license:) ;orocos-kdl uses this
   #:use-module (guix build-system cmake)
+  #:use-module (guix build-system python) ; for pydot
+  #:use-module (guix build-system pyproject) ;for pydot
   #:use-module (guix download)
   #:use-module (guix utils)
   #:use-module (guix gexp) ;orocos-kdl -uses this
@@ -172,3 +174,21 @@ A serial robot arm is one type of kinematic chain.")
 A serial robot arm is one type of kinematic chain.
 These are the python bindings.")
       (license license:lgpl2.1+))))
+
+;; current pydot propagates pyparsing-2.4.7 which is an issue for other
+;; packages that need pyparsing. Use the version that is closest to ROS 1
+;; but that builds as close to the version in guix
+(define-public python-pydot-noetic
+  (package
+    (inherit python-pydot)
+    (version "2.0.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "pydot" version))
+       (sha256
+        (base32
+         "0d9j9wg7lqwyj5l9zw0d51pkm8nxcyz93mqwy9ia0gqj2pr6l930"))))
+    (propagated-inputs
+     (modify-inputs (package-propagated-inputs python-pydot)
+       (replace "python-pyparsing" python-pyparsing)))))
