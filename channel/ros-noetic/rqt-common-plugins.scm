@@ -187,6 +187,43 @@ on your machine, not on the ROS core your rqt instance connects to.")
       (description "GUI plugin for displaying and replaying ROS bag files.")
       (license license:bsd-3))))
 
+
+(define-public ros-noetic-rqt-plot
+  ;; TODO: The option to use QwtPlot is not currently available,
+  ;; as it would require adding more dependencies that are not in guix
+  ;; and the matplotlib backend is good enough for now
+  (let ((commit "da86985a4e60fa0987371b43b59a69ebb0bb6670")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-plot")
+      (version (git-version "0.4.16" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_plot")
+               (commit commit)))
+         (sha256
+          (base32 "0mmi5pa97hdni4sbarfdh50lspazqyfqk97w18sxrbnkcfd9icig"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-matplotlib
+                               python-numpy
+                               python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rosgraph
+                               ros-noetic-rostopic
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-py-common
+                               ros-noetic-std-msgs))
+      (home-page "https://wiki.ros.org/rqt_plot")
+      (synopsis "GUI plugin for visualizing numeric values in a 2D plot")
+      (description "GUI plugin for visualizing numeric values in a 2D plot,
+ using different plotting backends.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-bag-plugins
   (let ((commit "7c2983a9e4ae9eb1d3fa9bdfa030dc83e18da749")
         (revision "0"))
@@ -222,42 +259,6 @@ on your machine, not on the ROS core your rqt instance connects to.")
       (description "GUI plugin for displaying and replaying ROS bag files.")
       (license license:bsd-3))))
 
-(define-public ros-noetic-rqt-plot
-  ;; The option to use QwtPlot is not currently available,
-  ;; as it would require adding more dependencies that are not in guix
-  ;; and the matplotlib backend is good enough for now
-  (let ((commit "da86985a4e60fa0987371b43b59a69ebb0bb6670")
-        (revision "0"))
-    (package
-      (name "ros-noetic-rqt-plot")
-      (version (git-version "0.4.16" revision commit))
-      (source
-       (origin
-         (method git-fetch)
-         (uri (git-reference
-               (url "https://github.com/ros-visualization/rqt_plot")
-               (commit commit)))
-         (sha256
-          (base32 "0mmi5pa97hdni4sbarfdh50lspazqyfqk97w18sxrbnkcfd9icig"))
-         (file-name (git-file-name name version))))
-      (build-system catkin-build-system)
-      (propagated-inputs (list python-matplotlib
-                               python-numpy
-                               python-rospkg
-                               ros-noetic-python-qt-binding
-                               ros-noetic-qt-gui-py-common
-                               ros-noetic-rosgraph
-                               ros-noetic-rostopic
-                               ros-noetic-rqt-gui
-                               ros-noetic-rqt-gui-py
-                               ros-noetic-rqt-py-common
-                               ros-noetic-std-msgs))
-      (home-page "https://wiki.ros.org/rqt_plot")
-      (synopsis "GUI plugin for visualizing numeric values in a 2D plot")
-      (description "GUI plugin for visualizing numeric values in a 2D plot,
- using different plotting backends.")
-      (license license:bsd-3))))
-
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -276,8 +277,8 @@ on your machine, not on the ROS core your rqt instance connects to.")
       (build-system catkin-build-system)
       (propagated-inputs (list
                           ros-noetic-rqt-action
-;                          ros-noetic-rqt-bag
-;                          ros-noetic-rqt-bag-plugins
+                          ros-noetic-rqt-bag
+                          ros-noetic-rqt-bag-plugins
                           ros-noetic-rqt-console
 ;                          ros-noetic-rqt-dep
 ;                          ros-noetic-rqt-graph
@@ -285,7 +286,7 @@ on your machine, not on the ROS core your rqt instance connects to.")
 ;                          ros-noetic-rqt-launch
                           ros-noetic-rqt-logger-level
                           ros-noetic-rqt-msg
-;                          ros-noetic-rqt-plot
+                          ros-noetic-rqt-plot
 ;                          ros-noetic-rqt-publisher
 ;                          ros-noetic-rqt-py-common
 ;                          ros-noetic-rqt-py-console

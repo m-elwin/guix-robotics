@@ -26,6 +26,8 @@
   #:use-module (gnu packages algebra) ; orocos-kdl uses this
   #:use-module (gnu packages check)
   #:use-module (gnu packages gcc)
+  #:use-module (gnu packages graphviz) ; for pydot-noetic
+  #:use-module (gnu packages python-build) ; for pydot-noetic
   #:use-module (gnu packages logging)
   #:use-module (gnu packages python) ;orocos-kdl uses this
   #:use-module (gnu packages python-xyz) ;orocos-kdl uses this
