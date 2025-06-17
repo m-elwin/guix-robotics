@@ -20,9 +20,12 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic bootstrap)
+  #:use-module (ros-noetic qt-gui-core)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-visualization)
   #:use-module (ros-noetic rqt))
 
@@ -182,6 +185,77 @@ on your machine, not on the ROS core your rqt instance connects to.")
       (home-page "https://wiki.ros.org/rqt_bag")
       (synopsis "GUI plugin for displaying and replaying ROS bag files")
       (description "GUI plugin for displaying and replaying ROS bag files.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-bag-plugins
+  (let ((commit "7c2983a9e4ae9eb1d3fa9bdfa030dc83e18da749")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-bag")
+      (version (git-version "0.5.3" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_bag")
+               (commit commit)))
+         (sha256
+          (base32 "01awyz5ysjyh9vibgxhkql276faddz21nsg87cl59wylcps1bjxy"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-cairo
+                               python-pil
+                               ros-noetic-rosbag
+                               ros-noetic-roslib
+                               ros-noetic-rospy
+                               ros-noetic-rqt-bag
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-plot
+                               ros-noetic-sensor-msgs
+                               ros-noetic-std-msgs))
+      (arguments
+       (list
+        #:package-dir "rqt_bag"))
+      (home-page "https://wiki.ros.org/rqt_bag")
+      (synopsis "GUI plugin for displaying and replaying ROS bag files")
+      (description "GUI plugin for displaying and replaying ROS bag files.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-plot
+  ;; The option to use QwtPlot is not currently available,
+  ;; as it would require adding more dependencies that are not in guix
+  ;; and the matplotlib backend is good enough for now
+  (let ((commit "da86985a4e60fa0987371b43b59a69ebb0bb6670")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-plot")
+      (version (git-version "0.4.16" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_plot")
+               (commit commit)))
+         (sha256
+          (base32 "0mmi5pa97hdni4sbarfdh50lspazqyfqk97w18sxrbnkcfd9icig"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-matplotlib
+                               python-numpy
+                               python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rosgraph
+                               ros-noetic-rostopic
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-py-common
+                               ros-noetic-std-msgs))
+      (home-page "https://wiki.ros.org/rqt_plot")
+      (synopsis "GUI plugin for visualizing numeric values in a 2D plot")
+      (description "GUI plugin for visualizing numeric values in a 2D plot,
+ using different plotting backends.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-common-plugins

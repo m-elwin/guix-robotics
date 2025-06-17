@@ -1,5 +1,6 @@
-* Packaging Currenly
-- [-]  Robotics metapackage
+* Packaging Currently
+- [ ]  rqt-common-plugins
+
 * Additional Test Packages
 There are some ROS packages that only contain tests.
 Listing them here for eventual inclusion as having them will increase robustness
@@ -15,7 +16,8 @@ Listing them here for eventual inclusion as having them will increase robustness
 - nodelet_core/test_nodelet_topic_tools
 - geometry2/test_tf2
 - diagnostics/test_diagnostic-aggregator
-* For README
+
+* To Add To README
 ** Discussion of inputs
 1. Native inputs: used only during build or test time.
    - ROS <test_depend> only is a native-input
@@ -79,3 +81,7 @@ Listing them here for eventual inclusion as having them will increase robustness
    - There are however, advantages to not needing to maintain a separate older python version.
    - So long as the patches required are limited and straightforward, I favor patching to the guix version of python
 5. Add more packages.
+
+* Additional Features
+- rqt_plot only has the option to use the matplotlib backend.
+  Could add support for other backends
