@@ -347,7 +347,6 @@ achieve graph representation can depend upon this package.")
       (propagated-inputs (list ros-noetic-cv-bridge
                                ros-noetic-geometry-msgs
                                ros-noetic-image-transport
-                               ros-noetic-
                                ros-noetic-python-qt-binding
                                ros-noetic-qt-dotgraph
                                ros-noetic-qt-gui
@@ -355,9 +354,10 @@ achieve graph representation can depend upon this package.")
                                ros-noetic-rqt-graph
                                ros-noetic-rqt-gui-py))
       (home-page "https://wiki.ros.org/rqt_dep")
-      (synopsis "GUI plugin for visualizing the ROS dependency graph")
-      (description "GUI plugin for visualizing the ROS dependency graph")
+      (synopsis "GUI plugin for displaying images using image transport")
+      (description "GUI plugin for displaying images using image transport.")
       (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
