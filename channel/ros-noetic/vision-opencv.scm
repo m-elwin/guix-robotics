@@ -87,3 +87,29 @@
       (synopsis "Convert between ROS Image messages and OpenCV images")
       (description "Convert between ROS Image messages and OpenCV images.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-vision-opencv
+  (let ((commit "08b012c038e575d7fe1d538f11235a994159dc93")
+        (revision "0"))
+    (package
+      (name "ros-noetic-vision-opencv")
+      (version (git-version "1.16.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-perception/vision_opencv")
+               (commit commit)))
+         (sha256
+          (base32 "037a4ms8qkb9fnymgspp4agiikkfxj1h6qlzcsmp78dyvkx3kdfk"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "vision_opencv"))
+      (propagated-inputs (list ros-noetic-cv-bridge ros-noetic-image-geometry))
+      (home-page "https://wiki.ros.org/python_qt_binding")
+      (synopsis "Interface ROS with OpenCV")
+      (description "Interface ROS with OpenCV, a library of
+programming functions for real time computer vision.")
+      (license license:bsd-3))))
