@@ -16,6 +16,7 @@ Listing them here for eventual inclusion as having them will increase robustness
 - nodelet_core/test_nodelet_topic_tools
 - geometry2/test_tf2
 - diagnostics/test_diagnostic-aggregator
+- vision_opencv/opencv_tests
 
 * To Add To README
 ** Discussion of inputs

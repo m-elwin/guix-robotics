@@ -18,8 +18,9 @@
 (define-module (ros-noetic rqt-common-plugins)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix build-system catkin)
-  #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (guix packages)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic bootstrap)
@@ -261,6 +262,102 @@ on your machine, not on the ROS core your rqt instance connects to.")
       (description "GUI plugin for displaying and replaying ROS bag files.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-graph
+  (let ((commit "f963f0fe020e254139aaf9ccbcd8638e0437aa49")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-graph")
+      (version (git-version "0.4.16" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_graph")
+               (commit commit)))
+         (sha256
+          (base32 "0mnapkwrww2d97p33yhx32z5nmkhwc3pq5yw0cwdfj6kbc3gah0w"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-dotgraph
+                               ros-noetic-rosgraph
+                               ros-noetic-rosgraph-msgs
+                               ros-noetic-roslib
+                               ros-noetic-rosnode
+                               ros-noetic-rospy
+                               ros-noetic-rosservice
+                               ros-noetic-rostopic
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_dep")
+      (synopsis "GUI plugin for visualizing the ROS computation graph")
+      (description
+       "GUI plguin for visualizing the ROS computation graph.
+Its components are made generic so that other packages where you want to
+achieve graph representation can depend upon this package.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-dep
+  (let ((commit "b095ffa3777764ff6d15456e874ad69ee6472e6c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-dep")
+      (version (git-version "0.4.14" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_dep")
+               (commit commit)))
+         (sha256
+          (base32 "01iv89djkn4kiw245achx83nkqvrvkm2bsxbrlhqfynyvsyazj42"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-mock))
+      (propagated-inputs (list python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-dotgraph
+                               ros-noetic-qt-gui
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rqt-graph
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_dep")
+      (synopsis "GUI plugin for visualizing the ROS dependency graph")
+      (description "GUI plugin for visualizing the ROS dependency graph")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-image-view
+  (let ((commit "ee9e0f08cbefa536b00d87a3fc9a9abc7a94a531")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-dep")
+      (version (git-version "0.4.19" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_image_view")
+               (commit commit)))
+         (sha256
+          (base32 "01iv89djkn4kiw245achx83nkqvrvkm2bsxbrlhqfynyvsyazj42"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-mock))
+      (propagated-inputs (list ros-noetic-cv-bridge
+                               ros-noetic-geometry-msgs
+                               ros-noetic-image-transport
+                               ros-noetic-
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-dotgraph
+                               ros-noetic-qt-gui
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rqt-graph
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_dep")
+      (synopsis "GUI plugin for visualizing the ROS dependency graph")
+      (description "GUI plugin for visualizing the ROS dependency graph")
+      (license license:bsd-3))))
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -282,8 +379,8 @@ on your machine, not on the ROS core your rqt instance connects to.")
                           ros-noetic-rqt-bag
                           ros-noetic-rqt-bag-plugins
                           ros-noetic-rqt-console
-;                          ros-noetic-rqt-dep
-;                          ros-noetic-rqt-graph
+                          ros-noetic-rqt-dep
+                          ros-noetic-rqt-graph
 ;                          ros-noetic-rqt-image-view
 ;                          ros-noetic-rqt-launch
                           ros-noetic-rqt-logger-level
