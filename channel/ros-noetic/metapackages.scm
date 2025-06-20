@@ -176,7 +176,7 @@ It may not contain any GUI dependencies.")
       (build-system catkin-build-system)
       (propagated-inputs (list
                           ros-noetic-ros-base
-                                        ;ros-noetic-rqt-common-plugins
+                          ros-noetic-rqt-common-plugins
                                         ;ros-noetic-rqt-robot-plugins
                                         ;ros-noetic-rvz
                           ))

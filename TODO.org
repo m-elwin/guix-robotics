@@ -83,6 +83,7 @@ Listing them here for eventual inclusion as having them will increase robustness
    - So long as the patches required are limited and straightforward, I favor patching to the guix version of python
 5. Add more packages.
 
-* Additional Features
+* Additional Features and Known Limitations
 - rqt_plot only has the option to use the matplotlib backend.
   Could add support for other backends
+- rqt_web does not work because there is no pyqt5-webkit

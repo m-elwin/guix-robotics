@@ -618,6 +618,8 @@ and ROS messages.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-web
+  ;; TODO: This does not work, it needs a dependency on pyqt5-webkit, which are
+  ;; python bindings for the QtWebkit. A custom version of qt is likely needed to implement that
   (let ((commit "7b3442e70e7256cb1beaaae192ad6e7f3fdacd31")
         (revision "0"))
     (package
@@ -659,34 +661,34 @@ Users can show web content in Qt-based window by specifying its URL.")
                (url "https://github.com/ros-visualization/rqt_common_plugins")
                (commit commit)))
          (sha256
-          (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
+          (base32 "0bi82bbvpqdasnabxxahiks3rw1hblpchn5lrjjnk40i41f9r7jk"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list
-                          ros-noetic-rqt-action
-                          ros-noetic-rqt-bag
-                          ros-noetic-rqt-bag-plugins
-                          ros-noetic-rqt-console
-                          ros-noetic-rqt-dep
-                          ros-noetic-rqt-graph
-                          ros-noetic-rqt-image-view
-                          ros-noetic-rqt-launch
-                          ros-noetic-rqt-logger-level
-                          ros-noetic-rqt-msg
-                          ros-noetic-rqt-plot
-                          ros-noetic-rqt-publisher
-                          ros-noetic-rqt-py-common
-                          ros-noetic-rqt-py-console
-                          ros-noetic-rqt-reconfigure
-                          ros-noetic-rqt-service-caller
-                          ros-noetic-rqt-shell
-                          ros-noetic-rqt-srv
-                          ros-noetic-rqt-top
-                          ros-noetic-rqt-topic
-                          ros-noetic-rqt-web))
+      (propagated-inputs (list ros-noetic-rqt-action
+                               ros-noetic-rqt-bag
+                               ros-noetic-rqt-bag-plugins
+                               ros-noetic-rqt-console
+                               ros-noetic-rqt-dep
+                               ros-noetic-rqt-graph
+                               ros-noetic-rqt-image-view
+                               ros-noetic-rqt-launch
+                               ros-noetic-rqt-logger-level
+                               ros-noetic-rqt-msg
+                               ros-noetic-rqt-plot
+                               ros-noetic-rqt-publisher
+                               ros-noetic-rqt-py-common
+                               ros-noetic-rqt-py-console
+                               ros-noetic-rqt-reconfigure
+                               ros-noetic-rqt-service-caller
+                               ros-noetic-rqt-shell
+                               ros-noetic-rqt-srv
+                               ros-noetic-rqt-top
+                               ros-noetic-rqt-topic
+                               ros-noetic-rqt-web))
       (home-page "https://wiki.ros.org/rqt_common_plugins")
       (synopsis "ROS backend graphical tools suite")
-      (description "ROS backend graphical tools suite that can be
+      (description
+       "ROS backend graphical tools suite that can be
 used on/off at robot runtime.
 To run any rqt plugins, just run rqt and select the desired plugins from the gui.
 rqt consists of 3 metapackages:
