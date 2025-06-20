@@ -30,7 +30,8 @@
   #:use-module (gnu packages shells)
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
-  #:use-module (ros-noetic roscpp-core))
+  #:use-module (ros-noetic roscpp-core)
+  #:export (ros-cmake-prefix-path-search-path))
 
 ;; Commentary:
 ;;

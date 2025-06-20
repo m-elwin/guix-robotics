@@ -264,7 +264,6 @@ rosparam can be invoked within a roslaunch file.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild ros-noetic-rosunit))
-      (inputs (list ros-noetic-rosout))
       (propagated-inputs (list python-paramiko
                                python-rospkg
                                python-pyyaml
@@ -272,7 +271,9 @@ rosparam can be invoked within a roslaunch file.")
                                ros-noetic-rosgraph-msgs
                                ros-noetic-roslib
                                ros-noetic-rosmaster
+                               ros-noetic-rosout
                                ros-noetic-rosparam))
+      (native-search-paths (list ros-cmake-prefix-path-search-path))
       (arguments
        (list
         #:package-dir "tools/roslaunch"
