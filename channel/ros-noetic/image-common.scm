@@ -26,6 +26,7 @@
   #:use-module (gnu packages serialization)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic common-msgs))
@@ -127,4 +128,33 @@ include JPEG/PNG compression and Theora sreaming video.")
       (description
        "Provides CameraInfo and handles SetCameraInfo
 service requests, saving and restoring the camera calibration data.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-polled-camera
+  (let ((commit "5559cc5ff15c4e94bef7912eabe5e330de62475c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-polled-camera")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-perception/image_common")
+               (commit commit)))
+         (sha256
+          (base32 "0bcraxpz3ffyha36zwnjhs22vsf94s7lvha37mfw1ixycjaxda5p"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "polled_camera"))
+      (native-inputs (list ros-noetic-message-generation))
+      (inputs (list ros-noetic-image-transport))
+      (propagated-inputs (list ros-noetic-roscpp ros-noetic-sensor-msgs
+                               ros-noetic-std-msgs ros-noetic-message-runtime))
+      (home-page "https://wiki.ros.org/polled_camera")
+      (synopsis "Service and C++ classes for polled camera driver nodes")
+      (description
+       "Currently this package is for internal use as APIs are still under development.")
       (license license:bsd-3))))
