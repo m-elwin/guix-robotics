@@ -346,6 +346,38 @@ achieve graph representation can depend upon this package.")
           (base32 "1vian4cjfp1f41r36sbvgir0sdwj718k56hya5m4k0zpcizx33ij"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-cv-bridge
+                               ros-noetic-geometry-msgs
+                               ros-noetic-image-transport
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-dotgraph
+                               ros-noetic-qt-gui
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rqt-graph
+                               ros-noetic-rqt-gui-cpp
+                               ros-noetic-rqt-gui-py
+                               qtbase-5))
+      (home-page "https://wiki.ros.org/rqt_image_view")
+      (synopsis "GUI plugin for displaying images using image transport")
+      (description "GUI plugin for displaying images using image transport.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-launch
+  (let ((commit "f95c99093aabe3f94ecfc720806f2032f0258785")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-launch")
+      (version (git-version "0.4.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_launch")
+               (commit commit)))
+         (sha256
+          (base32 "1vian4cjfp1f41r36sbvgir0sdwj718k56hya5m4k0zpcizx33ij"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
       (native-inputs (list python-mock))
       (propagated-inputs (list ros-noetic-cv-bridge
                                ros-noetic-geometry-msgs
@@ -358,7 +390,7 @@ achieve graph representation can depend upon this package.")
                                ros-noetic-rqt-gui-cpp
                                ros-noetic-rqt-gui-py
                                qtbase-5))
-      (home-page "https://wiki.ros.org/rqt_dep")
+      (home-page "https://wiki.ros.org/rqt_launch")
       (synopsis "GUI plugin for displaying images using image transport")
       (description "GUI plugin for displaying images using image transport.")
       (license license:bsd-3))))
