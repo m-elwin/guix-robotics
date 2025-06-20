@@ -158,3 +158,32 @@ service requests, saving and restoring the camera calibration data.")
       (description
        "Currently this package is for internal use as APIs are still under development.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-image-common
+  (let ((commit "5559cc5ff15c4e94bef7912eabe5e330de62475c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-image-common")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-perception/image_common")
+               (commit commit)))
+         (sha256
+          (base32 "0bcraxpz3ffyha36zwnjhs22vsf94s7lvha37mfw1ixycjaxda5p"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "image_common"))
+      (propagated-inputs (list ros-noetic-camera-calibration-parsers
+                               ros-noetic-camera-info-manager
+                               ros-noetic-image-transport
+                               ros-noetic-polled-camera))
+      (home-page "https://wiki.ros.org/image_common")
+      (synopsis "Metapackage with common code for working with images in ROS")
+      (description
+       "Metapackage with common code for working with images in ROS.")
+      (license license:bsd-3))))
