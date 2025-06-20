@@ -22,6 +22,7 @@
   #:use-module (guix packages)
   #:use-module (gnu packages check)
   #:use-module (gnu packages gtk)
+  #:use-module (gnu packages qt)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
@@ -30,6 +31,8 @@
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-visualization)
+  #:use-module (ros-noetic image-common)
+  #:use-module (ros-noetic vision-opencv)
   #:use-module (ros-noetic rqt))
 
 ;;; Commentary:
@@ -331,7 +334,7 @@ achieve graph representation can depend upon this package.")
   (let ((commit "ee9e0f08cbefa536b00d87a3fc9a9abc7a94a531")
         (revision "0"))
     (package
-      (name "ros-noetic-rqt-dep")
+      (name "ros-noetic-rqt-image-view")
       (version (git-version "0.4.19" revision commit))
       (source
        (origin
@@ -340,7 +343,7 @@ achieve graph representation can depend upon this package.")
                (url "https://github.com/ros-visualization/rqt_image_view")
                (commit commit)))
          (sha256
-          (base32 "01iv89djkn4kiw245achx83nkqvrvkm2bsxbrlhqfynyvsyazj42"))
+          (base32 "1vian4cjfp1f41r36sbvgir0sdwj718k56hya5m4k0zpcizx33ij"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-mock))
@@ -352,7 +355,9 @@ achieve graph representation can depend upon this package.")
                                ros-noetic-qt-gui
                                ros-noetic-qt-gui-py-common
                                ros-noetic-rqt-graph
-                               ros-noetic-rqt-gui-py))
+                               ros-noetic-rqt-gui-cpp
+                               ros-noetic-rqt-gui-py
+                               qtbase-5))
       (home-page "https://wiki.ros.org/rqt_dep")
       (synopsis "GUI plugin for displaying images using image transport")
       (description "GUI plugin for displaying images using image transport.")
@@ -381,7 +386,7 @@ achieve graph representation can depend upon this package.")
                           ros-noetic-rqt-console
                           ros-noetic-rqt-dep
                           ros-noetic-rqt-graph
-;                          ros-noetic-rqt-image-view
+                          ros-noetic-rqt-image-view
 ;                          ros-noetic-rqt-launch
                           ros-noetic-rqt-logger-level
                           ros-noetic-rqt-msg
