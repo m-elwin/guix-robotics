@@ -375,24 +375,19 @@ achieve graph representation can depend upon this package.")
                (url "https://github.com/ros-visualization/rqt_launch")
                (commit commit)))
          (sha256
-          (base32 "1vian4cjfp1f41r36sbvgir0sdwj718k56hya5m4k0zpcizx33ij"))
+          (base32 "1xs506gbpdm454mgmy9akpfrf5jz08dlqdrpismdiawhx3nffmbj"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (native-inputs (list python-mock))
-      (propagated-inputs (list ros-noetic-cv-bridge
-                               ros-noetic-geometry-msgs
-                               ros-noetic-image-transport
-                               ros-noetic-python-qt-binding
-                               ros-noetic-qt-dotgraph
-                               ros-noetic-qt-gui
-                               ros-noetic-qt-gui-py-common
-                               ros-noetic-rqt-graph
-                               ros-noetic-rqt-gui-cpp
-                               ros-noetic-rqt-gui-py
-                               qtbase-5))
+      (propagated-inputs (list ros-noetic-rqt-py-common
+                               ros-noetic-roslaunch
+                               ros-noetic-rospy
+                               ros-noetic-rqt-console
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
       (home-page "https://wiki.ros.org/rqt_launch")
-      (synopsis "GUI plugin for displaying images using image transport")
-      (description "GUI plugin for displaying images using image transport.")
+      (synopsis "Provide an easy view of launch files")
+      (description "Provides an easy view of launchfiles and lets
+the user start and stop individual nodes in a launchfile.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-common-plugins
@@ -419,7 +414,7 @@ achieve graph representation can depend upon this package.")
                           ros-noetic-rqt-dep
                           ros-noetic-rqt-graph
                           ros-noetic-rqt-image-view
-;                          ros-noetic-rqt-launch
+                          ros-noetic-rqt-launch
                           ros-noetic-rqt-logger-level
                           ros-noetic-rqt-msg
                           ros-noetic-rqt-plot
