@@ -538,6 +538,34 @@ on dynamic_reconfigure that allows access to only those parameters latched to no
       (description "GUI plugin providing an interactive shell.")
       (license license:bsd-3))))
 
+
+(define-public ros-noetic-rqt-srv
+  (let ((commit "1bfd76b033d9fab9a9c60c7fc0a18c19010c46b8")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-srv")
+      (version (git-version "0.4.11" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_srv")
+               (commit commit)))
+         (sha256
+          (base32 "0f01c5f93dxbmkbry16y78bh3rrrwkq9wfayrjvfak25ync18k25"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-rosmsg ros-noetic-rospy
+                               ros-noetic-rqt-gui ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-msg))
+      (home-page "https://wiki.ros.org/rqt_srv")
+      (synopsis "GUI plugin for introspecting available service types")
+      (description
+       "GUI plugin for introspecting available service types.
+Note that the services avalailable through this plugin are the ones stored
+on your machine, not on the ROS core your rqt instance connects to.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -571,8 +599,8 @@ on dynamic_reconfigure that allows access to only those parameters latched to no
                           ros-noetic-rqt-py-console
                           ros-noetic-rqt-reconfigure
                           ros-noetic-rqt-service-caller
-;                          ros-noetic-rqt-shell
-;                          ros-noetic-rqt-srv
+                          ros-noetic-rqt-shell
+                          ros-noetic-rqt-srv
 ;                          ros-noetic-rqt-top
 ;                          ros-noetic-rqt-topic
 ;                         ros-noetic-rqt-web
