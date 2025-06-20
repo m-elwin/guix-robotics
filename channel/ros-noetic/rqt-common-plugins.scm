@@ -617,6 +617,35 @@ Includes information about publishers, subscribers, publishing rate
 and ROS messages.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-web
+  (let ((commit "7b3442e70e7256cb1beaaae192ad6e7f3fdacd31")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-web")
+      (version (git-version "0.4.11" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_web")
+               (commit commit)))
+         (sha256
+          (base32 "1xyhdp8p7f9z146wr7da2a827skgf9pcac5dz2d37fc01m4yxa17"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-python-qt-binding
+                               python-rospkg
+                               ros-noetic-qt-gui
+                               ros-noetic-rospy
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_web")
+      (synopsis "Simple web content viewer for rqt")
+      (description
+       "Web content viewer for rqt.
+Users can show web content in Qt-based window by specifying its URL.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -654,8 +683,7 @@ and ROS messages.")
                           ros-noetic-rqt-srv
                           ros-noetic-rqt-top
                           ros-noetic-rqt-topic
-;                         ros-noetic-rqt-web
-                          ))
+                          ros-noetic-rqt-web))
       (home-page "https://wiki.ros.org/rqt_common_plugins")
       (synopsis "ROS backend graphical tools suite")
       (description "ROS backend graphical tools suite that can be
