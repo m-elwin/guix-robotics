@@ -590,6 +590,33 @@ on your machine, not on the ROS core your rqt instance connects to.")
       (description "GUI plugin for managing ROS processes.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-topic
+  (let ((commit "27feb7b57bb760127c1ef4d331909e5774b53a03")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-topic")
+      (version (git-version "0.4.15" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_topic")
+               (commit commit)))
+         (sha256
+          (base32 "1akf10ni03q805wn8yg70n58wx79vivwfi58z8r715wf0p8cbmyj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-rospkg ros-noetic-python-qt-binding
+                               ros-noetic-rostopic ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_topic")
+      (synopsis "GUI plugin for displaying debug information about ROS topics")
+      (description
+       "GUI plugin for displaying debug information for ROS topics.
+Includes information about publishers, subscribers, publishing rate
+and ROS messages.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -626,7 +653,7 @@ on your machine, not on the ROS core your rqt instance connects to.")
                           ros-noetic-rqt-shell
                           ros-noetic-rqt-srv
                           ros-noetic-rqt-top
-;                          ros-noetic-rqt-topic
+                          ros-noetic-rqt-topic
 ;                         ros-noetic-rqt-web
                           ))
       (home-page "https://wiki.ros.org/rqt_common_plugins")
