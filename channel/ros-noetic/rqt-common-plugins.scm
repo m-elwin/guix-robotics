@@ -486,6 +486,32 @@ However, currently as the name indicates, this package solely is dependent
 on dynamic_reconfigure that allows access to only those parameters latched to nodes.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-service-caller
+  (let ((commit "fdbae3309acdd94efa71af860d2636b6175b1fe3")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-service-caller")
+      (version (git-version "0.4.12" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_service_caller")
+               (commit commit)))
+         (sha256
+          (base32 "14slz54gy6kqsp4f65rcvmg2db5mwz0q42kkyag83fv8dpdynzhp"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-roslint ros-noetic-rostest))
+      (propagated-inputs (list python-rospkg ros-noetic-rosservice
+                               ros-noetic-rqt-gui ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-py-common))
+      (home-page "https://wiki.ros.org/rqt_service_caller")
+      (synopsis "GUI plugin for calling arbitrary services")
+      (description "GUI plugin for calling arbitrary services.")
+      (license license:bsd-3))))
+
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
