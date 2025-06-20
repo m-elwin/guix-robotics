@@ -511,6 +511,32 @@ on dynamic_reconfigure that allows access to only those parameters latched to no
       (description "GUI plugin for calling arbitrary services.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-shell
+  (let ((commit "93d5913b2a9fb10665c8f8a9eed626a9a55a6366")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-shell")
+      (version (git-version "0.4.13" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_shell")
+               (commit commit)))
+         (sha256
+          (base32 "15c2sh5fl9k4mc7ijf3yqxvdgsc84m0q8c8nrzp00f89dmahg3ny"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_shell")
+      (synopsis "GUI plugin providing an interactive shell")
+      (description "GUI plugin providing an interactive shell.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
@@ -544,7 +570,7 @@ on dynamic_reconfigure that allows access to only those parameters latched to no
                           ros-noetic-rqt-py-common
                           ros-noetic-rqt-py-console
                           ros-noetic-rqt-reconfigure
-;                          ros-noetic-rqt-service-caller
+                          ros-noetic-rqt-service-caller
 ;                          ros-noetic-rqt-shell
 ;                          ros-noetic-rqt-srv
 ;                          ros-noetic-rqt-top
