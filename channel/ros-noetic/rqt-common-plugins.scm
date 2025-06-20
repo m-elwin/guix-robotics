@@ -566,6 +566,30 @@ Note that the services avalailable through this plugin are the ones stored
 on your machine, not on the ROS core your rqt instance connects to.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-top
+  (let ((commit "1cc0b3dc3d5a43c622341e3deb3336fe0afda529")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-top")
+      (version (git-version "0.4.11" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_top")
+               (commit commit)))
+         (sha256
+          (base32 "1gxdk7ddarkmg2x6fn2aswi90n3l7nsmq5mslfgi6knb30m6rkd5"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-psutil ros-noetic-python-qt-binding
+                               ros-noetic-rospy ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_top")
+      (synopsis "GUI plugin for managing ROS processes")
+      (description "GUI plugin for managing ROS processes.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -601,7 +625,7 @@ on your machine, not on the ROS core your rqt instance connects to.")
                           ros-noetic-rqt-service-caller
                           ros-noetic-rqt-shell
                           ros-noetic-rqt-srv
-;                          ros-noetic-rqt-top
+                          ros-noetic-rqt-top
 ;                          ros-noetic-rqt-topic
 ;                         ros-noetic-rqt-web
                           ))
