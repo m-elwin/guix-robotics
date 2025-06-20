@@ -390,6 +390,37 @@ achieve graph representation can depend upon this package.")
 the user start and stop individual nodes in a launchfile.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-publisher
+  (let ((commit "dbeedea0f1f7e3287b5d85643fc8d47028f4df83")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-publisher")
+      (version (git-version "0.4.12" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_publisher")
+               (commit commit)))
+         (sha256
+          (base32 "1yg63cylrwnfg52g8058qfxf0612nwx0gql6hzbmhr65cm3ifygn"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-roslib
+                               ros-noetic-rosmsg
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-py-common))
+      (home-page "https://wiki.ros.org/rqt_launch")
+      (synopsis "GUI plugin for publishing arbitrary messages")
+      (description "GUI plugin for publishing arbitrary messages
+with fixed or computed field values.")
+      (license license:bsd-3))))
+
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -418,7 +449,7 @@ the user start and stop individual nodes in a launchfile.")
                           ros-noetic-rqt-logger-level
                           ros-noetic-rqt-msg
                           ros-noetic-rqt-plot
-;                          ros-noetic-rqt-publisher
+                          ros-noetic-rqt-publisher
 ;                          ros-noetic-rqt-py-common
 ;                          ros-noetic-rqt-py-console
 ;                          ros-noetic-rqt-reconfigure
