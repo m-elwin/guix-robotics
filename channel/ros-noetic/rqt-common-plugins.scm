@@ -420,6 +420,33 @@ the user start and stop individual nodes in a launchfile.")
 with fixed or computed field values.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-py-console
+  (let ((commit "9f48b5ee299e3d70a8a289c70e5c2aa077811fe1")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-py-console")
+      (version (git-version "0.4.12" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_py_console")
+               (commit commit)))
+         (sha256
+          (base32 "1kwkbf6w08brchwl9x92clcr3hiz0gszsl14w43lwdbmlkkrjbkc"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rospy
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_py_console")
+      (synopsis "GUI plugin for an interactive python console")
+      (description "GUI plugin for an interactive python console.")
+      (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
@@ -450,8 +477,8 @@ with fixed or computed field values.")
                           ros-noetic-rqt-msg
                           ros-noetic-rqt-plot
                           ros-noetic-rqt-publisher
-;                          ros-noetic-rqt-py-common
-;                          ros-noetic-rqt-py-console
+                          ros-noetic-rqt-py-common
+                          ros-noetic-rqt-py-console
 ;                          ros-noetic-rqt-reconfigure
 ;                          ros-noetic-rqt-service-caller
 ;                          ros-noetic-rqt-shell
