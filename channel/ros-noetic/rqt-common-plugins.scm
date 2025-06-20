@@ -28,6 +28,8 @@
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic qt-gui-core)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic robot)
+  #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-visualization)
@@ -448,6 +450,42 @@ with fixed or computed field values.")
       (description "GUI plugin for an interactive python console.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-reconfigure
+  (let ((commit "e0b0f61dfeb1bef85a503787d967a572e02e0933")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-reconfigure")
+      (version (git-version "0.5.7" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_reconfigure")
+               (commit commit)))
+         (sha256
+          (base32 "1wg6fmspfmn1r77y57a0bs2kjnrv87ifcykpacjf4al74kb27a13"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-roslint ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-dynamic-reconfigure
+                               ros-noetic-python-qt-binding
+                               python-pyyaml
+                               ros-noetic-rospy
+                               ros-noetic-rqt-console
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-py-common))
+      (home-page "https://wiki.ros.org/rqt_reconfigure")
+      (synopsis
+       "GUI plugin for viewing and and editing dynamic_reconfigure parameters")
+      (description
+       "GUI plugin for viewing and and editing dynamic_reconfigure parameters.
+Succeeds the reconfigure_gui.  In the future, arbitrary parameters that are not associated
+with any nodes (which are not handled by dynamic_reconfigure) might become handled.
+However, currently as the name indicates, this package solely is dependent
+on dynamic_reconfigure that allows access to only those parameters latched to nodes.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-common-plugins
   (let ((commit "73b0ebc69a6a36fbbce68d56c05dcf961a50ea59")
         (revision "0"))
@@ -479,7 +517,7 @@ with fixed or computed field values.")
                           ros-noetic-rqt-publisher
                           ros-noetic-rqt-py-common
                           ros-noetic-rqt-py-console
-;                          ros-noetic-rqt-reconfigure
+                          ros-noetic-rqt-reconfigure
 ;                          ros-noetic-rqt-service-caller
 ;                          ros-noetic-rqt-shell
 ;                          ros-noetic-rqt-srv
