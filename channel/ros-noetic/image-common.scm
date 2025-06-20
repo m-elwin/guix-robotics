@@ -94,7 +94,7 @@ include JPEG/PNG compression and Theora sreaming video.")
       (native-inputs (list ros-noetic-rosbash ros-noetic-rosunit))
       (inputs (list yaml-cpp ros-noetic-roscpp ros-noetic-roscpp-serialization))
       (propagated-inputs (list boost ros-noetic-sensor-msgs))
-      (home-page "https://wiki.ros.org/image_transport")
+      (home-page "https://wiki.ros.org/camera_calibration_parsers")
       (synopsis "Read and and write camera calibration parameters")
       (description "Read and write camera calibration parameters.")
       (license license:bsd-3))))
@@ -103,7 +103,7 @@ include JPEG/PNG compression and Theora sreaming video.")
   (let ((commit "5559cc5ff15c4e94bef7912eabe5e330de62475c")
         (revision "0"))
     (package
-      (name "ros-noetic-image-transport")
+      (name "ros-noetic-camera-info-manager")
       (version (git-version "1.12.1" revision commit))
       (source
        (origin
@@ -118,14 +118,13 @@ include JPEG/PNG compression and Theora sreaming video.")
       (arguments
        (list
         #:package-dir "camera_info_manager"))
-      (propagated-inputs (list ros-noetic-message-filters ros-noetic-pluginlib
-                               ros-noetic-rosconsole ros-noetic-roscpp
-                               ros-noetic-sensor-msgs))
-      (home-page "https://wiki.ros.org/image_transport")
-      (synopsis "Used for transmitting images in compressed formats")
+      (native-inputs (list ros-noetic-rostest ros-noetic-image-transport))
+      (inputs (list ros-noetic-roslib))
+      (propagated-inputs (list boost ros-noetic-camera-calibration-parsers
+                               ros-noetic-roscpp ros-noetic-sensor-msgs))
+      (home-page "https://wiki.ros.org/camera_info_manager")
+      (synopsis "C++ interface for camera calibration information")
       (description
-       "Used to subscribe and publish images. Provides
-transparent support for transporting images in low-bandwidth and
-compressed formats.  Examples (provided by separate plugin packages)
-include JPEG/PNG compression and Theora sreaming video.")
+       "Provides CameraInfo and handles SetCameraInfo
+service requests, saving and restoring the camera calibration data.")
       (license license:bsd-3))))
