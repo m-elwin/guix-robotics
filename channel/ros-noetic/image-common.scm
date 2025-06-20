@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
+  #:use-module (gnu packages commencement)
   #:use-module (gnu packages image-processing)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic ros)
@@ -30,6 +31,41 @@
 ;;; Commentary:
 ;;;
 ;;;
-;;; Packages related to computer vision/OpenCV n ROS.
+;;; Packages related to working with camera images in ROS
 ;;;
 ;;; Code:
+
+(define-public ros-noetic-image-transport
+  (let ((commit "5559cc5ff15c4e94bef7912eabe5e330de62475c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-image-transport")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-perception/image_common")
+               (commit commit)))
+         (sha256
+          (base32 "0bcraxpz3ffyha36zwnjhs22vsf94s7lvha37mfw1ixycjaxda5p"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "image_transport"))
+      ;; the default gcc-toolchain segfaults when building this package
+      ;; so use an updated gcc version
+      (native-inputs (list gcc-toolchain-12))
+      (inputs (list ros-noetic-roslib))
+      (propagated-inputs (list ros-noetic-message-filters ros-noetic-pluginlib
+                               ros-noetic-rosconsole ros-noetic-roscpp
+                               ros-noetic-sensor-msgs))
+      (home-page "https://wiki.ros.org/image_transport")
+      (synopsis "Used for transmitting images in compressed formats")
+      (description
+       "Used to subscribe and publish images. Provides
+transparent support for transporting images in low-bandwidth and
+compressed formats.  Examples (provided by separate plugin packages)
+include JPEG/PNG compression and Theora sreaming video.")
+      (license license:bsd-3))))
