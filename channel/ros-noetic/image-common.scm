@@ -23,9 +23,11 @@
   #:use-module (gnu packages boost)
   #:use-module (gnu packages commencement)
   #:use-module (gnu packages image-processing)
+  #:use-module (gnu packages serialization)
   #:use-module (gnu packages python-xyz)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic common-msgs))
 
 ;;; Commentary:
@@ -58,6 +60,64 @@
       ;; so use an updated gcc version
       (native-inputs (list gcc-toolchain-12))
       (inputs (list ros-noetic-roslib))
+      (propagated-inputs (list ros-noetic-message-filters ros-noetic-pluginlib
+                               ros-noetic-rosconsole ros-noetic-roscpp
+                               ros-noetic-sensor-msgs))
+      (home-page "https://wiki.ros.org/image_transport")
+      (synopsis "Used for transmitting images in compressed formats")
+      (description
+       "Used to subscribe and publish images. Provides
+transparent support for transporting images in low-bandwidth and
+compressed formats.  Examples (provided by separate plugin packages)
+include JPEG/PNG compression and Theora sreaming video.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-camera-calibration-parsers
+  (let ((commit "5559cc5ff15c4e94bef7912eabe5e330de62475c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-camera-calibration-parsers")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-perception/image_common")
+               (commit commit)))
+         (sha256
+          (base32 "0bcraxpz3ffyha36zwnjhs22vsf94s7lvha37mfw1ixycjaxda5p"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "camera_calibration_parsers"))
+      (native-inputs (list ros-noetic-rosbash ros-noetic-rosunit))
+      (inputs (list yaml-cpp ros-noetic-roscpp ros-noetic-roscpp-serialization))
+      (propagated-inputs (list boost ros-noetic-sensor-msgs))
+      (home-page "https://wiki.ros.org/image_transport")
+      (synopsis "Read and and write camera calibration parameters")
+      (description "Read and write camera calibration parameters.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-camera-info-manager
+  (let ((commit "5559cc5ff15c4e94bef7912eabe5e330de62475c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-image-transport")
+      (version (git-version "1.12.1" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-perception/image_common")
+               (commit commit)))
+         (sha256
+          (base32 "0bcraxpz3ffyha36zwnjhs22vsf94s7lvha37mfw1ixycjaxda5p"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (arguments
+       (list
+        #:package-dir "camera_info_manager"))
       (propagated-inputs (list ros-noetic-message-filters ros-noetic-pluginlib
                                ros-noetic-rosconsole ros-noetic-roscpp
                                ros-noetic-sensor-msgs))
