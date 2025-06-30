@@ -20,22 +20,14 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix git-download)
   #:use-module (guix packages)
-  #:use-module (gnu packages check)
-  #:use-module (gnu packages gtk)
-  #:use-module (gnu packages qt)
-  #:use-module (gnu packages python-xyz)
-  #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
-  #:use-module (ros-noetic qt-gui-core)
-  #:use-module (ros-noetic ros)
-  #:use-module (ros-noetic robot)
-  #:use-module (ros-noetic ros-base)
+  #:use-module (ros-noetic geometry)
   #:use-module (ros-noetic ros-comm)
-  #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic qt-gui-core)
+  #:use-module (ros-noetic rqt)
+  #:use-module (ros-noetic rqt-common-plugins)
   #:use-module (ros-noetic ros-visualization)
-  #:use-module (ros-noetic image-common)
-  #:use-module (ros-noetic vision-opencv)
-  #:use-module (ros-noetic rqt))
+  )
 
 ;;; Commentary:
 ;;;
@@ -58,7 +50,7 @@
                (url "https://github.com/ros-visualization/rqt_moveit")
                (commit commit)))
          (sha256
-          (base32 "058vc6zjl03rsa3r92h8m211bgx8hznl0fa1p6vw098hvpw6phbv"))
+          (base32 "1jby1h8zxq0iyixj6313cw3byglcsamgq25fqgpkvbzpf6wsf1bq"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-python-qt-binding
@@ -70,8 +62,9 @@
                                ros-noetic-rqt-topic
                                ros-noetic-sensor-msgs))
       (home-page "https://wiki.ros.org/rqt_moveit")
-      (synopsis "Rqt tool for monitoring MoveIt! planner tasks")
-      (description "Assists in monitoring tasks for the MoveIt! motion planner
+      (synopsis "Rqt tool for monitoring MoveIt planner tasks")
+      (description
+       "Assists in monitoring tasks for the MoveIt motion planner
 framework. Currently the following items are monitored if they are either
 running, existing, or published:
 Node: /movegroup
@@ -80,6 +73,37 @@ Topic: sensor_msgs/PointCloud, sensor_msgs/PointCloud2
        sensor_msgs/Image, sensor_msgs/CameraInfo
 
 This package is not made by the MoveIt! development team.")
+      (license license:bsd-3))))
+
+
+(define-public ros-noetic-rqt-nav-view
+  (let ((commit "7cda2e850ebfe9772fbb66b1524ab2e5d2443bc6")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-nav-view")
+      (version (git-version "0.5.8" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_nav_view")
+               (commit commit)))
+         (sha256
+          (base32 "0zyb3k3rx5by9gxp5djb9kdjyrrzm5a27nh2bxqb28l5s8ymnq99"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-geometry-msgs
+                               ros-noetic-nav-msgs
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui
+                               ros-noetic-rospy
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-py-common
+                               ros-noetic-tf))
+      (home-page "https://wiki.ros.org/rqt_nav_view")
+      (synopsis "Gui for viewing navigation maps and paths")
+      (description "Gui for viewing navigation maps and paths")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-robot-plugins
