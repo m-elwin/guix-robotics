@@ -225,6 +225,34 @@ are published by diagnostic_aggregator.")
       (description "GUI plugin for steering a robot with Twist messages")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-runtime-monitor
+  (let ((commit "a3183c159d3a6bd61958a205f4731b0bc34169d0")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-runtime-monitor")
+      (version (git-version "0.5.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_runtime_monitor")
+               (commit commit)))
+         (sha256
+          (base32 "0ig4rgjc91d7h7mc8jikv7098hakj9ysl1iaf907f5f572h22qrh"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-diagnostic-msgs
+                               ros-noetic-python-qt-binding
+                               python-rospkg
+                               ros-noetic-qt-gui
+                               ros-noetic-rospy
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_runtime_monitor")
+      (synopsis "GUI plugin for viewing DiagnosticsArray Messages")
+      (description "GUI plugin for viewing DiagnosticsArray Messages")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-robot-plugins
   (let ((commit "aa078795cddead2dc6232acc519364d65696873f")
         (revision "0"))
