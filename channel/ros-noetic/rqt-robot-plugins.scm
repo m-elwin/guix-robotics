@@ -138,6 +138,68 @@ This package is not made by the MoveIt! development team.")
       (description "Gui for viewing 3D poses")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-robot-monitor
+  (let ((commit "f9412e219d31b8d98a48b51d647dc70f9687d7c4")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-robot-monitor")
+      (version (git-version "0.5.15" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_robot_monitor")
+               (commit commit)))
+         (sha256
+          (base32 "0223sw42zjfshrb0v2rqa6sqdzj6vm44y6l6zqh6890hkipw0nvd"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-diagnostic-msgs
+                               python-rospkg
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui
+                               ros-noetic-qt-gui-py-common
+                               ros-noetic-rospy
+                               ros-noetic-rqt-py-common
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-bag))
+      (home-page "https://wiki.ros.org/rqt_robot_monitor")
+      (synopsis "Display diagnostics_agg topics messages")
+      (description "Display diagnostics_agg topics messages that
+are published by diagnostic_aggregator.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-robot-dashboard
+  (let ((commit "5c15781848b70a408fd364f430b8211aab379376")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-robot-dashboard")
+      (version (git-version "0.5.8" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_robot_dashboard")
+               (commit commit)))
+         (sha256
+          (base32 "1rha7cxnkmj1z6cplnx6igjn1drwv1wvz1b99dan01j2g0px84rg"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-diagnostic-msgs
+                               ros-noetic-python-qt-binding
+                               ros-noetic-qt-gui
+                               ros-noetic-rospy
+                               ros-noetic-rqt-console
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-rqt-nav-view
+                               ros-noetic-rqt-robot-monitor))
+      (home-page "https://wiki.ros.org/rqt_robot_dashboard")
+      (synopsis "iInfrastructure for building robot dashboard plugins in qt")
+      (description "Infrastructure for building robot dashboard plugins in qt.")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-robot-plugins
   (let ((commit "aa078795cddead2dc6232acc519364d65696873f")
         (revision "0"))
