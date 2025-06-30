@@ -22,6 +22,7 @@
   #:use-module (guix gexp)
   #:use-module (guix git-download)
   #:use-module (gnu packages bash)
+  #:use-module (gnu packages engineering)
   #:use-module (gnu packages graphviz)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry2)
@@ -59,7 +60,7 @@
       (propagated-inputs (list
                           ros-noetic-rospy
                           ros-noetic-diagnostic-msgs
-                          orocos-kdl
+                          orocos-kinematics-dynamics
                           ros-noetic-geometry-msgs
                           ros-noetic-std-msgs))
       (arguments
@@ -87,7 +88,8 @@ Eigen and geometry_msgs.")
           (base32 "13m50fp9ylm9m05p2iisqmhwyhqpqsay62li6brj81gms1ljdgdv"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list orocos-kdl ros-noetic-geometry-msgs))
+      (propagated-inputs (list orocos-kinematics-dynamics
+                               ros-noetic-geometry-msgs))
       (arguments
        (list
         #:package-dir "kdl_conversions"))
@@ -211,7 +213,7 @@ major changes in the near future.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest))
-      (propagated-inputs (list orocos-kdl python-orocos-kdl
+      (propagated-inputs (list orocos-kinematics-dynamics python-orocos-kinematics-dynamics
                                ros-noetic-geometry-msgs ros-noetic-tf
                                ros-noetic-kdl-conversions))
       (arguments

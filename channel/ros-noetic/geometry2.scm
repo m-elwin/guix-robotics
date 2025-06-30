@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages algebra)
+  #:use-module (gnu packages engineering)
   #:use-module (gnu packages game-development)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
@@ -253,8 +254,8 @@ the types specified by the Bullet engine API see http://bulletphysics.org.")
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules ros-noetic-rostest
                            ros-noetic-ros-environment))
-      (propagated-inputs (list orocos-kdl
-                               python-orocos-kdl
+      (propagated-inputs (list orocos-kinematics-dynamics
+                               python-orocos-kinematics-dynamics
                                eigen
                                ros-noetic-tf2
                                ros-noetic-geometry-msgs
@@ -287,7 +288,7 @@ the types specified by Orocos KDL.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rostest ros-noetic-ros-environment))
-      (propagated-inputs (list orocos-kdl python-orocos-kdl ros-noetic-tf2
+      (propagated-inputs (list orocos-kinematics-dynamics python-orocos-kinematics-dynamics ros-noetic-tf2
                                ros-noetic-geometry-msgs ros-noetic-tf2-ros))
       (arguments
        (list
@@ -321,7 +322,7 @@ such as Vector, Point, Pose, Transform, Quaternion, etc.")
                            ros-noetic-cmake-modules))
       (propagated-inputs (list eigen
                                ros-noetic-rospy
-                               python-orocos-kdl
+                               python-orocos-kinematics-dynamics
                                ros-noetic-tf2-ros
                                ros-noetic-tf2
                                ros-noetic-sensor-msgs))

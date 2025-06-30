@@ -24,6 +24,7 @@
   #:use-module (gnu packages boost)
   #:use-module (gnu packages check)
   #:use-module (gnu packages cpp)
+  #:use-module (gnu packages engineering)
   #:use-module (gnu packages python-xyz)
   #:use-module (gnu packages xml)
   #:use-module (ros-noetic bootstrap)
@@ -266,7 +267,7 @@ backwards compatible in future releases.")
                            ros-noetic-rostest))
       (inputs (list ros-noetic-rosconsole))
       (propagated-inputs (list urdfdom-headers tinyxml tinyxml2
-                               ros-noetic-urdf orocos-kdl))
+                               ros-noetic-urdf orocos-kinematics-dynamics))
       (arguments
        (list
         #:package-dir "kdl_parser"))
@@ -299,7 +300,7 @@ tree from an XML robot representation in URDF.")
       (inputs (list ros-noetic-tf2-kdl ros-noetic-kdl-parser
                     ros-noetic-rostime))
       (propagated-inputs (list ros-noetic-roscpp ros-noetic-sensor-msgs
-                               ros-noetic-tf2-ros orocos-kdl))
+                               ros-noetic-tf2-ros orocos-kinematics-dynamics))
       (home-page "https://wiki.ros.org/robot_state_publisher")
       (synopsis "Publish the state of a robot to tf2")
       (description
