@@ -108,7 +108,7 @@ This package is not made by the MoveIt! development team.")
       (description "Gui for viewing navigation maps and paths")
       (license license:bsd-3))))
 
-(define-public ros-noetic-rqt-nav-view
+(define-public ros-noetic-rqt-pose-view
   (let ((commit "3259af8635df3b2d603267cb5f00f7137ee2f5d7")
         (revision "0"))
     (package
