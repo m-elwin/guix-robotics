@@ -26,6 +26,7 @@
   #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic ros-perception)
   #:use-module (ros-noetic image-common)
   #:use-module (ros-noetic ros))
 

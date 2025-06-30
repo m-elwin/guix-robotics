@@ -15,12 +15,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with Guix-Robotics.  If not, see <http://www.gnu.org/licenses/>.
 
-;; Commentary:
-;;
-;; Packages that are part of ros-common-msgs
-;;
-;; Code:
-
 (define-module (ros-noetic common-msgs)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
@@ -29,6 +23,13 @@
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core))
+
+;; Commentary:
+;;
+;; Packages that are part of ros-common-msgs
+;;
+;; Code:
+
 
 (define-public ros-noetic-actionlib-msgs
   (let ((commit "1230f39a7068d1d73d1039eb0eb970c922b6bcf7")
