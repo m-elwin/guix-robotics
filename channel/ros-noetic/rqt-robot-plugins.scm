@@ -183,7 +183,7 @@ are published by diagnostic_aggregator.")
                (url "https://github.com/ros-visualization/rqt_robot_dashboard")
                (commit commit)))
          (sha256
-          (base32 "1rha7cxnkmj1z6cplnx6igjn1drwv1wvz1b99dan01j2g0px84rg"))
+          (base32 "0xlfdm75434j2rfdss4sm06mwvynsfr8w1z1qycq5nyqw3pymq7c"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list ros-noetic-diagnostic-msgs
@@ -196,8 +196,9 @@ are published by diagnostic_aggregator.")
                                ros-noetic-rqt-nav-view
                                ros-noetic-rqt-robot-monitor))
       (home-page "https://wiki.ros.org/rqt_robot_dashboard")
-      (synopsis "iInfrastructure for building robot dashboard plugins in qt")
-      (description "Infrastructure for building robot dashboard plugins in qt.")
+      (synopsis "Infrastructure for building robot dashboard plugins in qt")
+      (description
+       "Infrastructure for building robot dashboard plugins in qt.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-robot-plugins
