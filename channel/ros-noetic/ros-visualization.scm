@@ -20,7 +20,13 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages graphics)
   #:use-module (gnu packages qt)
+  #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic geometry2)
+  #:use-module (ros-noetic ros-core)
+  #:use-module (ros-noetic ros-comm)
+  #:use-module (ros-noetic image-common)
   #:use-module (ros-noetic ros))
 
 ;;; Commentary:
@@ -66,3 +72,86 @@ it very easy to switch between these.")
       (license license:bsd-3))))
 
 
+(define-public ros-noetic-interactive-markers
+  (let ((commit "51e6b1c83c376affacad897fa9c6f723ea2c6cd5")
+        (revision "0"))
+    (package
+      (name "ros-noetic-interactive-markers")
+      (version (git-version "1.12.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/interactive_markers")
+               (commit commit)))
+         (sha256
+          (base32 "1by0m41rq67lflv0md1cvsy0svknawj08bvpm97r2i3qjd73zz73"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rostest))
+      (propagated-inputs (list ros-noetic-rosconsole
+                               ros-noetic-roscpp
+                               ros-noetic-rospy
+                               ros-noetic-std-msgs
+                               ros-noetic-tf2-ros
+                               ros-noetic-tf2-geometry-msgs
+                               ros-noetic-visualization-msgs))
+      (home-page "https://wiki.ros.org/interactive_markers")
+      (synopsis
+       "3D interactive marker communication library for Rviz and similar tools")
+      (description
+       "3D interactive marker communication library for Rviz and similar tools")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rviz
+  (let ((commit "c4964de840d97b1377456a2054662551816b0a54")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rviz")
+      (version (git-version "1.14.26" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rviz")
+               (commit commit)))
+         (sha256
+          (base32 "0jzfs521v82jfhwsnk421y0fa2k4m8qxhvrq6k7dn48pgalqi7cj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-cmake-modules
+                           ros-noetic-rosunit
+                           ros-noetic-rostest))
+      (propagated-inputs (list assimp
+                               ros-noetic-geometry-msgs
+                               ros-noetic-image-transport
+                               ros-noetic-interactive-markers
+                               ros-noetic-laser-geometry
+                               ogre
+                               ros-noetic-map-msgs
+                               ros-noetic-message-filters
+                               ros-noetic-nav-msgs
+                               ros-noetic-pluginlib
+                               ros-noetic-python-qt-binding
+                               ros-noetic-resource-retriever
+                               ros-noetic-rosconsole
+                               ros-noetic-roscpp
+                               ros-noetic-roslib
+                               ros-noetic-rospy
+                               ros-noetic-sensor-msgs
+                               ros-noetic-std-msgs
+                               ros-noetic-std-srvs
+                               ros-noetic-tf2-ros
+                               ros-noetic-tf2-geometry-msgs
+                               tinyxml2
+                               ros-noetic-urdf
+                               ros-noetic-visualization-msgs
+                               yaml-cpp
+                               opengl
+                               ros-noetic-message-runtime
+                               ros-noetic-media-export
+                               ros-noetic-qt5base))
+      (home-page "https://wiki.ros.org/rviz")
+      (synopsis "3D visualization tool for ROS")
+      (description "3D Visualization tool for ROS.")
+      (license license:bsd-3))))
