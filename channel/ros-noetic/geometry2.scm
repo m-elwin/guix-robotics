@@ -147,14 +147,12 @@ package, users generally should use tf2_ros.")
          (file-name (git-file-name name version))
          (modules '((guix build utils)))
          (snippet
-          ;; spin_for_a_second assumes messages will be received within one second.
-          ;; there needs to be some type of timeout, but one second is not enough
-          ;; Package authors had determined if it didn't arrive in one second the
-          ;; test should fail, I am doubling that.
-          '(substitute* '("tf2_ros/test/time_reset_test.cpp"
-                          "tf2_ros/test/message_filter_test.cpp")
-             (("spin_for_a_second();")
-              "spin_for_a_second(); spin_for_a_second();")))))
+          ;; There were known flakiness in time_reset_test.cpp and message_filter_test.cpp
+          ;; that were never fully resolved: likely some race condition.
+          ;; Issue as tracked here: https://github.com/ros/geometry2/issues/129
+          ;; but never resolved. For maximum reproducability, disable these tests
+          '(substitute* "tf2_ros/CMakeLists.txt"
+             (("add_rostest\\(test/transform_listener_time_reset_test.launch\\)") "")))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules ros-noetic-rostest))
       (inputs (list ros-noetic-xmlrpcpp))
