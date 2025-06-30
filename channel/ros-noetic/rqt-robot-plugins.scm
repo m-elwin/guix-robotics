@@ -201,6 +201,30 @@ are published by diagnostic_aggregator.")
        "Infrastructure for building robot dashboard plugins in qt.")
       (license license:bsd-3))))
 
+(define-public ros-noetic-rqt-robot-steering
+  (let ((commit "322885f396b2d140b9875b69ad5bd66b42cc1837")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-robot-steering")
+      (version (git-version "0.5.14" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_robot_steering")
+               (commit commit)))
+         (sha256
+          (base32 "1qlvhv4431lmjyzf3lbv9x35sjf41vzz2ri7hssxq51zccf9bmd7"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (propagated-inputs (list ros-noetic-geometry-msgs
+                               ros-noetic-python-qt-binding python-rospkg
+                               ros-noetic-rqt-gui ros-noetic-rqt-gui-py))
+      (home-page "https://wiki.ros.org/rqt_robot_steering")
+      (synopsis "GUI plugin for steering a robot with Twist messages")
+      (description "GUI plugin for steering a robot with Twist messages")
+      (license license:bsd-3))))
+
 (define-public ros-noetic-rqt-robot-plugins
   (let ((commit "aa078795cddead2dc6232acc519364d65696873f")
         (revision "0"))
