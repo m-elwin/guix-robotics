@@ -33,7 +33,9 @@
   #:use-module (ros-noetic ros-perception)
   #:use-module (ros-noetic image-common)
   #:use-module (ros-noetic robot)
-  #:use-module (ros-noetic ros))
+  #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic system) ; only needed until sip-4-noetic is not
+  )
 
 ;;; Commentary:
 ;;;
@@ -60,7 +62,7 @@
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild))
-      (propagated-inputs (list python-pyside-2 python-pyqt5-sip))
+      (propagated-inputs (list python-pyside-2 python-pyqt5-noetic python-sip-4-noetic))
       (home-page "https://wiki.ros.org/python_qt_binding")
       (synopsis "Python bindings for Qt from either pyside or pyqt")
       (description
@@ -122,7 +124,7 @@ it very easy to switch between these.")
                (url "https://github.com/ros-visualization/rviz")
                (commit commit)))
          (sha256
-          (base32 "0jzfs521v82jfhwsnk421y0fa2k4m8qxhvrq6k7dn48pgalqi7cj"))
+          (base32 "1bmf2wkcgh5smskirjas7q96pv0wiapkszkjwszvpck24r1v7bz1"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules
@@ -133,7 +135,7 @@ it very easy to switch between these.")
                                ros-noetic-image-transport
                                ros-noetic-interactive-markers
                                ros-noetic-laser-geometry
-                               ogre
+                               ogre-noetic
                                ros-noetic-map-msgs
                                ros-noetic-message-filters
                                ros-noetic-nav-msgs
@@ -156,7 +158,8 @@ it very easy to switch between these.")
                                mesa
                                ros-noetic-message-runtime
                                ros-noetic-media-export
-                               ros-noetic-qt5base))
+                               qtbase-5
+                               python-pyqt))
       (home-page "https://wiki.ros.org/rviz")
       (synopsis "3D visualization tool for ROS")
       (description "3D Visualization tool for ROS.")
