@@ -24,6 +24,7 @@
   #:use-module (gnu packages qt)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry2)
+  #:use-module (ros-noetic navigation-msgs)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-perception)

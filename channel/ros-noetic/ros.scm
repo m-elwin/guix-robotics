@@ -18,12 +18,14 @@
 (define-module (ros-noetic ros)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (guix gexp)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bash)
   #:use-module (gnu packages boost)
+  #:use-module (gnu packages curl)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages python)
   #:use-module (gnu packages xml)
@@ -464,4 +466,38 @@ their plugins in the package.xml of their package.")
       (synopsis "Connects console_bridge-based logging to rosconsole-logging")
       (description "Used in conjunction with consoel_bridge and rosconsole to
 connect console_bridge-based logging to rosconsole-logging.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-resource-retriever
+  (let ((commit "3058eabe0c0e15cc538caec0c4a92608b9058c2b")
+        (revision "0"))
+    (package
+      (name "ros-noetic-resource-retriever")
+      (version (git-version "1.12.10" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/resource_retriever")
+               (commit commit)))
+         (sha256
+          (base32 "1x69hvwpmvrnfsq1y5hsvwb29ppv0dp2mdvwymggnja550mdqxcm"))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;; Don't retrieve a resource from the network for a test
+         ;; instead just use a dummy file from a package
+         (snippet '(substitute* '("test/test.cpp" "test/test.py")
+                     (("http://packages.ros.org/ros.key")
+                      "package://resource_retriever/test/test.txt")))))
+      (build-system catkin-build-system)
+      (inputs (list ros-noetic-roslib ros-noetic-rosconsole))
+      (propagated-inputs (list boost curl))
+      (home-page "http://wiki.ros.org/resource_retriever")
+      (synopsis "Retrieve data from url-format files")
+      (description
+       "Retrieve data from url-format files such as
+http://, ftp://, package://, file://, etc., and loads the data into memory.
+The package:// url for ros packages is translated into a local file:// url.
+The resource retriever was initially designed to load mesh files into memory, but can
+be used for any type of data.  This package is based on libcurl.")
       (license license:bsd-3))))
