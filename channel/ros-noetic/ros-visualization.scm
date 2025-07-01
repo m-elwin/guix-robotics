@@ -20,8 +20,11 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages gl)
   #:use-module (gnu packages graphics)
   #:use-module (gnu packages qt)
+  #:use-module (gnu packages serialization)
+  #:use-module (gnu packages xml)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic navigation-msgs)
@@ -29,6 +32,7 @@
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-perception)
   #:use-module (ros-noetic image-common)
+  #:use-module (ros-noetic robot)
   #:use-module (ros-noetic ros))
 
 ;;; Commentary:
@@ -149,7 +153,7 @@ it very easy to switch between these.")
                                ros-noetic-urdf
                                ros-noetic-visualization-msgs
                                yaml-cpp
-                               opengl
+                               mesa
                                ros-noetic-message-runtime
                                ros-noetic-media-export
                                ros-noetic-qt5base))

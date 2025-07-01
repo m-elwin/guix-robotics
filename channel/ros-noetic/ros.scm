@@ -501,3 +501,26 @@ The package:// url for ros packages is translated into a local file:// url.
 The resource retriever was initially designed to load mesh files into memory, but can
 be used for any type of data.  This package is based on libcurl.")
       (license license:bsd-3))))
+
+(define-public ros-noetic-media-export
+  (let ((commit "9e29aae662fb023fcb196f9020fea206dc7d29f1")
+        (revision "0"))
+    (package
+      (name "ros-noetic-media-export")
+      (version (git-version "0.2.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/media_export")
+               (commit commit)))
+         (sha256
+          (base32 "1vds2w0qxx67b67zzj06q63qbdff20k7ymgrif3zw78gqs9b4bmw"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "http://wiki.ros.org/media_export")
+      (synopsis "Placeholder package enabling generic export of media paths")
+      (description
+       "An empty package that exists to allow ROS packages
+to export media paths to each other.")
+      (license license:bsd-3))))
