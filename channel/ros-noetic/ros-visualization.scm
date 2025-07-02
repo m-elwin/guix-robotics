@@ -140,6 +140,7 @@ it very easy to switch between these.")
                            ros-noetic-rostest
                            ;; The gcc-11 crashes when including qtsvg-5
                            gcc-toolchain-12))
+      (inputs (list tinyxml2 yaml-cpp))
       (propagated-inputs (list assimp
                                ros-noetic-geometry-msgs
                                ros-noetic-image-transport
@@ -161,10 +162,8 @@ it very easy to switch between these.")
                                ros-noetic-std-srvs
                                ros-noetic-tf2-ros
                                ros-noetic-tf2-geometry-msgs
-                               tinyxml2
                                ros-noetic-urdf
                                ros-noetic-visualization-msgs
-                               yaml-cpp
                                ros-noetic-message-runtime
                                ros-noetic-media-export
                                qtbase-5
