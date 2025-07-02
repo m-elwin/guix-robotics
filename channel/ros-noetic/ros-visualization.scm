@@ -59,10 +59,18 @@
                (commit commit)))
          (sha256
           (base32 "0jzfs521v82jfhwsnk421y0fa2k4m8qxhvrq6k7dn48pgalqi7cj"))
-         (file-name (git-file-name name version))))
+         (file-name (git-file-name name version))
+         (modules '((guix build utils)))
+         ;;; When other packages use the sip_helper.cmake from here
+         ;;; Make sure that the resulting library has it's rpath set properly.
+         (snippet
+          '(substitute* "cmake/sip_helper.cmake"
+             (("set\\(LDFLAGS_OTHER .*\\)")
+              "set(LDFLAGS_OTHER \"${${PROJECT_NAME}_LDFLAGS_OTHER}\
+ -Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${CATKIN_PACKAGE_LIB_DESTINATION}\")")))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild))
-      (propagated-inputs (list python-pyside-2 python-pyqt5-noetic python-sip-4-noetic))
+      (propagated-inputs (list python-pyside-2 python-pyqt-noetic python-sip-4-noetic))
       (home-page "https://wiki.ros.org/python_qt_binding")
       (synopsis "Python bindings for Qt from either pyside or pyqt")
       (description
@@ -158,8 +166,7 @@ it very easy to switch between these.")
                                mesa
                                ros-noetic-message-runtime
                                ros-noetic-media-export
-                               qtbase-5
-                               python-pyqt))
+                               qtbase-5))
       (home-page "https://wiki.ros.org/rviz")
       (synopsis "3D visualization tool for ROS")
       (description "3D Visualization tool for ROS.")

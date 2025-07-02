@@ -121,7 +121,7 @@
 
 ;;; pyqt5 with sip4 support
 ;;; See https://github.com/ros-noetic-arch/ros-noetic-python-qt-binding/issues/7
-(define-public python-pyqt5-noetic
+(define-public python-pyqt-noetic
   (package
     (inherit python-pyqt)
     (version "5.15.10-noetic")
