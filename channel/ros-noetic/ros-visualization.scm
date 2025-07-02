@@ -21,7 +21,6 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages commencement)
-  #:use-module (gnu packages gl)
   #:use-module (gnu packages graphics)
   #:use-module (gnu packages qt)
   #:use-module (gnu packages serialization)
@@ -166,7 +165,6 @@ it very easy to switch between these.")
                                ros-noetic-urdf
                                ros-noetic-visualization-msgs
                                yaml-cpp
-                               mesa
                                ros-noetic-message-runtime
                                ros-noetic-media-export
                                qtbase-5
