@@ -20,6 +20,7 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix packages)
   #:use-module (guix git-download)
+  #:use-module (gnu packages commencement)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages graphics)
   #:use-module (gnu packages qt)
@@ -137,7 +138,9 @@ it very easy to switch between these.")
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-cmake-modules
                            ros-noetic-rosunit
-                           ros-noetic-rostest))
+                           ros-noetic-rostest
+                           ;; The gcc-11 crashes when including qtsvg-5
+                           gcc-toolchain-12))
       (propagated-inputs (list assimp
                                ros-noetic-geometry-msgs
                                ros-noetic-image-transport
@@ -166,7 +169,8 @@ it very easy to switch between these.")
                                mesa
                                ros-noetic-message-runtime
                                ros-noetic-media-export
-                               qtbase-5))
+                               qtbase-5
+                               qtsvg-5))
       (home-page "https://wiki.ros.org/rviz")
       (synopsis "3D visualization tool for ROS")
       (description "3D Visualization tool for ROS.")
