@@ -20,12 +20,15 @@
   #:use-module (guix build-system catkin)
   #:use-module (guix git-download)
   #:use-module (guix packages)
+  #:use-module (gnu packages boost)
   #:use-module (gnu packages python-graphics)
+  #:use-module (gnu packages qt)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic qt-gui-core)
+  #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic rqt)
   #:use-module (ros-noetic rqt-common-plugins)
   #:use-module (ros-noetic ros-visualization)
@@ -251,6 +254,34 @@ are published by diagnostic_aggregator.")
       (home-page "https://wiki.ros.org/rqt_runtime_monitor")
       (synopsis "GUI plugin for viewing DiagnosticsArray Messages")
       (description "GUI plugin for viewing DiagnosticsArray Messages")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-rviz
+  (let ((commit "e3cacb5e792f7fb938032efc444d7eeae8c0868c")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-rviz")
+      (version (git-version "0.7.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_rviz")
+               (commit commit)))
+         (sha256
+          (base32 "1h0ad7yiih7z9nk78hxdhjc2xc8i1jwhs7g8gnm075nl00x4z8yj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (inputs (list boost
+                    ros-noetic-class-loader
+                    qtbase-5
+                    ros-noetic-rqt-gui
+                    ros-noetic-rqt-gui-cpp
+                    ros-noetic-rviz))
+      (home-page "https://wiki.ros.org/rqt_rviz")
+      (synopsis "GUI plugin embedding for rviz")
+      (description "An rqt plugin for embedding RViz.
+This package does not supersed RViz, rather it depends on it.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-robot-plugins
