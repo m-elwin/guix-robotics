@@ -330,7 +330,7 @@ This package does not supersed RViz, rather it depends on it.")
                (url "https://github.com/ros-visualization/rqt_robot_plugins")
                (commit commit)))
          (sha256
-          (base32 "0bi82bbvpqdasnabxxahiks3rw1hblpchn5lrjjnk40i41f9r7jk"))
+          (base32 "16sxp7k7ipwpbvypxfih62b73wkmqihjjh62r29bwn18852m3ndw"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list

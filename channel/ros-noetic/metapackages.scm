@@ -31,7 +31,10 @@
   #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-core)
   #:use-module (ros-noetic ros-comm)
-  #:use-module (ros-noetic roscpp-core))
+  #:use-module (ros-noetic ros-visualization)
+  #:use-module (ros-noetic roscpp-core)
+  #:use-module (ros-noetic rqt-common-plugins)
+  #:use-module (ros-noetic rqt-robot-plugins))
 
 ;;; Commentary:
 ;;
@@ -177,9 +180,8 @@ It may not contain any GUI dependencies.")
       (propagated-inputs (list
                           ros-noetic-ros-base
                           ros-noetic-rqt-common-plugins
-                                        ;ros-noetic-rqt-robot-plugins
-                                        ;ros-noetic-rvz
-                          ))
+                          ros-noetic-rqt-robot-plugins
+                          ros-noetic-rviz))
       (arguments
        (list
         #:package-dir "robot"))
