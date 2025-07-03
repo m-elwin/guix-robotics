@@ -276,8 +276,8 @@ are published by diagnostic_aggregator.")
                     ros-noetic-class-loader
                     qtbase-5
                     ros-noetic-rqt-gui
-                    ros-noetic-rqt-gui-cpp
-                    ros-noetic-rviz))
+                    ros-noetic-rqt-gui-cpp))
+      (propagated-inputs (list ros-noetic-rviz))
       (home-page "https://wiki.ros.org/rqt_rviz")
       (synopsis "GUI plugin embedding for rviz")
       (description "An rqt plugin for embedding RViz.
