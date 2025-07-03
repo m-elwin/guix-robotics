@@ -21,11 +21,13 @@
   #:use-module (guix git-download)
   #:use-module (guix packages)
   #:use-module (gnu packages boost)
+  #:use-module (gnu packages check)
   #:use-module (gnu packages python-graphics)
   #:use-module (gnu packages qt)
   #:use-module (ros-noetic bootstrap)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
+  #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic qt-gui-core)
   #:use-module (ros-noetic ros-core)
@@ -282,6 +284,37 @@ are published by diagnostic_aggregator.")
       (synopsis "GUI plugin embedding for rviz")
       (description "An rqt plugin for embedding RViz.
 This package does not supersed RViz, rather it depends on it.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-rqt-tf-tree
+  (let ((commit "5cd6e23fc136508cdfbcaa2cd523806ab83c67a8")
+        (revision "0"))
+    (package
+      (name "ros-noetic-rqt-tf-tree")
+      (version (git-version "0.6.5" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/rqt_tf_tree")
+               (commit commit)))
+         (sha256
+          (base32 "1qnfcnaajpq9prvwahc898nxyi9013kcm3ias0afx5046cczs0rh"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list python-mock))
+      (propagated-inputs (list ros-noetic-python-qt-binding
+                               python-rospkg
+                               ros-noetic-qt-dotgraph
+                               ros-noetic-rospy
+                               ros-noetic-rqt-graph
+                               ros-noetic-rqt-gui
+                               ros-noetic-rqt-gui-py
+                               ros-noetic-tf2-msgs
+                               ros-noetic-tf2-ros))
+      (home-page "https://wiki.ros.org/rqt_tf_tree")
+      (synopsis "GUI plugin for visualizing the ROS TF frame tree")
+      (description "GUI plugin for visualizing the ROS TF frame tree.")
       (license license:bsd-3))))
 
 (define-public ros-noetic-rqt-robot-plugins

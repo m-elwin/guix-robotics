@@ -163,7 +163,7 @@ in order to use C++ plugins.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (native-inputs (list python-pygraphviz))
-      (propagated-inputs (list python-pydot-noetic))
+      (propagated-inputs (list python-pydot-noetic graphviz))
       (arguments
        (list
         #:package-dir "qt_dotgraph"))

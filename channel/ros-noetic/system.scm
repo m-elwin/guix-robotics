@@ -135,7 +135,7 @@
     ;; the runtime dependencies of sip6 and sip4 appear to be compatible
     ;; In other words: this package needs to be built with python-sip, but ROS users need to use
     ;; python-sip-4-noetic. However, the package itself, at runtime, works with either
-    ;; Long-term solutionw ould be to make rviz work with sip5
+    ;; Long-term solution would be to make rviz work with sip5
     (native-inputs (list python-sip python-pyqt-builder))
     (propagated-inputs (list python-sip-4-noetic python-pyqt5-sip))))
 
