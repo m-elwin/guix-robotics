@@ -79,7 +79,7 @@
           (base32 "0iwspznn0dmjhf0lbv7snjj17gadrmmzsbvp21sjpmjfimznifl9"))
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
-      (propagated-inputs (list ros-noetic-qt-gui ros-noetic-qt-gui-cpp ros-noetic-ros
+      (propagated-inputs (list ros-noetic-qt-gui ros-noetic-qt-gui-cpp catkin
                                ros-noetic-roscpp ros-noetic-nodelet))
       (arguments
        (list
