@@ -130,8 +130,14 @@
        (inherit (package-source python-pyqt))
        (modules '((guix build utils)))
        (snippet '(substitute* "sip/QtCore/QtCoremod.sip"
-                   ((", py_ssize_t_clean=True") "")))))))
-
+                   ((", py_ssize_t_clean=True") "")))))
+    ;; This package needs sip6 to build, but we propagate sip-4 since the dependencies need sip4
+    ;; the runtime dependencies of sip6 and sip4 appear to be compatible
+    ;; In other words: this package needs to be built with python-sip, but ROS users need to use
+    ;; python-sip-4-noetic. However, the package itself, at runtime, works with either
+    ;; Long-term solutionw ould be to make rviz work with sip5
+    (native-inputs (list python-sip python-pyqt-builder))
+    (propagated-inputs (list python-sip-4-noetic python-pyqt5-sip))))
 
 (define-public ogre-noetic
   (package

@@ -70,7 +70,7 @@
  -Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${CATKIN_PACKAGE_LIB_DESTINATION}\")")))))
       (build-system catkin-build-system)
       (native-inputs (list ros-noetic-rosbuild))
-      (propagated-inputs (list python-pyside-2 python-pyqt-noetic python-sip-4-noetic))
+      (propagated-inputs (list python-pyside-2 python-pyqt-noetic))
       (home-page "https://wiki.ros.org/python_qt_binding")
       (synopsis "Python bindings for Qt from either pyside or pyqt")
       (description
