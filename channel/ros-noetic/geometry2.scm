@@ -21,6 +21,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages algebra)
+  #:use-module (gnu packages commencement)
   #:use-module (gnu packages engineering)
   #:use-module (gnu packages game-development)
   #:use-module (ros-noetic bootstrap)
@@ -155,7 +156,10 @@ package, users generally should use tf2_ros.")
           '(substitute* "tf2_ros/CMakeLists.txt"
              (("add_rostest\\(test/transform_listener_time_reset_test.launch\\)") "")))))
       (build-system catkin-build-system)
-      (native-inputs (list ros-noetic-cmake-modules ros-noetic-rostest))
+      ;; gcc-11 (the default) segfaults so use gcc-12
+      (native-inputs (list ros-noetic-cmake-modules
+                           ros-noetic-rostest
+                           gcc-toolchain-12))
       (inputs (list ros-noetic-xmlrpcpp))
       (propagated-inputs (list ros-noetic-actionlib
                                ros-noetic-actionlib-msgs
