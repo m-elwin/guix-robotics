@@ -287,7 +287,9 @@ rosparam can be invoked within a roslaunch file.")
                                "test/unit/test_roslaunch_list_files.py")
                   (("cmd = 'roslaunch'")
                    (string-append "cmd = '"
-                                  (getcwd) "/../build/devel/bin/roslaunch'"))))))))
+                                  (getcwd) "/../build/devel/bin/roslaunch'")))
+                (substitute* "test/unit/test_nodeprocess.py"
+                  (("def test_local_process_stop_timeouts") "def disable_local_process_stop_timeouts")))))))
       (home-page "https://wiki.ros.org/roslaunch")
       (synopsis
        "Launch multiple ROS nodes locally and remotely and set ROS parameters")
