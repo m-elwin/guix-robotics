@@ -40,7 +40,7 @@
   #:use-module (gnu packages graphics) ; for ogre
   #:use-module (gnu packages graphviz) ; for pydot-noetic
   #:use-module (gnu packages python-build) ; for pydot-noetic
-  #:use-module (gnu packages qt) ; for python-sip-4
+  #:use-module (gnu packages qt) ; for python-pyqt
   #:use-module (gnu packages logging))
 
 ;; Commentary:
@@ -106,19 +106,6 @@
      (modify-inputs (package-propagated-inputs python-pydot)
        (replace "python-pyparsing" python-pyparsing)))))
 
-;;; temporary bug fix, submitted as PR #954 to guix
-(define-public python-sip-4-noetic
-  (package
-    (inherit python-sip-4)
-    (version "4.19.25-noetic")
-    (source
-     (origin
-       (inherit (package-source python-sip-4))
-       (modules '((guix build utils)))
-       (snippet '(substitute* "siplib/siplib.c"
-                   ;; Make compatible with python 3.11
-                   (("frame->f_back") "PyFrame_GetBack(frame)")))))))
-
 ;;; pyqt5 with sip4 support
 ;;; See https://github.com/ros-noetic-arch/ros-noetic-python-qt-binding/issues/7
 (define-public python-pyqt-noetic
@@ -137,7 +124,7 @@
     ;; python-sip-4-noetic. However, the package itself, at runtime, works with either
     ;; Long-term solution would be to make rviz work with sip5
     (native-inputs (list python-sip python-pyqt-builder))
-    (propagated-inputs (list python-sip-4-noetic python-pyqt5-sip))))
+    (propagated-inputs (list python-sip-4 python-pyqt5-sip))))
 
 (define-public ogre-noetic
   (package
