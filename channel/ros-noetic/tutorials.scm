@@ -18,6 +18,7 @@
 (define-module (ros-noetic tutorials)
   #:use-module (guix build-system catkin)
   #:use-module ((guix licenses) #:prefix license:)
+  #:use-module (guix gexp)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
@@ -100,6 +101,36 @@ services and parameters.")))
     (synopsis "Tutorials that demonstrate C++ features of ROS step by step")
     (description "Tutorials for using ROS with C++, including using messages,
 services, and parameters.")))
+
+(define-public ros-noetic-rospy-tutorials
+  (package
+    (inherit ros-tutorials-base)
+    (name "ros-noetic-rospy-tutorials")
+    (native-inputs (list ros-noetic-message-generation ros-noetic-rostest
+                         ros-noetic-roscpp-tutorials))
+    (propagated-inputs (list ros-noetic-message-runtime ros-noetic-rospy
+                             ros-noetic-std-msgs))
+    (arguments
+     (list
+      #:package-dir "rospy_tutorials"))
+    (home-page "https://wiki.ros.org/rospy_tutorials")
+    (synopsis "Tutorials that demonstrate Python features of ROS step by step")
+    (description "Tutorials for using ROS with Python, including using messages,
+services, and parameters.")))
+
+(define-public ros-noetic-ros-tutorials
+  (package
+    (inherit ros-tutorials-base)
+    (name "ros-noetic-ros-tutorials")
+    (propagated-inputs (list ros-noetic-message-runtime ros-noetic-rospy
+                             ros-noetic-std-msgs))
+    (arguments
+     (list
+      #:package-dir "ros_tutorials"))
+    (home-page "https://wiki.ros.org/roscpp_tutorials")
+    (synopsis "Packages to demonstrate features of ROS")
+    (description "Packages taht demonstrate features of ROS
+and packages that support the demonstration of those features.")))
 
 (define common-tutorials-base
   (let ((commit "b3a86ff8a60efd678f942deab47efcadd52a5336")

@@ -148,5 +148,8 @@ Also creates an opt/ros/ directory with noetic symlinking back."
       wrap-lib-bin)
     (add-after 'wrap 'ros-wrap
       ros-wrap)
+    ;; move check after the install phase
+    (delete 'check)
+    (add-after 'wrap 'check check-with-results)
     (replace 'check
       check-with-results)))
