@@ -208,15 +208,21 @@ It may not contain any GUI dependencies.")
          (file-name (git-file-name name version))))
       (build-system catkin-build-system)
       (propagated-inputs (list
-                          ros-noetic-ros-base
-                          ros-noetic-rqt-common-plugins
-                          ros-noetic-rqt-robot-plugins
-                          ros-noetic-rviz))
+                          ros-noetic-robot
+                          ros-noetic-viz
+                          ros-noetic-angles
+                          ros-noetic-joint-state-publisher-gui
+                          ros-noetic-roslint
+                          ros-noetic-common-tutorials
+                          ros-noetic-geometry-tutorials
+                          ros-noetic-ros-tutorials
+                          ros-noetic-urdf-tutorial
+                          ros-noetic-visualization-tutorials))
       (arguments
        (list
         #:package-dir "desktop"))
       (home-page "https://github.com/ros/metapackages")
       (synopsis
-       "Metapackage for visualization")
-      (description "Metapackage for visualization.")
+       "Metapackage for a basic ROS desktop installation")
+      (description "Metapackage for a basic ROS desktop installation.")
       (license license:bsd-3))))
