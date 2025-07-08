@@ -24,6 +24,7 @@
   #:use-module (gnu packages boost)
   #:use-module (gnu packages qt)
   #:use-module (ros-noetic common-msgs)
+  #:use-module (ros-noetic geometry)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-comm)
@@ -184,6 +185,7 @@ and packages that support the demonstration of those features.")))
                   ros-noetic-rosconsole
                   ros-noetic-roscpp
                   ros-noetic-std-msgs
+                  ros-noetic-std-srvs
                   ros-noetic-turtlesim
                   ros-noetic-geometry-msgs))
     (synopsis "Tutorials for using actionlib")
