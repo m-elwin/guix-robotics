@@ -189,8 +189,12 @@ and packages that support the demonstration of those features.")))
                   ros-noetic-std-srvs
                   ros-noetic-turtlesim
                   ros-noetic-geometry-msgs))
-    (synopsis "Tutorials for using actionlib")
-    (description "Tutorials for using actionlib")))
+      (home-page "https://github.com/ros/turtle_actionlib")
+    (synopsis "Tutorials for using actionlib with turtlesim")
+    (description "A tutorial that demonstrates how to write an
+action server and client with the turtlesim. The shape_server
+provides an action interface for drawing regular polygons with
+the turtlesim.")))
 
 (define-public ros-noetic-nodelet-tutorial-math
   (package
@@ -203,3 +207,14 @@ and packages that support the demonstration of those features.")))
                   ros-noetic-std-msgs))
     (synopsis "Package for nodelet tutorial")
     (description "Package for nodelet tutorial.")))
+
+(define-public ros-noetic-pluginlib-tutorials
+  (package
+    (inherit common-tutorials-base)
+    (name "ros-noetic-pluginlib-tutorials")
+    (arguments
+     (list
+      #:package-dir "pluginlib_tutorials"))
+    (inputs (list ros-noetic-pluginlib ros-noetic-roscpp))
+    (synopsis "Tutorials for pluginlib")
+    (description "Tutorials for pluginlib")))
