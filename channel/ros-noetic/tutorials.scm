@@ -25,6 +25,7 @@
   #:use-module (gnu packages qt)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
+  #:use-module (ros-noetic nodelet-core)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-comm)
@@ -191,3 +192,14 @@ and packages that support the demonstration of those features.")))
     (synopsis "Tutorials for using actionlib")
     (description "Tutorials for using actionlib")))
 
+(define-public ros-noetic-nodelet-tutorial-math
+  (package
+    (inherit common-tutorials-base)
+    (name "ros-noetic-nodelet-tutorial-math")
+    (arguments
+     (list
+      #:package-dir "nodelet_tutorial_math"))
+    (inputs (list ros-noetic-nodelet ros-noetic-pluginlib ros-noetic-roscpp
+                  ros-noetic-std-msgs))
+    (synopsis "Package for nodelet tutorial")
+    (description "Package for nodelet tutorial.")))
