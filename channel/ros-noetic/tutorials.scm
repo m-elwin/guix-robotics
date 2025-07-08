@@ -205,6 +205,7 @@ the turtlesim.")))
       #:package-dir "nodelet_tutorial_math"))
     (inputs (list ros-noetic-nodelet ros-noetic-pluginlib ros-noetic-roscpp
                   ros-noetic-std-msgs))
+    (home-page "https://github.com/ros/nodelet_tutorial_math")
     (synopsis "Package for nodelet tutorial")
     (description "Package for nodelet tutorial.")))
 
@@ -216,5 +217,18 @@ the turtlesim.")))
      (list
       #:package-dir "pluginlib_tutorials"))
     (inputs (list ros-noetic-pluginlib ros-noetic-roscpp))
+    (home-page "https://github.com/ros/pluginlib_tutorials")
     (synopsis "Tutorials for pluginlib")
     (description "Tutorials for pluginlib")))
+
+(define-public ros-noetic-common-tutorials
+  (package
+    (inherit common-tutorials-base)
+    (name "ros-noetic-common-tutorials")
+    (arguments
+     (list
+      #:package-dir "common_tutorials"))
+    (inputs (list ros-noetic-pluginlib ros-noetic-roscpp))
+    (home-page "https://github.com/ros/common_tutorials")
+    (synopsis "Common tutorials for ROS")
+    (description "Common Tutorials for ROS")))
