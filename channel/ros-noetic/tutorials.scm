@@ -22,6 +22,7 @@
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (gnu packages boost)
+  #:use-module (gnu packages commencement)
   #:use-module (gnu packages qt)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
@@ -164,7 +165,8 @@ and packages that support the demonstration of those features.")))
       #:package-dir "actionlib_tutorials"))
     (native-inputs (list ros-noetic-message-generation))
     (inputs (list ros-noetic-roscpp))
-    (propagated-inputs (list ros-noetic-actionlib ros-noetic-std-msgs
+    (propagated-inputs (list gcc-toolchain-12
+                             ros-noetic-actionlib ros-noetic-std-msgs
                              ros-noetic-actionlib-msgs
                              ros-noetic-message-runtime))
     (home-page "https://wiki.ros.org/actionlib_tutorials")
@@ -228,7 +230,10 @@ the turtlesim.")))
     (arguments
      (list
       #:package-dir "common_tutorials"))
-    (inputs (list ros-noetic-pluginlib ros-noetic-roscpp))
+    (propagated-inputs (list ros-noetic-actionlib-tutorials
+                             ros-noetic-nodelet-tutorial-math
+                             ros-noetic-pluginlib-tutorials
+                             ros-noetic-turtle-actionlib))
     (home-page "https://github.com/ros/common_tutorials")
     (synopsis "Common tutorials for ROS")
     (description "Common Tutorials for ROS")))
