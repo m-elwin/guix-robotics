@@ -34,7 +34,8 @@
   #:use-module (ros-noetic ros-visualization)
   #:use-module (ros-noetic roscpp-core)
   #:use-module (ros-noetic rqt-common-plugins)
-  #:use-module (ros-noetic rqt-robot-plugins))
+  #:use-module (ros-noetic rqt-robot-plugins)
+  #:use-module (ros-noetic tutorials))
 
 ;;; Commentary:
 ;;
@@ -216,8 +217,9 @@ It may not contain any GUI dependencies.")
                           ros-noetic-common-tutorials
                           ros-noetic-geometry-tutorials
                           ros-noetic-ros-tutorials
-                          ros-noetic-urdf-tutorial
-                          ros-noetic-visualization-tutorials))
+                          ;ros-noetic-urdf-tutorial
+                                        ;ros-noetic-visualization-tutorials
+                          ))
       (arguments
        (list
         #:package-dir "desktop"))
