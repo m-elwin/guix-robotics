@@ -237,3 +237,46 @@ the turtlesim.")))
     (home-page "https://github.com/ros/common_tutorials")
     (synopsis "Common tutorials for ROS")
     (description "Common Tutorials for ROS")))
+
+(define geometry-tutorials-base
+  (let ((commit "d365875776b154ead3150faae9f47d591c20a9d1")
+        (revision "0"))
+    (package
+      (name "ros-noetic-geometry-tutorials-base")
+      (version (git-version "0.2.4" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/geometry_tutorials")
+               (commit commit)))
+         (sha256
+          (base32 "1bj0kj8rxkqxhjsp9zh4j80hg8k90vqs96bl4ljmkhlg9bc9ipl9"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "https://github.com/ros/geometry_tutorials")
+      (synopsis "Base package for geometry tutorials")
+      (description "Not for direct use, inherit instead.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-turtle-tf
+  (package
+    (inherit geometry-tutorials-base)
+    (name "ros-noetic-turtle-tf")
+    (arguments
+     (list
+      #:package-dir "turtle_tf"))
+    (inputs (list ros-noetic-roscpp))
+    (propagated-inputs (list ros-noetic-geometry-msgs
+                             ros-noetic-rospy
+                             ros-noetic-std-msgs
+                             ros-noetic-std-srvs
+                             ros-noetic-tf
+                             ros-noetic-turtlesim))
+    (home-page "https://wiki.ros.org/turtle_tf")
+    (synopsis
+     "Demonstrates how to write a tf broadcaster and listener with turtlesim")
+    (description
+     "The turtle_tf_listener commands turtle2 to follow turtle1 around
+ad you drive turtle1 using the keyboard")))
+
