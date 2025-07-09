@@ -26,6 +26,7 @@
   #:use-module (gnu packages qt)
   #:use-module (ros-noetic common-msgs)
   #:use-module (ros-noetic geometry)
+  #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic nodelet-core)
   #:use-module (ros-noetic ros)
   #:use-module (ros-noetic ros-base)
@@ -280,3 +281,26 @@ the turtlesim.")))
      "The turtle_tf_listener commands turtle2 to follow turtle1 around
 ad you drive turtle1 using the keyboard")))
 
+
+(define-public ros-noetic-turtle-tf2
+  (package
+    (inherit geometry-tutorials-base)
+    (name "ros-noetic-turtle-tf2")
+    (arguments
+     (list
+      #:package-dir "turtle_tf2"))
+    (inputs (list ros-noetic-roscpp))
+    (propagated-inputs (list ros-noetic-geometry-msgs
+                             ros-noetic-rospy
+                             ros-noetic-std-msgs
+                             ros-noetic-std-srvs
+                             ros-noetic-tf2
+                             ros-noetic-tf2-ros
+                             ros-noetic-tf2-geometry-msgs
+                             ros-noetic-turtlesim))
+    (home-page "https://github.com/ros/turtle_tf")
+    (synopsis
+     "Demonstrates how to write a tf2 broadcaster and listener with turtlesim")
+    (description
+     "The turtle_tf2_listener commands turtle2 to follow turtle1 around
+ad you drive turtle1 using the keyboard")))
