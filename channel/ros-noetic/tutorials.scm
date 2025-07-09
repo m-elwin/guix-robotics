@@ -298,9 +298,21 @@ ad you drive turtle1 using the keyboard")))
                              ros-noetic-tf2-ros
                              ros-noetic-tf2-geometry-msgs
                              ros-noetic-turtlesim))
-    (home-page "https://github.com/ros/turtle_tf")
+    (home-page "https://wiki.ros.org/turtle_tf2")
     (synopsis
      "Demonstrates how to write a tf2 broadcaster and listener with turtlesim")
     (description
      "The turtle_tf2_listener commands turtle2 to follow turtle1 around
 ad you drive turtle1 using the keyboard")))
+
+(define-public ros-noetic-geometry-tutorials
+  (package
+    (inherit geometry-tutorials-base)
+    (name "ros-noetic-geometry-tutorials")
+    (arguments
+     (list
+      #:package-dir "turtle_tf2"))
+    (propagated-inputs (list ros-noetic-turtle-tf ros-noetic-turtle-tf2))
+    (home-page "https://wiki.ros.org/geometry_tutorials")
+    (synopsis "Metapackage for ROS geometry tutorials")
+    (description "Metapackage for ROS geometry tutorials.")))
