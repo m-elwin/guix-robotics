@@ -217,7 +217,7 @@ It may not contain any GUI dependencies.")
                           ros-noetic-common-tutorials
                           ros-noetic-geometry-tutorials
                           ros-noetic-ros-tutorials
-                          ;ros-noetic-urdf-tutorial
+                          ros-noetic-urdf-tutorial
                                         ;ros-noetic-visualization-tutorials
                           ))
       (arguments

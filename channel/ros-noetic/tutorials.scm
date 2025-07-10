@@ -29,10 +29,12 @@
   #:use-module (ros-noetic geometry2)
   #:use-module (ros-noetic nodelet-core)
   #:use-module (ros-noetic ros)
+  #:use-module (ros-noetic robot)
   #:use-module (ros-noetic ros-base)
   #:use-module (ros-noetic ros-comm)
   #:use-module (ros-noetic ros-core)
-  #:use-module (ros-noetic roscpp-core))
+  #:use-module (ros-noetic roscpp-core)
+  #:use-module (ros-noetic ros-visualization))
 
 ;;; Commentary:
 ;;
@@ -316,3 +318,31 @@ ad you drive turtle1 using the keyboard")))
     (home-page "https://wiki.ros.org/geometry_tutorials")
     (synopsis "Metapackage for ROS geometry tutorials")
     (description "Metapackage for ROS geometry tutorials.")))
+
+(define-public ros-noetic-urdf-tutorial
+  (let ((commit "21a6ecdff0146ad93852cf32e8f494439fd99065")
+        (revision "0"))
+    (package
+      (name "ros-noetic-urdf-tutorial")
+      (version (git-version "0.5.0" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros/urdf_tutorial")
+               (commit commit)))
+         (sha256
+          (base32 "12harh5d06mkv0aw1glvj63w2nhi5z8rcngl7scfsdm29wbchw3b"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (native-inputs (list ros-noetic-rosunit))
+      (propagated-inputs (list ros-noetic-joint-state-publisher
+                               ros-noetic-joint-state-publisher-gui
+                               ros-noetic-robot-state-publisher
+                               ros-noetic-rviz
+                               ros-noetic-xacro
+                               ros-noetic-roslaunch))
+      (home-page "https://wiki.ros.org/urdf_tutorial")
+      (synopsis "Universal Robot Description Format (URDF) tutorials")
+      (description "Universal Robot Description Format (URDF) tutorials.")
+      (license license:bsd-3))))
