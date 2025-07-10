@@ -218,8 +218,7 @@ It may not contain any GUI dependencies.")
                           ros-noetic-geometry-tutorials
                           ros-noetic-ros-tutorials
                           ros-noetic-urdf-tutorial
-                                        ;ros-noetic-visualization-tutorials
-                          ))
+                          ros-noetic-visualization-tutorials))
       (arguments
        (list
         #:package-dir "desktop"))
@@ -228,3 +227,4 @@ It may not contain any GUI dependencies.")
        "Metapackage for a basic ROS desktop installation")
       (description "Metapackage for a basic ROS desktop installation.")
       (license license:bsd-3))))
+

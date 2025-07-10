@@ -346,3 +346,36 @@ ad you drive turtle1 using the keyboard")))
       (synopsis "Universal Robot Description Format (URDF) tutorials")
       (description "Universal Robot Description Format (URDF) tutorials.")
       (license license:bsd-3))))
+
+(define visualization-tutorials-base
+  (let ((commit "3141f0dfcb7c34ce57909226d5394ca5fd57a5c7")
+        (revision "0"))
+    (package
+      (name "ros-noetic-visualization-tutorials-base")
+      (version (git-version "0.11.2" revision commit))
+      (source
+       (origin
+         (method git-fetch)
+         (uri (git-reference
+               (url "https://github.com/ros-visualization/visualization_tutorials")
+               (commit commit)))
+         (sha256
+          (base32 "1n27hd1cv6ngs61d5jq4fd4bi4za3ll0bpds18g7ln483kjanvvj"))
+         (file-name (git-file-name name version))))
+      (build-system catkin-build-system)
+      (home-page "https://github.com/ros/visualization_tutorials")
+      (synopsis "Base package for visualization tutorials")
+      (description "Not for direct use, inherit instead.")
+      (license license:bsd-3))))
+
+(define-public ros-noetic-visualization-marker-tutorials
+  (package
+    (inherit visualization-tutorials-base)
+    (name "ros-noetic-visualization-marker-tutorials")
+    (arguments
+     (list
+      #:package-dir "visualization_marker_tutorials"))
+    (inputs (list ros-noetic-roscpp ros-noetic-visualization-msgs))
+    (home-page "https://wiki.ros.org/visualization_marker_tutorials")
+    (synopsis "Tutorials for using markers")
+    (description "Tutorials for using markers.")))
