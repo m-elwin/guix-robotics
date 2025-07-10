@@ -393,6 +393,19 @@ ad you drive turtle1 using the keyboard")))
     (synopsis "Tutorials for using interactive markers")
     (description "Tutorials for using interactive markers.")))
 
+(define-public ros-noetic-librviz-tutorial
+  (package
+    (inherit visualization-tutorials-base)
+    (name "ros-noetic-librviz-tutorial")
+    (arguments
+     (list
+      #:package-dir "librviz_tutorial"))
+    (inputs (list qtbase-5 ros-noetic-roscpp))
+    (propagated-inputs (list ros-noetic-rviz))
+    (home-page "https://wiki.ros.org/librviz_tutorial")
+    (synopsis "Tutorials for how to compile a C++ program with RViz displays")
+    (description "Tutorials for how to embed RViz displays inside a C++ program")))
+
 (define-public ros-noetic-visualization-tutorials
   (package
     (inherit visualization-tutorials-base)
