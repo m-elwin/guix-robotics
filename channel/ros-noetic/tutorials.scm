@@ -379,3 +379,28 @@ ad you drive turtle1 using the keyboard")))
     (home-page "https://wiki.ros.org/visualization_marker_tutorials")
     (synopsis "Tutorials for using markers")
     (description "Tutorials for using markers.")))
+
+(define-public ros-noetic-interactive-marker-tutorials
+  (package
+    (inherit visualization-tutorials-base)
+    (name "ros-noetic-interactive-marker-tutorials")
+    (arguments
+     (list
+      #:package-dir "interactive_marker_tutorials"))
+    (inputs (list ros-noetic-roscpp ros-noetic-interactive-markers
+                  ros-noetic-visualization-msgs ros-noetic-tf))
+    (home-page "https://wiki.ros.org/interactive_marker_tutorials")
+    (synopsis "Tutorials for using interactive markers")
+    (description "Tutorials for using interactive markers.")))
+
+(define-public ros-noetic-visualization-tutorials
+  (package
+    (inherit visualization-tutorials-base)
+    (name "ros-noetic-visualization-tutorials")
+    (arguments
+     (list
+      #:package-dir "visualization_tutorials"))
+    (inputs (list ros-noetic-roscpp ros-noetic-visualization-msgs))
+    (home-page "https://wiki.ros.org/visualization_marker_tutorials")
+    (synopsis "Tutorials for using markers")
+    (description "Tutorials for using markers.")))
