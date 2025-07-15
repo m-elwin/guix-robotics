@@ -406,6 +406,19 @@ ad you drive turtle1 using the keyboard")))
     (synopsis "Tutorials for how to compile a C++ program with RViz displays")
     (description "Tutorials for how to embed RViz displays inside a C++ program")))
 
+(define-public ros-noetic-rviz-plugin-tutorials
+  (package
+    (inherit visualization-tutorials-base)
+    (name "ros-noetic-rviz-plugin-tutorials")
+    (arguments
+     (list
+      #:package-dir "rviz_plugin_tutorials"))
+    (inputs (list qtbase-5))
+    (propagated-inputs (list ros-noetic-rviz))
+    (home-page "https://wiki.ros.org/rviz_plugin_tutorials")
+    (synopsis "Tutorials for how to write plugins for RViz")
+    (description "Tutorials for how to write plugins for RViz.")))
+
 (define-public ros-noetic-visualization-tutorials
   (package
     (inherit visualization-tutorials-base)
