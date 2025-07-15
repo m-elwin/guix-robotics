@@ -1,6 +1,3 @@
-* Packaging Currently
-- [ ]  rqt-common-plugins
-
 * Additional Test Packages
 There are some ROS packages that only contain tests.
 Listing them here for eventual inclusion as having them will increase robustness

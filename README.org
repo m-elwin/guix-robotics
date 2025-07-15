@@ -23,9 +23,11 @@ The method is to use [[https://guix.gnu.org][Guix]] a declarative package manage
    - This brings in all =ros= packages in the channel.
    - You can also specify additional packages in the guix distribution
      (e.g., =coreutils= will let you use basic command line utilities)
-4. If you want to develop ROS packages the best way is to make it a guix package
-   - This eliminates the need for workspaces and catkin
-   - There are some tricks, but most normal ROS packages can be straightforward from the examples in the channel (see e.g., =ros-noetic-joint-state-publisher=).
+5. If you have ROS packages you want to compile:
+     - =guix shell --pure -D ros-noetic-desktop ros-noetic-desktop= brings in all the packages and development tools
+     - You can now build packages in the shell environment
+     - The best way to develop the packages is to make your own guix package
+     - There are some tricks, but most normal ROS packages can be straightforward from the examples in the channel (see e.g., =ros-noetic-joint-state-publisher=).
 5. These [[https://www.futurile.net/resources/guix/][Guix Tutorials]] are a good starting point for getting started with Guix.
 
 * Further Possibilities
