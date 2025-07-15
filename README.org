@@ -3,10 +3,10 @@ The goal of this repository is to create [[https://reproducible-builds.org/docs/
 The method is to use [[https://guix.gnu.org][Guix]] a declarative package manager focused on [[https://guix.gnu.org/en/blog/2024/adventures-on-the-quest-for-long-term-reproducible-deployment/][Reproducible software deployment]].
 
 The first test is a distribution of ROS Noetic, which went end-of-life in May 2025.
-- Currently all packages required for the [[https://www.ros.org/reps/rep-0142.html#robot-metapackage][robot metapackage]] are included.
+- Currently all packages required for the [[https://www.ros.org/reps/rep-0142.html#robot-metapackage][desktop metapackage]] are included.
 
 * Getting Started
-1. [[https://guix.gnu.org/manual/en/html_node/Installation.html][Install Guix]] (Note: for Ubuntu users: =sudo apt install guix=
+1. [[https://guix.gnu.org/manual/en/html_node/Installation.html][Install Guix]] (For Ubuntu users: =sudo apt install guix=)
 2. Add this repository as a [[https://guix.gnu.org/manual/en/html_node/Channels.html][guix channel]] (a supplemental source of package definitions)
    #+NAME: ~/.config/guix/channels.scm
    #+BEGIN_SRC scheme
@@ -17,9 +17,9 @@ The first test is a distribution of ROS Noetic, which went end-of-life in May 20
            %default-channels)
    #+END_SRC
 3. Run =guix pull= to bring in the latest package definition.
-   This step can take a while, especially the first time, but it is worth it.
+   - This step can take a while, especially the first time.
 4. You can now launch a [[https://guix.gnu.org/manual/en/html_node/Invoking-guix-shell.html][guix shell]] to run the ROS commands:
-   =guix shell --pure ros-noetic-robot=
+   =guix shell --pure ros-noetic-desktop=
    - This brings in all =ros= packages in the channel.
    - You can also specify additional packages in the guix distribution
      (e.g., =coreutils= will let you use basic command line utilities)
