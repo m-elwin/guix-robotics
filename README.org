@@ -2,8 +2,7 @@
 The goal of this repository is to create [[https://reproducible-builds.org/docs/definition/][reproducible builds]] for robotics projects.
 The method is to use [[https://guix.gnu.org][Guix]] a declarative package manager focused on [[https://guix.gnu.org/en/blog/2024/adventures-on-the-quest-for-long-term-reproducible-deployment/][Reproducible software deployment]].
 
-The first test is a distribution of ROS Noetic, which went end-of-life in May 2025.
-- Currently all packages required for the [[https://www.ros.org/reps/rep-0142.html#robot-metapackage][desktop metapackage]] are included.
+- Currently all packages required for the ROS-noetic [[https://www.ros.org/reps/rep-0142.html#robot-metapackage][desktop metapackage]] are included.
 
 * Getting Started
 1. [[https://guix.gnu.org/manual/en/html_node/Installation.html][Install Guix]] (For Ubuntu users: =sudo apt install guix=)
