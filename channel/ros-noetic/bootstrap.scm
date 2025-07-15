@@ -122,7 +122,7 @@ but for applications that are not necessarily using ROS")
         (base32 "0w8sj3628m0q8d59d7ckjn8cam39pa2k22fv6gid3nh4izxydb95"))))
     (build-system pyproject-build-system)
     (propagated-inputs (list python-catkin-pkg python-pyyaml python-rosdistro
-                             python-rospkg))
+                             python-rospkg python-docutils))
     (native-inputs (list python-distro python-mock python-pytest
                          python-setuptools python-wheel))
     (native-search-paths
