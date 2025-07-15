@@ -71,5 +71,5 @@ exec guix shell -L "$curr_dir/channel" -C \
    ))
 
 (specifications->manifest
- (append shell-quality-of-life ros-core-system-deps))
+ (append shell-quality-of-life ros-core-system-deps '("ros-noetic-desktop")))
 
