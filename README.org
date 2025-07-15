@@ -20,6 +20,7 @@ The first test is a distribution of ROS Noetic, which went end-of-life in May 20
    - This step can take a while, especially the first time.
 4. You can now launch a [[https://guix.gnu.org/manual/en/html_node/Invoking-guix-shell.html][guix shell]] to run the ROS commands:
    =guix shell --pure ros-noetic-desktop=
+   - This command will take a long time the first time you use it.
    - This brings in all =ros= packages in the channel.
    - You can also specify additional packages in the guix distribution
      (e.g., =coreutils= will let you use basic command line utilities)
